@@ -1,0 +1,67 @@
+<form class="ajax-form form-horizontal" id="installmentForm" data-replace-selector="#defaultModalContent" role="form" method="post" action="/financial/installment/40733/save?">
+	<div class="form-group col-md-12">
+		<label class="col-md-offset-0 col-md-3 control-label">Betrag*</label>
+		<div class="col-md-offset-0 col-md-9">
+			<input type="text" class="form-control" value="" name="amount">
+		</div>
+	</div>
+	<div class="form-group col-md-12">
+		<label class="col-md-offset-0 col-md-3 control-label">Buchung*</label>
+		<div class="col-md-offset-0 col-md-9">
+			<select class="selectpicker form-control" name="bookingId" style="display: none;">
+				<option selected="selected" value="0">Bitte wählen</option>
+				<option value="1801">Hotel- und Gastrofachfrau/-mann</option>
+			</select>
+			<div class="btn-group bootstrap-select form-control">
+				<button data-toggle="dropdown" class="btn dropdown-toggle selectpicker btn-default" type="button" title="Bitte wählen">
+					<span class="filter-option pull-left"> Bitte wählen </span>&nbsp;<span class="caret"></span>
+				</button>
+				<div class="dropdown-menu open">
+					<ul role="menu" class="dropdown-menu inner selectpicker">
+						<li rel="0" class="selected"><a style="" class="" tabindex="0"><span class="text"> Bitte wählen </span><i class="glyphicon glyphicon-ok icon-ok check-mark"></i></a></li>
+						<li rel="1"><a style="" class="" tabindex="0"><span class="text"> Hotel- und Gastrofachfrau/-mann </span><i class="glyphicon glyphicon-ok icon-ok check-mark"></i></a></li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="form-group col-md-12">
+		<label class="col-md-offset-0 col-md-3 control-label">Empfänger*</label>
+		<div class="col-md-offset-0 col-md-9">
+			<select class="selectpicker form-control" name="addressId" style="display: none;">
+				<option selected="selected" value="0">Bitte wählen</option>
+				<option value="7998">Mädliweg 9, 9470 Werdenberg SG</option>
+			</select>
+			<div class="btn-group bootstrap-select form-control">
+				<button data-toggle="dropdown" class="btn dropdown-toggle selectpicker btn-default" type="button" title="Bitte wählen">
+					<span class="filter-option pull-left"> Bitte wählen </span>&nbsp;<span class="caret"></span>
+				</button>
+				<div class="dropdown-menu open">
+					<ul role="menu" class="dropdown-menu inner selectpicker">
+						<li rel="0" class="selected"><a style="" class="" tabindex="0"><span class="text"> Bitte wählen </span><i class="glyphicon glyphicon-ok icon-ok check-mark"></i></a></li>
+						<li rel="1"><a style="" class="" tabindex="0"><span class="text"> Mädliweg 9, 9470 Werdenberg SG </span><i class="glyphicon glyphicon-ok icon-ok check-mark"></i></a></li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="form-group col-md-12">
+		<label class="col-md-offset-0 col-md-3 control-label">Zahlungsfrist</label>
+		<div class="col-md-offset-0 col-md-9">
+			<input type="text" lang="de" class="form-control datetimeValidate datepickerBootstrap" value="" name="duedate">
+		</div>
+	</div>
+	<div class="form-group col-md-12">
+		<label class="col-md-offset-0 col-md-3 control-label">Bezeichnung</label>
+		<div class="col-md-offset-0 col-md-9">
+			<textarea class="form-control" style="resize: vertical;" name="comment"></textarea>
+		</div>
+	</div>
+	<div class="form-group col-md-12">
+		<div class="col-md-offset-3 col-md-9">
+			<button type="submit">Submit</button>
+		</div>
+	</div>
+</form>
