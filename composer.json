@@ -1,0 +1,32 @@
+{
+  "name" : "simovative/zeus",
+  "description": "A Post-Redirect-Get specialised framework for PHP",
+  "keywords": ["framework"],
+  "homepage": "https://github.com/Simovative-gmbh/zeus",
+  "license": "MIT",
+  "authors": [
+    {"name": "Benedikt Schaller", "email": "benedikt.schaller@simovative.com"},
+    {"name": "Markus Nörenberg", "email": "markus.noerenberg@simovative.com"},
+    {"name": "Sebastian Hartmann", "email": "sebastian.hartmann@simovative.com"}
+  ],
+  "version": "dev-master",
+  "type": "library",
+  "autoload" : {
+    "classmap" : [ "src/", "skeleton/bundles" ]
+  },
+  "require" : {
+    "smarty/smarty": "v3.*",
+    "php": ">=5.3.0",
+    "ext-intl": "*",
+    "symfony/console": "*"
+  },
+  "require-dev": {
+    "matthiasmullie/minify": "=v1.3.35"
+  },
+  "bin": [
+    "bin/zeus"
+  ],
+  "archive": {
+    "exclude": ["!vendor", "tests"]
+  }
+}
