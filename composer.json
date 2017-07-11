@@ -9,7 +9,6 @@
     {"name": "Markus Nörenberg", "email": "markus.noerenberg@simovative.com"},
     {"name": "Sebastian Hartmann", "email": "sebastian.hartmann@simovative.com"}
   ],
-  "version": "dev-master",
   "type": "library",
   "autoload" : {
     "classmap" : [ "src/", "skeleton/bundles" ]
