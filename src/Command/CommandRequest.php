@@ -1,8 +1,10 @@
 <?php
 namespace Simovative\Zeus\Command;
 
+use Simovative\Zeus\Http\Post\HttpPostRequest;
+
 /**
- * @author mnoerenberg
+ * @author Benedikt Schaller
  */
 class CommandRequest {
 	
@@ -17,6 +19,17 @@ class CommandRequest {
 	 */
 	public function __construct(array $valueMap) {
 		$this->valueMap = $valueMap;
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param HttpPostRequest $postRequest
+	 * @return CommandRequest
+	 */
+	public static function fromHttpPostRequest(HttpPostRequest $postRequest) {
+		$values = $postRequest->all();
+		$commandRequest = new CommandRequest($values);
+		return $commandRequest;
 	}
 	
 	/**

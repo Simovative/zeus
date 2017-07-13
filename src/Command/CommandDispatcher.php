@@ -46,7 +46,7 @@ class CommandDispatcher implements HttpPostRequestDispatcherInterface {
 	public function dispatch(HttpPostRequest $request) {
 		// match url and create command request.
 		$commandBuilder = $this->router->route($request);
-		$commandRequest = null;
+		$commandRequest = CommandRequest::fromHttpPostRequest($request);
 		$validationResult = $commandBuilder->getCommandValidator()->validate($commandRequest);
 		if ($validationResult->isValid()) {
 			
