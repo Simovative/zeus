@@ -39,7 +39,7 @@ class HttpGetRequestRouterChain {
 				return $result;
 			}
 		}
-		if (empty($this->router)) {
+		if (empty($this->routers)) {
 			throw new IncompleteSetupException('No routers registred!');
 		}
 		throw new RouteNotFoundException($request->getUrl());
