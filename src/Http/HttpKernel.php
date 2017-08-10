@@ -79,7 +79,7 @@ abstract class HttpKernel implements KernelInterface {
 		} catch (\Exception $throwable) {
 			$this->exceptionHandler->log($throwable);
 			$response = $this->report($throwable);
-			if ($send) {
+			if ($send && $response instanceof HttpRequestInterface) {
 				$response->send();
 			}
 		}
@@ -91,8 +91,15 @@ abstract class HttpKernel implements KernelInterface {
 	 * @inheritdoc
 	 */
 	public function report($throwable) {
-		$message = '%s';
+		$message = sprintf(
+			'Error %s on line "%s" in file "%s": %s',
+			$throwable->getCode(),
+			$throwable->getLine(),
+			$throwable->getFile(),
+			$throwable->getMessage()
+		);
 		error_log($message, self::LOG_TO_SAPI);
+		return $message;
 	}
 	
 	/**
