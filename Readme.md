@@ -1,10 +1,10 @@
 # Simovative PRG-HTTP-Framework
 
 ## Index
-1.[Design principles](#design)
-2.[Quickstart](#quickstart)
-3.[General structure](#structure)
-4.[Modifying components](#modifying)
+1.[Design principles](#design)<br>
+2.[Quickstart](#quickstart)<br>
+3.[General structure](#structure)<br>
+4.[Modifying components](#modifying)<br>
 
 
 ## Design principles<a name="design"></a>
