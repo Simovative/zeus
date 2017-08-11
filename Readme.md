@@ -1,8 +1,33 @@
 # Simovative PRG-HTTP-Framework
-## Design principles
+
+## Index
+1.[Design principles](#design)
+2.[Quickstart](#quickstart)
+3.[General structure](#structure)
+4.[Modifying components](#modifying)
+
+
+## Design principles<a name="design"></a>
 
 This framework is made specifically for applications relying heavily on the
-HTTP protocol and the Post-Redirect-Get (PRG) design pattern.
+HTTP protocol and the Post-Redirect-Get (PRG) design pattern. From our point 
+of view it could be extended to create any kind of application, you
+just need to extend the HttpKernel or write your own Kernel. But currently this
+is not our intention.
+
+To use the automatic form population, you need to use bootstrap (getbootstrap.com)
+as your frontend framework. If you do not want to use it, you need to write your
+own FormPopulation class and replace the existing with it. We will write a tutorial
+for it in future. See the [mofifying components](#modifying).
+
+### Why did we develop this framework
+This framework was create in collaboration with Stefan Priebsch from the PHP
+Consulting Company (thePHP.cc). It aims to provide a solid solution to create
+a modular maintainable product out of our monolithic application. It should be
+easy to understand for young and inexperienced developers and delivers solid
+boundaries to develop new features in a maintainable way. A way of doing CQRS
+(Command Query Responsibility Segregation) is embedded into it, but if you
+do not need or want to use it, you can just ignore it (but I would not recommend it).
 
 ### What is PRG?
 Post-Redirect-Get is a common web development design pattern.
@@ -12,25 +37,25 @@ See https://en.wikipedia.org/wiki/Post/Redirect/Get
 This framework doesn't aim to provide a solution for every
 problem your application can possibly encounter, instead it tries to
 provide an elegant way to implement a very specific task. Unlike
- other frameworks it doesn't try to be a foundation for everything,
- but rather a solid solution for your applications very specific PRG
- needs. Thus, it doesn't abstract the transport protocol away, but
- relies on it to get the job done in a transparent way and leaves
- everything else up to your application. 
+other frameworks it doesn't try to be a foundation for everything,
+but rather a solid solution for your applications very specific PRG
+needs. Thus, it doesn't abstract the transport protocol away, but
+relies on it to get the job done in a transparent way and leaves
+everything else up to your application. 
  
 It aims to be compatible with other other frameworks for other tasks. 
 The commands are re-usable and you should be able to inject any kind 
 of action you already have into the framework using the command-interfaces. 
 
 ### Compatibility
-PHP 5.3 for now. We will switch to PHP 7 as soon as possible
+PHP 5.3 and up for now. We will remove the support for the older PHP versions
+very soon, so if you aim to stay on 5.5 or older, you should not use this framework.
 
-## Quickstart
-
+## Quickstart<a name="quickstart"></a>
 This section explains how you can get the framework up and running as
-fast as possible. 
+fast as possible.<br> 
 **Note: Registering the framework into an existing application is out of 
-scope of this guide**
+scope of this guide, but shouldn't be a big problem, as we also did this**
 
 ### Generating your application
 Install with composer
@@ -43,7 +68,7 @@ And let the cli help you in setting up a default application
 vendor/bin/zeus c:a Simovative\\Demo Demo
 ```
 This will create a folder public with an index.php file and a folder "bundles" 
-containing the ApplicationBundle and HttpKernel.
+containing the ApplicationBundle and ApplicationKernel.
 
 You might want to configure your webserver right away to test if this
 worked. 
@@ -70,7 +95,7 @@ location / {
 #### PHP internal webserver
 Just run the webserver and use the public/index.php as router script:
 ```
-php -S localhost:8000 publc/index.php
+php -S localhost:8000 public/index.php
 ``` 
 If everything worked you should see a basic setup page, telling you 
 to add another bundle. 
@@ -95,15 +120,50 @@ page with the message:
 Replace me with some serious content, please
 ```
 
-### Generating a GET Page
+### Generating a Page to display content (GET)
+```
+vendor/bin/zeus c:p Home Test
+```
 
-Todo
+This will create two files in you bundles/Test/Page folder:
+* HomePage.php: That's the page to show 
+* HomePageFactoryMethods.txt: Move this code into your 
+Bundle-Factory (TestFactory.php) to create the page from the router.
+(The file can be deleted afterwards)
 
-### Generating a Page with Form (POST)
+To create a route for this page add something similar to your GetRequestRouter
+```
+if ($request->getUrl() == '/test/home') {
+	return $this->factory->createTestHomePage();
+}
+```
 
-Todo
+### Generating a Page with a form that will be submitted (GET)
+```
+vendor/bin/zeus c:f Login Test
+```
 
-## General Structure
+This will create two files in you bundles/Test/Page folder:
+* LoginForm.php 
+* LoginFormFactoryMethods.txt 
+They contain the same type of code as in a normal page and should be treated
+the same way. Also use the similar code to create a route for it.
+
+The only difference is, if the form is submitted to an command, and the 
+validator invalidates it, the error messages and form content will be
+automatically populated to the form. This happens in the CommandDispatcher
+if you want to have a look at it.
+
+### Generating a Command (POST)
+```
+vendor/bin/zeus c:c Login Test
+```
+
+This will create five files in you bundles/Test/Command folder:
+* LoginForm.php 
+* LoginFormFactoryMethods.txt 
+
+## General Structure<a name="structure"></a>
 
 ### Configuration
 How you implement environments is up to you.
@@ -270,28 +330,26 @@ to display after the command execution. It is important for the
 framework to know what to do in case a command doesn't execute or
 validate.
 
-### Responses
+### CommandResponses
 
-Todo
+A command response signals the application/bundle controller the result of a
+command handler and lets the application react accordingly. Two default responses
+are already implemented that should fit most cases (CommandSuccessResponse, 
+CommandFailureResponse), but you can implement any kind of response yourself.
 
 #### Content
 #### HttpResponses & Locator
-Todo
+This class will translate a content into its http representation.
 
 ### TemplateEngine
-Todo
+The default template engine that is used is smarty. You can replace it
+with any your want in your application factory.
 
 ### ApplicationState
-Todo
+This is the equivalent of a session, but it can be anything that represents
+the current state of your application.
 
-## Dependencies
-Todo
-
-### Where to find what
-### What to put where
-
-
-## Modifying Components
+## Modifying Components <a name="modifying"></a>
 These examples should make you familiar with the process of modifying
 the behaviour of the framework with your application. **Note: It should
 not be necessary to modify the sources of the framework in any way.**
