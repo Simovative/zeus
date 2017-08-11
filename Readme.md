@@ -27,7 +27,7 @@ a modular maintainable product out of our monolithic application. It should be
 easy to understand for young and inexperienced developers and delivers solid
 boundaries to develop new features in a maintainable way. A way of doing CQRS
 (Command Query Responsibility Segregation) is embedded into it, but if you
-do not need or want to use it, you can just ignore it (but I would not recommend it).
+do not need or want to use it, you can just ignore it (but we would not recommend it).
 
 ### What is PRG?
 Post-Redirect-Get is a common web development design pattern.
