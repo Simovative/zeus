@@ -55,7 +55,7 @@ very soon, so if you aim to stay on 5.5 or older, you should not use this framew
 This section explains how you can get the framework up and running as
 fast as possible.<br> 
 **Note: Registering the framework into an existing application is out of 
-scope of this guide, but shouldn't be a big problem, as we also did this**
+scope of this guide, but shouldn't be a big problem, as we also did this.**
 
 ### Generating your application
 Install with composer
