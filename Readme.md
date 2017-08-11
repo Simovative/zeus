@@ -206,7 +206,8 @@ factory methods not beginning with either "get" or "create" will be ignored.
 
 ### Request
 
-Todo.
+The framework has its own request classes that will be used to access the request
+values.
 
 ### HTTPKernel
 
