@@ -354,18 +354,28 @@ These examples should make you familiar with the process of modifying
 the behaviour of the framework with your application. **Note: It should
 not be necessary to modify the sources of the framework in any way.**
 
+### Create your own FormPopulation
+Scenario: We do not want to use bootstrap as frontend framework but
+		  we love the automatic form population
+		  
+TODO
 ### Example: Implementing Pre- and PostFilterChains
 Scenario: We have a huge application with hundreds of routes and didn't
           care about localisation. Now the team decided to implement locales
           by adding en/ fr/ de/ es/ and so on at the beginning of the
           URI.
-
+TODO
 ### Example: Changing the Router
+TODO
 ### Example: Changing the Template Engine
+TODO
 ### Example: Enforce generic ACL
-
+TODO
 ## Extending your Application
-
+TODO
 ### Add Language/Translation Support
+TODO
 ### Add database support with doctrine
+TODO
 ### Add a consul key/value store
+TODO
