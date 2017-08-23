@@ -1,7 +1,7 @@
 <?php
 namespace {{appNamespace}}\{{bundleName}}\Command;
 
-use {{appNamespace}}\\{{bundleName}}Factory;
+use {{appNamespace}}\{{bundleName}\{{bundleName}}Factory;
 use Simovative\Zeus\Command\CommandBuilderAbstract;
 use Simovative\Zeus\Command\CommandRequest;
 use Simovative\Zeus\Dependency\MasterFactory;

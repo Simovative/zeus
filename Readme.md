@@ -160,8 +160,22 @@ vendor/bin/zeus c:c Login Test
 ```
 
 This will create five files in you bundles/Test/Command folder:
-* LoginForm.php 
-* LoginFormFactoryMethods.txt 
+* LoginCommand.php: The command object that holds all the data needed for execution.
+* LoginCommandBuilder.php The command builder connects all the command classes 
+together and will be used by the command dispatcher to get the single components.
+* LoginCommandHandler.php: The handler does the command execution.
+* LoginCommandValidator.php: The validator checks the command request if all the data
+is there and valid that is needed for the command execution.
+* LoginCommandFactoryMethods.txt: Move this code into your 
+Bundle-Factory (TestFactory.php) to create all required components and access the 
+builder creation method from the command router.
+
+To create a route for this command add something similar to your CommandRouter
+```
+if ($request->getUrl() == '/test/login') {
+	return $this->factory->createTestLoginCommandBuilder();
+}
+```
 
 ## General Structure<a name="structure"></a>
 
