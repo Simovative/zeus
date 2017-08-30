@@ -1,12 +1,6 @@
 language: php
 php:
-  - '5.6'
   - '7.0'
   - '7.1'
 install: php composer.phar update
-jobs:
-  include:
-    - stage: build
-      script: php composer.phar update
-    - stage: test
-      script: php tests/phpunit.phar --configuration tests/phpunit.xml
+script: php tests/phpunit.phar --configuration tests/phpunit.xml
