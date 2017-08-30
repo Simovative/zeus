@@ -24,7 +24,7 @@ use Simovative\Zeus\Session\Session;
 use Simovative\Zeus\Session\SessionInterface;
 use Simovative\Zeus\Session\Storage\Handler\SessionFileHandler;
 use Simovative\Zeus\Session\Storage\NativeSessionStorage;
-use Simovative\Zeus\Template\FormPopulation;
+use Simovative\Zeus\Template\BootstrapFormPopulation;
 use Simovative\Zeus\Template\SmartyTemplateEngine;
 use Simovative\Zeus\Template\TemplateEngineInterface;
 use Simovative\Zeus\Translator\Translator;
@@ -347,10 +347,10 @@ class FrameworkFactory extends Factory {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return FormPopulation
+	 * @return BootstrapFormPopulation
 	 */
-	public function createFormPopulation() {
-		return new FormPopulation();
+	public function createBootstrapFormPopulation() {
+		return new BootstrapFormPopulation();
 	}
 	
 	/**

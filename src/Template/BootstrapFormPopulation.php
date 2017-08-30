@@ -8,7 +8,7 @@ use Command\CommandValidationResult;
  *
  * @author mnoerenberg
  */
-class FormPopulation implements FormPopulationInterface {
+class BootstrapFormPopulation implements FormPopulationInterface {
 	
 	/**
 	 * @author Benedikt Schaller

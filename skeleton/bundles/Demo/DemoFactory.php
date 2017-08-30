@@ -60,7 +60,7 @@ class DemoFactory extends Factory {
 	 */
 	public function createDemoLoginPage() {
 		return new LoginPage(
-			$this->getMasterFactory()->createFormPopulation(),
+			$this->getMasterFactory()->createBootstrapFormPopulation(),
 			$this->getMasterFactory()->createDemoTemplateEngine()
 		);
 	}

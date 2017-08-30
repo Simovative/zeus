@@ -1,17 +1,24 @@
 <?php
-namespace Simovative\AC5\Framework;
+namespace Simovative\Zeus\Template;
 
-use Simovative\Framework\Template\FormPopulation;
+use Command\CommandValidationResult;
 
 /**
- * FormPopulation test case.
+ * Tests the bootstrap form population.
  */
-class FormPopulationTest extends \PHPUnit_Framework_TestCase {
-
-	public function testPopulatesTextInput() {
+class BootstrapFormPopulationTest extends \PHPUnit_Framework_TestCase {
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @return void
+	 */
+	public function testThatATextFieldValueIsPopulated() {
 		$amount = uniqid('amount_');
-		$formPopulation = new FormPopulation(file_get_contents(__DIR__ . '/data/form.html'), array('amount' => $amount));
-		$this->assertContains($amount, $formPopulation->populate());
+		$html = file_get_contents(__DIR__ . '/data/bootstrap_form.html');
+		$validationResult = new CommandValidationResult(false, array('amount' => $amount));
+		$formPopulation = new BootstrapFormPopulation();
+		$populatedHtml = $formPopulation->populate($html, $validationResult);
+		$this->assertContains($amount, $populatedHtml);
 	}
 }
 
