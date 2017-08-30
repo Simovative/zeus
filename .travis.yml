@@ -4,7 +4,7 @@ php:
   - '5.6'
   - '7.0'
   - '7.1'
-install: php vendor/vendors.php
+install: php composer.phar update
 jobs:
   include:
     - stage: build
