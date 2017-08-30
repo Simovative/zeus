@@ -1,5 +1,5 @@
 # Simovative PRG-HTTP-Framework
-
+[![Build Status](https://travis-ci.org/Simovative/zeus.svg?branch=master)](https://travis-ci.org/Simovative/zeus)
 ## Index
 1.[Design principles](#design)<br>
 2.[Quickstart](#quickstart)<br>
