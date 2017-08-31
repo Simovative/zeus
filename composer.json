@@ -17,8 +17,8 @@
     "smarty/smarty": "v3.*",
     "php": ">=5.3.0",
     "ext-intl": "*",
-    "symfony/console": "3.3.6",
-    "symfony/debug": "3.3.6"
+    "symfony/debug": "3.3.6",
+    "symfony/console": "3.3.6"
   },
   "require-dev": {
   },
