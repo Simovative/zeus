@@ -1,5 +1,8 @@
 # Simovative PRG-HTTP-Framework
 [![Build Status](https://travis-ci.org/Simovative/zeus.svg?branch=master)](https://travis-ci.org/Simovative/zeus)
+[![Coveralls](https://coveralls.io/repos/Simovative/zeus/badge.svg?branch=master)](https://coveralls.io/github/Simovative/zeus?branch=master)
+[![CodeCov](https://codecov.io/gh/Simovative/zeus/branch/master/graph/badge.svg)](https://codecov.io/gh/Simovative/zeus)
+
 ## Index
 1.[Design principles](#design)<br>
 2.[Quickstart](#quickstart)<br>
