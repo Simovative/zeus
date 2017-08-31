@@ -7,10 +7,10 @@ install: php build/composer.phar install --no-interaction
 script: php build/phpunit.phar --configuration tests/phpunit.xml
 
 after_success:
-# Submit coverage report to Coveralls servers, see .coveralls.yml
- - travis_retry php build/coveralls.phar -v  -c .coveralls.yaml
-# Submit coverage report to codecov.io
-- bash <(curl -s https://codecov.io/bash)
+  # Submit coverage report to Coveralls servers, see .coveralls.yml
+  - travis_retry php build/coveralls.phar -v  -c .coveralls.yaml
+  # Submit coverage report to codecov.io
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:
