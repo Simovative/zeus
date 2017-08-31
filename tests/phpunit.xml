@@ -10,7 +10,8 @@
 			<directory>../src</directory>
 		</whitelist>
 		<blacklist>
-			<directory>../vendor</directory>
+            <directory>../tests</directory>
+            <directory>../vendor</directory>
 		</blacklist>
 	</filter>
 	<logging>
