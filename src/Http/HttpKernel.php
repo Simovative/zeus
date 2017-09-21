@@ -7,6 +7,7 @@ use Simovative\Zeus\Dependency\KernelInterface;
 use Simovative\Zeus\Dependency\MasterFactory;
 use Simovative\Zeus\Exception\ExceptionHandler;
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
+use Simovative\Zeus\Http\Response\HttpResponseInterface;
 use Simovative\Zeus\State\ApplicationStateInterface;
 
 /**
@@ -79,7 +80,7 @@ abstract class HttpKernel implements KernelInterface {
 		} catch (\Exception $throwable) {
 			$this->exceptionHandler->log($throwable);
 			$response = $this->report($throwable, $request);
-			if ($send && $response instanceof HttpRequestInterface) {
+			if ($send && $response instanceof HttpResponseInterface) {
 				$response->send();
 			}
 		}
