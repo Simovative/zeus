@@ -17,7 +17,7 @@ interface KernelInterface {
 	 * @param \Exception|\Throwable $throwable
 	 * @return HttpResponseInterface|string
 	 */
-	public function report($throwable);
+	public function report($throwable, HttpRequestInterface $request);
 	
 	/**
 	 * @author shartmann

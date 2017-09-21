@@ -90,7 +90,7 @@ abstract class HttpKernel implements KernelInterface {
 	 * @author Benedikt Schaller
 	 * @inheritdoc
 	 */
-	public function report($throwable) {
+	public function report($throwable, HttpRequestInterface $request) {
 		$message = sprintf(
 			'Error %s on line "%s" in file "%s": %s',
 			$throwable->getCode(),
