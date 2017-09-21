@@ -78,7 +78,7 @@ abstract class HttpKernel implements KernelInterface {
 			}
 		} catch (\Exception $throwable) {
 			$this->exceptionHandler->log($throwable);
-			$response = $this->report($throwable);
+			$response = $this->report($throwable, $request);
 			if ($send && $response instanceof HttpRequestInterface) {
 				$response->send();
 			}
