@@ -12,12 +12,13 @@ interface KernelInterface {
 	/**
 	 * Handles exceptions and errors.
 	 * Called by exception handler.
-	 * 
+	 *
 	 * @author mnoerenberg
 	 * @param \Exception|\Throwable $throwable
+	 * @param HttpRequestInterface|null $request
 	 * @return HttpResponseInterface|string
 	 */
-	public function report($throwable, HttpRequestInterface $request);
+	public function report($throwable, HttpRequestInterface $request = null);
 	
 	/**
 	 * @author shartmann

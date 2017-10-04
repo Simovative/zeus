@@ -91,7 +91,7 @@ abstract class HttpKernel implements KernelInterface {
 	 * @author Benedikt Schaller
 	 * @inheritdoc
 	 */
-	public function report($throwable, HttpRequestInterface $request) {
+	public function report($throwable, HttpRequestInterface $request = null) {
 		$message = sprintf(
 			'Error %s on line "%s" in file "%s": %s',
 			$throwable->getCode(),
@@ -99,6 +99,9 @@ abstract class HttpKernel implements KernelInterface {
 			$throwable->getFile(),
 			$throwable->getMessage()
 		);
+		if ($request !== null) {
+			$message .= ' - Request-Url: ' . (string) $request->getUrl();
+		}
 		error_log($message, self::LOG_TO_SAPI);
 		return $message;
 	}
