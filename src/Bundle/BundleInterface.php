@@ -46,4 +46,31 @@ interface BundleInterface {
 	 * @return void
 	*/
 	public function registerBundleController(ApplicationController $applicationController);
+	
+	/**
+	 * Register bundles put routers.
+	 *
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerPutRouters(CommandRequestRouterChain $router);
+	
+	/**
+	 * Register bundles patch routers.
+	 *
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerPatchRouters(CommandRequestRouterChain $router);
+	
+	/**
+	 * Register bundles delete routers.
+	 *
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerDeleteRouters(CommandRequestRouterChain $router);
 }

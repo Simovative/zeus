@@ -58,4 +58,28 @@ interface HttpRequestInterface {
 	 * @return boolean
 	 */
 	public function isGet();
+	
+	/**
+	 * Returns if we have a put request.
+	 *
+	 * @author Benedikt Schaller
+	 * @return boolean
+	 */
+	public function isPut();
+	
+	/**
+	 * Returns if we have a patch request.
+	 *
+	 * @author Benedikt Schaller
+	 * @return boolean
+	 */
+	public function isPatch();
+	
+	/**
+	 * Returns if we have a delete request.
+	 *
+	 * @author Benedikt Schaller
+	 * @return boolean
+	 */
+	public function isDelete();
 }

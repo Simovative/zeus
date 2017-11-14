@@ -112,4 +112,28 @@ abstract class HttpRequest implements HttpRequestInterface {
 	public function isPost() {
 		return false;
 	}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function isPut() {
+		return false;
+	}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function isPatch() {
+		return false;
+	}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function isDelete() {
+		return false;
+	}
 }
