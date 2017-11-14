@@ -89,6 +89,21 @@ abstract class HttpKernel implements KernelInterface {
 					$bundle->registerDeleteController($this->getMasterFactory()->getApplicationController());
 					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 				}
+				// patch
+				if ($request->isPatch()) {
+					$bundle->registerPatchRouters($this->getMasterFactory()->getCommandRequestRouterChain());
+					$bundle->registerPatchController($this->getMasterFactory()->getApplicationController());
+				}
+				// put
+				if ($request->isPut()) {
+					$bundle->registerPutRouters($this->getMasterFactory()->getCommandRequestRouterChain());
+					$bundle->registerPutController($this->getMasterFactory()->getApplicationController());
+				}
+				// delete
+				if ($request->isDelete()) {
+					$bundle->registerDeleteRouters($this->getMasterFactory()->getCommandRequestRouterChain());
+					$bundle->registerDeleteController($this->getMasterFactory()->getApplicationController());
+				}
 			}
 		
 			$locator = $this->getMasterFactory()->createHttpRequestDispatcherLocator();
