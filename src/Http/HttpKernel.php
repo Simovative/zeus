@@ -59,7 +59,7 @@ abstract class HttpKernel implements KernelInterface {
 	public function run(HttpRequestInterface $request, $send = true) {
 		try {
 			$this->exceptionHandler = $this->getMasterFactory()->createExceptionHandler($this);
-			$this->exceptionHandler->registerExceptionHandler();
+			$this->exceptionHandler->register();
 			$this->bundles = $this->registerBundles($request);
 			foreach ($this->bundles as $bundle) {
 				$bundle->registerFactories($this->getMasterFactory());
@@ -74,35 +74,23 @@ abstract class HttpKernel implements KernelInterface {
 					$bundle->registerPostController($this->getMasterFactory()->getApplicationController());
 					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 				}
-				if ($request->isPatch()) {
-					$bundle->registerPatchRouters($this->getMasterFactory()->getCommandRequestRouterChain());
-					$bundle->registerPatchController($this->getMasterFactory()->getApplicationController());
-					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
-				}
-				if ($request->isPut()) {
-					$bundle->registerPutRouters($this->getMasterFactory()->getCommandRequestRouterChain());
-					$bundle->registerPutController($this->getMasterFactory()->getApplicationController());
-					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
-				}
-				if ($request->isDelete()) {
-					$bundle->registerDeleteRouters($this->getMasterFactory()->getCommandRequestRouterChain());
-					$bundle->registerDeleteController($this->getMasterFactory()->getApplicationController());
-					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
-				}
 				// patch
 				if ($request->isPatch()) {
 					$bundle->registerPatchRouters($this->getMasterFactory()->getCommandRequestRouterChain());
 					$bundle->registerPatchController($this->getMasterFactory()->getApplicationController());
+					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 				}
 				// put
 				if ($request->isPut()) {
 					$bundle->registerPutRouters($this->getMasterFactory()->getCommandRequestRouterChain());
 					$bundle->registerPutController($this->getMasterFactory()->getApplicationController());
+					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 				}
 				// delete
 				if ($request->isDelete()) {
 					$bundle->registerDeleteRouters($this->getMasterFactory()->getCommandRequestRouterChain());
 					$bundle->registerDeleteController($this->getMasterFactory()->getApplicationController());
+					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 				}
 			}
 		
