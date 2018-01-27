@@ -63,4 +63,53 @@ abstract class Bundle implements BundleInterface {
 	 * @param ApplicationController $applicationController
 	 */
 	public function registerBundleController(ApplicationController $applicationController) {}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerPutRouters(CommandRequestRouterChain $router) {}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerPatchRouters(CommandRequestRouterChain $router) {}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerDeleteRouters(CommandRequestRouterChain $router) {}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerPostController(ApplicationController $applicationController) {}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerPatchController(ApplicationController $applicationController) {}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerPutController(ApplicationController $applicationController) {}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerDeleteController(ApplicationController $applicationController) {}
 }

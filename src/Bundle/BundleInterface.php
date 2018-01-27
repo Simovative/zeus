@@ -40,6 +40,7 @@ interface BundleInterface {
 	
 	/**
 	 * Method to register bundle controller at the main application controller.
+	 * Can be used for all post, put, patch and delete methods.
 	 *
 	 * @author mnoerenberg
 	 * @param ApplicationController $applicationController
@@ -73,4 +74,32 @@ interface BundleInterface {
 	 * @return void
 	 */
 	public function registerDeleteRouters(CommandRequestRouterChain $router);
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerPostController(ApplicationController $applicationController);
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerPatchController(ApplicationController $applicationController);
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerPutController(ApplicationController $applicationController);
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerDeleteController(ApplicationController $applicationController);
 }

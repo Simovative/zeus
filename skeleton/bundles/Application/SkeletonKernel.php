@@ -4,6 +4,7 @@ namespace Simovative\Skeleton\Application;
 use Simovative\Skeleton\Demo\DemoBundle;
 use Simovative\Zeus\Dependency\FrameworkFactory;
 use Simovative\Zeus\Http\HttpKernel;
+use Simovative\Zeus\Http\Request\HttpRequestInterface;
 
 /**
  * @author Benedikt Schaller
@@ -22,7 +23,7 @@ class SkeletonKernel extends HttpKernel {
 	 * @author mnoerenberg
 	 * @inheritdoc
 	 */
-	protected function registerBundles() {
+	protected function registerBundles(HttpRequestInterface $request) {
 		$bundles = array();
 		$bundles[] = new ApplicationBundle();
 		$bundles[] = new DemoBundle();
@@ -41,7 +42,7 @@ class SkeletonKernel extends HttpKernel {
 	 * @author Benedikt Schaller
 	 * @inheritdoc
 	 */
-	public function report($throwable) {
+	public function report($throwable, HttpRequestInterface $request = null) {
 		parent::report($throwable);
 		var_dump($throwable);
 	}

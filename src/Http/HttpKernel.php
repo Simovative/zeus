@@ -1,7 +1,6 @@
 <?php
 namespace Simovative\Zeus\Http;
 
-use Simovative\Zeus\Bundle\Bundle;
 use Simovative\Zeus\Bundle\BundleInterface;
 use Simovative\Zeus\Dependency\FrameworkFactory;
 use Simovative\Zeus\Dependency\KernelInterface;
@@ -50,10 +49,11 @@ abstract class HttpKernel implements KernelInterface {
 	public function run(HttpRequestInterface $request, $send = true) {
 		$this->exceptionHandler = $this->getMasterFactory()->createExceptionHandler($this);
 		$this->exceptionHandler->registerExceptionHandler();
-		$this->bundles = $this->registerBundles();
+		$this->bundles = $this->registerBundles($request);
 		foreach ($this->bundles as $bundle) {
 			$bundle->registerFactories($this->getMasterFactory());
 		}
+		
 		foreach ($this->bundles as $index => $bundle) {
 			// get
 			if ($request->isGet()) {
@@ -63,23 +63,25 @@ abstract class HttpKernel implements KernelInterface {
 			if ($request->isPost()) {
 				$bundle->registerPostRouters($this->getMasterFactory()->getCommandRequestRouterChain());
 				$bundle->registerPostController($this->getMasterFactory()->getApplicationController());
-				// For backwards compatibility still call the old method
 				$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 			}
 			// patch
 			if ($request->isPatch()) {
 				$bundle->registerPatchRouters($this->getMasterFactory()->getCommandRequestRouterChain());
 				$bundle->registerPatchController($this->getMasterFactory()->getApplicationController());
+				$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 			}
 			// put
 			if ($request->isPut()) {
 				$bundle->registerPutRouters($this->getMasterFactory()->getCommandRequestRouterChain());
 				$bundle->registerPutController($this->getMasterFactory()->getApplicationController());
+				$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 			}
 			// delete
 			if ($request->isDelete()) {
 				$bundle->registerDeleteRouters($this->getMasterFactory()->getCommandRequestRouterChain());
 				$bundle->registerDeleteController($this->getMasterFactory()->getApplicationController());
+				$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 			}
 		}
 		
@@ -135,9 +137,10 @@ abstract class HttpKernel implements KernelInterface {
 	 * Returns installed Bundles.
 	 *
 	 * @author mnoerenberg
-	 * @return BundleInterface[]
+	 * @param HttpRequestInterface $request
+	 * @return \Simovative\Zeus\Bundle\BundleInterface[]
 	 */
-	abstract protected function registerBundles();
+	abstract protected function registerBundles(HttpRequestInterface $request);
 	
 	/**
 	 * If the application has no state, just return null.
