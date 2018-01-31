@@ -16,7 +16,7 @@ interface KernelInterface {
 	 * @author mnoerenberg
 	 * @param \Exception|\Throwable $throwable
 	 * @param HttpRequestInterface|null $request
-	 * @return HttpResponseInterface|string
+	 * @return HttpResponseInterface|null
 	 */
 	public function report($throwable, HttpRequestInterface $request = null);
 	

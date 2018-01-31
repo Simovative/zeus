@@ -38,6 +38,16 @@ abstract class HttpKernel implements KernelInterface {
 	 */
 	public function __construct(MasterFactory $masterFactory) {
 		$this->masterFactory = $masterFactory;
+		$this->initializeExceptionHandler();
+	}
+	
+	/**
+	 * @author shartmann
+	 * @return void
+	 */
+	protected function initializeExceptionHandler() {
+		$this->exceptionHandler = $this->getMasterFactory()->createExceptionHandler($this);
+		$this->exceptionHandler->register();
 	}
 	
 	/**
@@ -47,40 +57,40 @@ abstract class HttpKernel implements KernelInterface {
 	 * @inheritdoc
 	 */
 	public function run(HttpRequestInterface $request, $send = true) {
-		$this->exceptionHandler = $this->getMasterFactory()->createExceptionHandler($this);
-		$this->exceptionHandler->registerExceptionHandler();
-		$this->bundles = $this->registerBundles($request);
-		foreach ($this->bundles as $bundle) {
-			$bundle->registerFactories($this->getMasterFactory());
-		}
-		
-		foreach ($this->bundles as $index => $bundle) {
-			if ($request->isGet()) {
-				$bundle->registerGetRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
-			}
-			if ($request->isPost()) {
-				$bundle->registerPostRouters($this->getMasterFactory()->getCommandRequestRouterChain());
-				$bundle->registerPostController($this->getMasterFactory()->getApplicationController());
-				$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
-			}
-			if ($request->isPatch()) {
-				$bundle->registerPatchRouters($this->getMasterFactory()->getCommandRequestRouterChain());
-				$bundle->registerPatchController($this->getMasterFactory()->getApplicationController());
-				$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
-			}
-			if ($request->isPut()) {
-				$bundle->registerPutRouters($this->getMasterFactory()->getCommandRequestRouterChain());
-				$bundle->registerPutController($this->getMasterFactory()->getApplicationController());
-				$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
-			}
-			if ($request->isDelete()) {
-				$bundle->registerDeleteRouters($this->getMasterFactory()->getCommandRequestRouterChain());
-				$bundle->registerDeleteController($this->getMasterFactory()->getApplicationController());
-				$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
-			}
-		}
-		
 		try {
+			$this->exceptionHandler = $this->getMasterFactory()->createExceptionHandler($this);
+			$this->exceptionHandler->registerExceptionHandler();
+			$this->bundles = $this->registerBundles($request);
+			foreach ($this->bundles as $bundle) {
+				$bundle->registerFactories($this->getMasterFactory());
+			}
+			
+			foreach ($this->bundles as $index => $bundle) {
+				if ($request->isGet()) {
+					$bundle->registerGetRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
+				}
+				if ($request->isPost()) {
+					$bundle->registerPostRouters($this->getMasterFactory()->getCommandRequestRouterChain());
+					$bundle->registerPostController($this->getMasterFactory()->getApplicationController());
+					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
+				}
+				if ($request->isPatch()) {
+					$bundle->registerPatchRouters($this->getMasterFactory()->getCommandRequestRouterChain());
+					$bundle->registerPatchController($this->getMasterFactory()->getApplicationController());
+					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
+				}
+				if ($request->isPut()) {
+					$bundle->registerPutRouters($this->getMasterFactory()->getCommandRequestRouterChain());
+					$bundle->registerPutController($this->getMasterFactory()->getApplicationController());
+					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
+				}
+				if ($request->isDelete()) {
+					$bundle->registerDeleteRouters($this->getMasterFactory()->getCommandRequestRouterChain());
+					$bundle->registerDeleteController($this->getMasterFactory()->getApplicationController());
+					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
+				}
+			}
+		
 			$locator = $this->getMasterFactory()->createHttpRequestDispatcherLocator();
 			$dispatcher = $locator->getDispatcherFor($request);
 			$content = $dispatcher->dispatch($request);
@@ -92,7 +102,6 @@ abstract class HttpKernel implements KernelInterface {
 				$this->getApplicationState()->commit();
 			}
 		} catch (\Exception $throwable) {
-			$this->exceptionHandler->log($throwable);
 			$response = $this->report($throwable, $request);
 			if ($send && $response instanceof HttpResponseInterface) {
 				$response->send();
