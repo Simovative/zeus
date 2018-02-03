@@ -110,4 +110,68 @@ class UploadedFile {
 		}
 		return $normalizedFilesArray;
 	}
+	
+	/**
+	 * Returns if we have a valid uploaded file or if someone tried to manipulate the request.
+	 *
+	 * @author Benedikt Schaller
+	 * @return bool
+	 */
+	public function isValidUploadedFile() {
+		return is_uploaded_file($this->path);
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @return string
+	 */
+	public function getInputName() {
+		return $this->inputName;
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @return int
+	 */
+	public function getInputIndex() {
+		return $this->inputIndex;
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @return string
+	 */
+	public function getLabel() {
+		return $this->label;
+	}
+	
+	/**
+	 * Returns the transmitted file type, but you should not rely on this,
+	 * because this can be manipulated.
+	 *
+	 * @author Benedikt Schaller
+	 * @return string
+	 */
+	public function getType() {
+		return $this->type;
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @return string
+	 */
+	public function getPath() {
+		return $this->path;
+	}
+	
+	/**
+	 * Returns the Size in bytes.
+	 *
+	 * @author Benedikt Schaller
+	 * @return int
+	 */
+	public function getSize() {
+		return $this->size;
+	}
+	
 }
