@@ -61,8 +61,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::has()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function has($name) {
@@ -70,8 +69,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::get()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function get($name, $default = null) {
@@ -83,8 +81,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::all()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function all() {
@@ -92,8 +89,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::getUrl()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function getUrl() {
@@ -101,8 +97,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::isGet()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function isGet() {
@@ -110,9 +105,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 *
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::isPost()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function isPost() {
