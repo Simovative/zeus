@@ -33,7 +33,7 @@ class {{prefix}}Kernel extends HttpKernel {
 	/**
 	 * @inheritdoc
 	 */
-	public function report($throwable) {
+	public function report($throwable, HttpRequestInterface $request = null) {
 		parent::report($throwable);
 		if (
 			$throwable instanceof IncompleteSetupException
