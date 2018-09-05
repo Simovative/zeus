@@ -95,11 +95,11 @@ abstract class HttpKernel implements KernelInterface {
 			$dispatcher = $locator->getDispatcherFor($request);
 			$content = $dispatcher->dispatch($request);
 			$response = $this->getMasterFactory()->getHttpResponseLocator()->getResponseFor($content);
-			if ($send) {
-				$response->send();
-			}
 			if ($this->getApplicationState() !== null) {
 				$this->getApplicationState()->commit();
+			}
+			if ($send) {
+				$response->send();
 			}
 		} catch (\Exception $throwable) {
 			$response = $this->report($throwable, $request);
