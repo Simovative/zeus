@@ -15,7 +15,7 @@ interface UrlMatcherInterface {
 	 * @param bool $matchPath if set to true the server name is ignored
 	 * @return bool
 	 */
-	public function match(Url $url, $route, $matchPath);
+	public function match(Url $url, $route, $matchPath = true);
 	
 	/**
 	 * Returns true if any of the given routes is matched.
