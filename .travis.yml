@@ -4,6 +4,20 @@ php:
   - '7.0'
   - '7.1'
 install: php build/composer.phar install --no-interaction
+
+addons:
+	sonarcloud:
+
+	organization: "sonarcloud_organization_key"
+	# the key of the org you chose at step
+	#3 
+	token: 
+	secure: ********* 
+	# encrypted value of your token 
+	script: 
+	# other script steps might be done before running the actual analysis
+	- sonar-scanner
+
 script: php build/phpunit.phar --configuration tests/phpunit.xml
 
 after_success:
