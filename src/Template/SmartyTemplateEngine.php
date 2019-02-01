@@ -141,4 +141,13 @@ class SmartyTemplateEngine implements TemplateEngineInterface {
 		
 		return $this->smarty->fetch($path, md5($path));
 	}
+	
+	/**
+	 * @author bschaller
+	 * @param string $templatePath
+	 * @return void
+	 */
+	public function addTemplatePath($templatePath) {
+		$this->smarty->addTemplateDir($templatePath);
+	}
 }

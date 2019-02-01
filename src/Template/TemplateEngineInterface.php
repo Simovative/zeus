@@ -21,4 +21,11 @@ interface TemplateEngineInterface {
 	 * @return string
 	 */
 	public function render($path, array $placeholderValues = array());
+	
+	/**
+	 * @author bschaller
+	 * @param string $templatePath
+	 * @return void
+	 */
+	public function addTemplatePath($templatePath);
 }
