@@ -4,6 +4,7 @@ namespace {{namespace}}\Application;
 use Simovative\Zeus\Dependency\FrameworkFactory;
 use Simovative\Zeus\Exception\IncompleteSetupException;
 use Simovative\Zeus\Http\HttpKernel;
+use Simovative\Zeus\Http\Request\HttpRequestInterface;
 
 class {{prefix}}Kernel extends HttpKernel {
 	
