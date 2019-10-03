@@ -3,6 +3,7 @@ namespace Simovative\Zeus\Http\Request;
 
 use Simovative\Zeus\Http\Get\HttpDeleteRequest;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
+use Simovative\Zeus\Http\Get\HttpHeaderRequest;
 use Simovative\Zeus\Http\Get\HttpPatchRequest;
 use Simovative\Zeus\Http\Get\HttpPutRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
@@ -48,13 +49,15 @@ abstract class HttpRequest implements HttpRequestInterface {
 				$uploadedFiles = UploadedFile::createFromGlobal($_FILES);
 				return new HttpPostRequest($currentUrl, $_REQUEST, $uploadedFiles);
 			case 'GET':
-				return new HttpGetRequest($currentUrl, $_REQUEST);
+				return new HttpGetRequest($currentUrl, $_GET);
 			case 'PUT':
 				return new HttpPutRequest($currentUrl, $_REQUEST);
 			case 'PATCH':
 				return new HttpPatchRequest($currentUrl, $_REQUEST);
 			case 'DELETE':
 				return new HttpDeleteRequest($currentUrl, $_REQUEST);
+			case 'HEADER':
+				return new HttpHeaderRequest($currentUrl, $_REQUEST);
 		}
 		
 		throw new \LogicException('request method not allowed.');
@@ -133,6 +136,14 @@ abstract class HttpRequest implements HttpRequestInterface {
 	 * @author Benedikt Schaller
 	 */
 	public function isDelete() {
+		return false;
+	}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function isHeader() {
 		return false;
 	}
 }
