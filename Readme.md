@@ -24,7 +24,7 @@ own FormPopulation class and replace the existing with it. We will write a tutor
 for it in future. See the [mofifying components](#modifying).
 
 ### Why did we develop this framework
-This framework was create in collaboration with Stefan Priebsch from the PHP
+This framework was created in collaboration with Stefan Priebsch from the PHP
 Consulting Company (thePHP.cc). It aims to provide a solid solution to create
 a modular maintainable product out of our monolithic application. It should be
 easy to understand for young and inexperienced developers and delivers solid
