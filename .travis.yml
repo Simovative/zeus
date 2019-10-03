@@ -1,3 +1,4 @@
+dist: trusty
 language: php
 php:
   - '5.6'
@@ -8,13 +9,13 @@ install: php build/composer.phar install --no-interaction
 addons:
   sonarcloud:
     organization: "simovative"
-    # the key of the org you chose at step
-    #3
-script: 
-  # other script steps might be done before running the actual analysis
-  - sonar-scanner
+    token:
+      secure: "**************************" # encrypted value of your token
 
-script: php build/phpunit.phar --configuration tests/phpunit.xml
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - sonar-scanner
+  - php build/phpunit.phar --configuration tests/phpunit.xml
 
 after_success:
   # Submit coverage report to Coveralls servers, see .coveralls.yml
