@@ -1,6 +1,8 @@
 <?php
 namespace Simovative\Zeus\Filesystem;
 
+use Simovative\Zeus\Exception\FilesystemException;
+
 /**
  * @author mnoerenberg
  */
@@ -89,10 +91,11 @@ class File {
 	 * @author mnoerenberg
 	 * @param string $content
 	 * @return boolean
+	 * @throws FilesystemException
 	 */
 	public function append($content) {
 		if (! $this->exists()) {
-			throw new \Exception('file not found');
+			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
 		}
 		
 		file_put_contents($this->path, $content, FILE_APPEND);
@@ -105,10 +108,11 @@ class File {
 	 *
 	 * @author mnoerenberg
 	 * @return string
+	 * @throws FilesystemException
 	 */
 	public function read() {
 		if (! $this->exists()) {
-			throw new \Exception('file ' . $this->path . ' not found');
+			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
 		}
 		
 		if ($this->getSize() > 0) {
@@ -119,14 +123,15 @@ class File {
 	}
 	
 	/**
-	 * Returns the filesize in bytes.
+	 * Returns the size of the file in bytes.
 	 *
 	 * @author mnoerenberg
 	 * @return int
+	 * @throws FilesystemException
 	 */
 	public function getSize() {
 		if (! $this->exists()) {
-			throw new \Exception('file not found');
+			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
 		}
 		
 		return filesize($this->path);
@@ -147,10 +152,11 @@ class File {
 	 *
 	 * @author mnoerenberg
 	 * @return boolean
+	 * @throws FilesystemException
 	 */
 	public function delete() {
 		if (! $this->exists()) {
-			throw new \Exception('file not found');
+			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
 		}
 		
 		return unlink($this->path);
@@ -163,10 +169,11 @@ class File {
 	 * @param File $destinationFile
 	 * @param boolean $createDir
 	 * @return void
+	 * @throws FilesystemException
 	 */
 	public function copy(File $destinationFile, $createDir = true) {
 		if ($destinationFile->exists()) {
-			throw new \Exception('target file already exists.');
+			throw new FilesystemException(sprintf('Target file already exists "%s".', $destinationFile->getPath()));
 		}
 		
 		// create directory if not exists.
@@ -186,10 +193,11 @@ class File {
 	 *
 	 * @author mnoerenberg
 	 * @return \DateTime|false
+	 * @throws FilesystemException
 	 */
 	public function getLastChangeTimestamp() {
 		if (! $this->exists()) {
-			throw new \Exception('file not found');
+			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
 		}
 		
 		return new \DateTime(filemtime($this->path));
@@ -240,12 +248,13 @@ class File {
 	public function getPath() {
 		return $this->path;
 	}
-
+	
 	/**
 	 * Returns the directory of the file.
 	 *
 	 * @author mnoerenberg
 	 * @return Directory
+	 * @throws FilesystemException
 	 */
 	public function getDirectory() {
 		return new Directory(dirname($this->path));
@@ -258,15 +267,15 @@ class File {
 	 * @return int
 	 */
 	public function countLines() {
-		$linecount = 0;
+		$lineCount = 0;
 		$handle = fopen($this->path, "r");
 		while(!feof($handle)){
 			$line = fgets($handle, 4096);
-			$linecount = $linecount + substr_count($line, PHP_EOL);
+			$lineCount = $lineCount + substr_count($line, PHP_EOL);
 		}
 		fclose($handle);
 		
-		return $linecount;
+		return $lineCount;
 	}
 	
 	/**
@@ -275,10 +284,11 @@ class File {
 	 * @author http://www.codediesel.com/php/tail-functionality-in-php
 	 * @param int $lines
 	 * @return string
+	 * @throws FilesystemException
 	 */
 	public function tail($lines = 10) {
 		if (! $this->exists()) {
-			throw new \Exception('file not found');
+			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
 		}
 		
 		$data = '';
@@ -312,7 +322,8 @@ class File {
 	 * @return string
 	 */
 	public function getMimeType() {
-		return mime_content_type($this->getPath());
+		$mimeType = new FileMimeType($this);
+		return $mimeType->getMimeType();
 	}
 	
 	/**
