@@ -37,7 +37,7 @@ abstract class Bundle implements BundleInterface {
 	/**
 	 * @inheritdoc
 	 * @author mnoerenberg
-	 * @param MasterFactory $masterFactory
+	 * @throws \Exception
 	 */
 	public function registerFactories(MasterFactory $masterFactory) {
 		$masterFactory->register($this->getBundleFactory());
@@ -46,21 +46,73 @@ abstract class Bundle implements BundleInterface {
 	/**
 	 * @inheritdoc
 	 * @author mnoerenberg
-	 * @param HttpGetRequestRouterChain $router
 	 */
 	public function registerGetRouters(HttpGetRequestRouterChain $router) {}
 	
 	/**
 	 * @inheritdoc
 	 * @author mnoerenberg
-	 * @param CommandRequestRouterChain $router
 	 */
 	public function registerPostRouters(CommandRequestRouterChain $router) {}
 	
 	/**
 	 * @inheritdoc
 	 * @author mnoerenberg
-	 * @param ApplicationController $applicationController
 	 */
 	public function registerBundleController(ApplicationController $applicationController) {}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function registerPutRouters(CommandRequestRouterChain $router) {}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function registerPatchRouters(CommandRequestRouterChain $router) {}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function registerDeleteRouters(CommandRequestRouterChain $router) {}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function registerPostController(ApplicationController $applicationController) {}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function registerPatchController(ApplicationController $applicationController) {}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function registerPutController(ApplicationController $applicationController) {}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function registerDeleteController(ApplicationController $applicationController) {}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function registerHeaderRouters(CommandRequestRouterChain $router) {}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function registerHeaderController(ApplicationController $applicationController) {}
+	
 }

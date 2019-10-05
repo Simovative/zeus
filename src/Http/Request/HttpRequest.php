@@ -1,8 +1,13 @@
 <?php
 namespace Simovative\Zeus\Http\Request;
 
+use Simovative\Zeus\Http\Get\HttpDeleteRequest;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
+use Simovative\Zeus\Http\Get\HttpHeaderRequest;
+use Simovative\Zeus\Http\Get\HttpPatchRequest;
+use Simovative\Zeus\Http\Get\HttpPutRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
+use Simovative\Zeus\Http\Post\UploadedFile;
 use Simovative\Zeus\Http\Url\Url;
 
 /**
@@ -37,26 +42,29 @@ abstract class HttpRequest implements HttpRequestInterface {
 	 * @return HttpRequestInterface
 	 */
 	public static function createFromGlobals() {
-		$protocol = 'http://';
-		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-			$protocol = 'https://';
-		}
-		$currentUrl = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-// 		$currentUrl = str_replace('index.php', '', $currentUrl); // fix to redirect to /
+		$currentUrl = Url::createFromServerArray($_SERVER);
 		
 		switch ($_SERVER['REQUEST_METHOD']) {
 			case 'POST':
-				return new HttpPostRequest(new Url($currentUrl), $_REQUEST);
+				$uploadedFiles = UploadedFile::createFromGlobal($_FILES);
+				return new HttpPostRequest($currentUrl, $_REQUEST, $uploadedFiles);
 			case 'GET':
-				return new HttpGetRequest(new Url($currentUrl), $_REQUEST);
+				return new HttpGetRequest($currentUrl, $_GET);
+			case 'PUT':
+				return new HttpPutRequest($currentUrl, $_REQUEST);
+			case 'PATCH':
+				return new HttpPatchRequest($currentUrl, $_REQUEST);
+			case 'DELETE':
+				return new HttpDeleteRequest($currentUrl, $_REQUEST);
+			case 'HEADER':
+				return new HttpHeaderRequest($currentUrl, $_REQUEST);
 		}
 		
 		throw new \LogicException('request method not allowed.');
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::has()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function has($name) {
@@ -64,8 +72,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::get()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function get($name, $default = null) {
@@ -77,8 +84,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::all()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function all() {
@@ -86,8 +92,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::getUrl()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function getUrl() {
@@ -95,8 +100,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::isGet()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function isGet() {
@@ -104,12 +108,42 @@ abstract class HttpRequest implements HttpRequestInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 *
-	 * @see \Simovative\Zeus\Http\Request\HttpRequestInterface::isPost()
+	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
 	public function isPost() {
+		return false;
+	}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function isPut() {
+		return false;
+	}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function isPatch() {
+		return false;
+	}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function isDelete() {
+		return false;
+	}
+	
+	/**
+	 * @inheritdoc
+	 * @author Benedikt Schaller
+	 */
+	public function isHeader() {
 		return false;
 	}
 }

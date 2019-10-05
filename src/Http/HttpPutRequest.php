@@ -4,15 +4,15 @@ namespace Simovative\Zeus\Http\Get;
 use Simovative\Zeus\Http\Request\HttpRequest;
 
 /**
- * @author mnoerenberg
+ * @author Benedikt Schaller
  */
-class HttpGetRequest extends HttpRequest {
+class HttpPutRequest extends HttpRequest {
 	
 	/**
 	 * @inheritdoc
-	 * @author mnoerenberg
+	 * @author Benedikt Schaller
 	 */
-	public function isGet() {
+	public function isPut() {
 		return true;
 	}
 }

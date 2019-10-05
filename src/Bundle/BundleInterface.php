@@ -39,11 +39,83 @@ interface BundleInterface {
 	public function registerPostRouters(CommandRequestRouterChain $router);
 	
 	/**
+	 * Register bundles header routers.
+	 *
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerHeaderRouters(CommandRequestRouterChain $router);
+	
+	/**
 	 * Method to register bundle controller at the main application controller.
+	 * Can be used for all post, put, patch and delete methods.
 	 *
 	 * @author mnoerenberg
 	 * @param ApplicationController $applicationController
 	 * @return void
 	*/
 	public function registerBundleController(ApplicationController $applicationController);
+	
+	/**
+	 * Register bundles put routers.
+	 *
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerPutRouters(CommandRequestRouterChain $router);
+	
+	/**
+	 * Register bundles patch routers.
+	 *
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerPatchRouters(CommandRequestRouterChain $router);
+	
+	/**
+	 * Register bundles delete routers.
+	 *
+	 * @author Benedikt Schaller
+	 * @param CommandRequestRouterChain $router
+	 * @return void
+	 */
+	public function registerDeleteRouters(CommandRequestRouterChain $router);
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerPostController(ApplicationController $applicationController);
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerPatchController(ApplicationController $applicationController);
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerPutController(ApplicationController $applicationController);
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerDeleteController(ApplicationController $applicationController);
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param ApplicationController $applicationController
+	 * @return void
+	 */
+	public function registerHeaderController(ApplicationController $applicationController);
 }
