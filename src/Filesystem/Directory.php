@@ -1,6 +1,8 @@
 <?php
 namespace Simovative\Zeus\Filesystem;
 
+use Simovative\Zeus\Exception\FilesystemException;
+
 /**
  * @author mnoerenberg
  */
@@ -27,11 +29,11 @@ class Directory {
 	 * @author mnoerenberg
 	 * @param string $path
 	 * @param boolean $createIfNotExists
-	 * @throws \Exception
+	 * @throws FilesystemException
 	 */
 	public function __construct($path, $createIfNotExists = false) {
 		if ($path == '') {
-			throw new \Exception('Path of directory ist empty.');
+			throw new FilesystemException('Path of directory ist empty.');
 		}
 		
 		$this->path = $path;
@@ -45,7 +47,6 @@ class Directory {
 	 * Returns the path as given to the constructor.
 	 *
 	 * @author mnoerenberg
-	 * @param bool $realpath
 	 * @return string|boolean
 	 */
 	public function getPath() {
@@ -78,10 +79,15 @@ class Directory {
 	 * @author mnoerenberg
 	 * @param int $mode The mode to create the directory with.
 	 * @return void
+	 * @throws FilesystemException
 	 */
 	public function create($mode = self::MODE_DEFAULT) {
 		if (! $this->exists()) {
-			mkdir($this->getPath(), $mode, true);
+			if (false === mkdir($this->getPath(), $mode, true)) {
+				throw new FilesystemException(
+					sprintf('Could not create directory "%s". Permission denied.', $this->getPath())
+				);
+			}
 		}
 	}
 	
@@ -89,7 +95,10 @@ class Directory {
 	 * Change directory relative to current path.
 	 *
 	 * @author mnoerenberg
+	 * @param string $directoryName
+	 * @param bool $createIfNotExist
 	 * @return Directory
+	 * @throws FilesystemException
 	 */
 	public function change($directoryName, $createIfNotExist = true) {
 		return new self($this->getPath() . '/' . $directoryName, $createIfNotExist);
@@ -101,10 +110,11 @@ class Directory {
 	 * @author mnoerenberg
 	 * @param boolean $preserveDirectory - default: false - If true, only the files and folders it contains.
 	 * @return boolean
+	 * @throws FilesystemException
 	 */
 	public function delete($preserveDirectory = false) {
 		if (! $this->exists()) {
-			throw new \Exception('directory not exist.');
+			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
 		}
 		
 		foreach ($this->getFiles() as $index => $file) {
@@ -141,7 +151,7 @@ class Directory {
 	 */
 	public function getFilesRecursive() {
 		if (! $this->exists()) {
-			throw new \Exception('directory not found.');
+			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
 		}
 		
 		// create file iterator for all files in bundles asset sub directories.
@@ -151,6 +161,7 @@ class Directory {
 		
 		// for each found file in bundle assets subdirectories.
 		$files = array();
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		foreach ($fileIterator as $file) {
 			$files[] = new File(realpath($fileIterator->key()));
 		}
@@ -160,14 +171,14 @@ class Directory {
 	
 	/**
 	 * Returns the files in current directory.
-	 * 
+	 *
 	 * @author mnoerenberg
-	 * @throws \Exception
 	 * @return File[]
+	 * @throws FilesystemException
 	 */
 	public function getFiles() {
 		if (! $this->exists()) {
-			throw new \Exception('directory not found.');
+			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
 		}
 		
 		if (! empty($this->files)) {
@@ -189,13 +200,14 @@ class Directory {
 	
 	/**
 	 * Returns the sub directories of the directory.
-	 * 
+	 *
 	 * @author mnoerenberg
 	 * @return Directory[]
+	 * @throws FilesystemException
 	 */
 	public function getDirectories() {
 		if (! $this->exists()) {
-			throw new \Exception('directory not found.');
+			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
 		}
 		
 		if (! empty($this->directories)) {

@@ -19,8 +19,12 @@
     "ext-intl": "*",
     "symfony/debug": ">=v2.5.0",
     "symfony/console": ">=v2.5.0"
+
   },
   "require-dev": {
+  },
+  "suggest": {
+    "ext-fileinfo": "Better recognition for file mime types in the file system classes."
   },
   "bin": [
     "bin/zeus"
