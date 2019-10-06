@@ -83,6 +83,7 @@ class FileMimeType {
 		);
 		
 		$fileExtension = $this->file->getExtension();
+		$fileExtension = strtolower($fileExtension);
 		if (array_key_exists($fileExtension, $mimeTypes)) {
 			return $mimeTypes[$fileExtension];
 		}
