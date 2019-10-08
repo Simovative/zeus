@@ -1,12 +1,12 @@
 <?php /** @noinspection PhpComposerExtensionStubsInspection */
-
-
 namespace Simovative\Zeus\Filesystem;
 
 /**
  * @author Benedikt Schaller
  */
 class FileMimeType {
+	
+	private const FILE_PROTOCOL_FILE = 'file';
 	
 	/**
 	 * @var File
@@ -25,7 +25,7 @@ class FileMimeType {
 	 * @author Benedikt Schaller
 	 * @return string|null
 	 */
-	private function getMimeTypeByExtension() {
+	private function getMimeTypeByExtension(): ?string {
 		$mimeTypes = array(
 			
 			'txt' => 'text/plain',
@@ -94,7 +94,7 @@ class FileMimeType {
 	 * @author Benedikt Schaller
 	 * @return string|null
 	 */
-	private function getMimeTypeByFileInfoExtension() {
+	private function getMimeTypeByFileInfo(): ?string {
 		$fileInfo = finfo_open(FILEINFO_MIME);
 		$mimeType = finfo_file($fileInfo, $this->file->getPath());
 		finfo_close($fileInfo);
@@ -108,10 +108,22 @@ class FileMimeType {
 	 * @author Benedikt Schaller
 	 * @return string|null
 	 */
-	public function getMimeType() {
-		if (function_exists('finfo_open')) {
-			return $this->getMimeTypeByFileInfoExtension();
+	public function getMimeType(): ?string {
+		if (function_exists('finfo_open') && self::FILE_PROTOCOL_FILE === $this->getFileProtocol()) {
+			return $this->getMimeTypeByFileInfo();
 		}
 		return $this->getMimeTypeByExtension();
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @return string
+	 */
+	private function getFileProtocol(): string {
+		$protocolStart = strpos($this->file->getPath(), '://');
+		if (false === $protocolStart) {
+			return self::FILE_PROTOCOL_FILE;
+		}
+		return substr($this->file->getPath(), 0, $protocolStart);
 	}
 }
