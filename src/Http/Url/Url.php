@@ -108,7 +108,12 @@ class Url {
 		if ($isSslEnabled) {
 			$protocol .= 's';
 		}
-		$port = ':' . $serverArray['SERVER_PORT'];
+		preg_match('/:(\d+)$/', $serverArray['HTTP_HOST'], $portPosition);
+		if (! empty($portPosition[0])) {
+			$port = '';
+		} else {
+			$port = ':' . $serverArray['SERVER_PORT'];
+		}
 		$isHttpRequest = (! $isSslEnabled && $port == '80');
 		$isHttpsRequest = ($isSslEnabled && $port == '443');
 		if ($isHttpRequest || $isHttpsRequest) {
