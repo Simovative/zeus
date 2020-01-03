@@ -3,8 +3,8 @@ namespace Simovative\Zeus\Command;
 
 use Simovative\Zeus\Content\ValidatedContent;
 use Simovative\Zeus\Dependency\MasterFactory;
-use Simovative\Zeus\Http\Post\HttpPostRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequestDispatcherInterface;
+use Simovative\Zeus\Http\Request\HttpRequestInterface;
 
 /**
  * @author mnoerenberg
@@ -15,10 +15,12 @@ class CommandDispatcher implements HttpPostRequestDispatcherInterface {
 	 * @var CommandRequestRouterChain
 	 */
 	private $router;
+	
 	/**
 	 * @var ApplicationController
 	 */
 	private $applicationController;
+	
 	/**
 	 * @var MasterFactory
 	 */
@@ -43,18 +45,22 @@ class CommandDispatcher implements HttpPostRequestDispatcherInterface {
 	 * @inheritdoc
 	 * @author mnoerenberg
 	 */
-	public function dispatch(HttpPostRequest $request) {
+	public function dispatch(HttpRequestInterface $request) {
 		// match url and create command request.
 		$commandBuilder = $this->router->route($request);
-		$commandRequest = CommandRequest::fromHttpPostRequest($request);
+		if ($request->isDelete()) {
+			$commandRequest = CommandRequest::fromHttpDeleteRequest($request);
+		} else {
+			$commandRequest = CommandRequest::fromHttpPostRequest($request);
+		}
 		$validationResult = $commandBuilder->getCommandValidator()->validate($commandRequest);
 		if ($validationResult->isValid()) {
 			
 			// create command handler by command.
 			$command = $commandBuilder->createCommand($commandRequest);
 			$commandHandler = $commandBuilder->createCommandHandler($this->masterFactory);
-				
-				// execute command handler.
+			
+			// execute command handler.
 			$result = $commandHandler->execute($command);
 			
 			// which redirect on success

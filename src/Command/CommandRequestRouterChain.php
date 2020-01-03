@@ -2,7 +2,7 @@
 namespace Simovative\Zeus\Command;
 
 use Simovative\Zeus\Exception\RouteNotFoundException;
-use Simovative\Zeus\Http\Post\HttpPostRequest;
+use Simovative\Zeus\Http\Request\HttpRequest;
 
 /**
  * @author mnoerenberg
@@ -26,11 +26,11 @@ class CommandRequestRouterChain  {
 	
 	/**
 	 * @author mnoerenberg
-	 * @param HttpPostRequest $request
+	 * @param HttpRequest $request
 	 * @throws RouteNotFoundException
 	 * @return CommandBuilderInterface|NULL
 	 */
-	public function route(HttpPostRequest $request) {
+	public function route(HttpRequest $request) {
 		foreach ($this->routers as $router) {
 			$result = $router->route($request);
 			if ($result !== null) {
