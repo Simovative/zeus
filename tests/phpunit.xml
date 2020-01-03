@@ -2,17 +2,13 @@
 <phpunit bootstrap="../vendor/autoload.php">
 	<testsuites>
 		<testsuite name="Unit">
-			<directory suffix="Test.php" phpVersion="5.3.0">Unit</directory>
+			<directory suffix="Test.php" phpVersion="7.1">Unit</directory>
 		</testsuite>
 	</testsuites>
 	<filter>
 		<whitelist>
 			<directory>../src</directory>
 		</whitelist>
-		<blacklist>
-            <directory>../tests</directory>
-            <directory>../vendor</directory>
-		</blacklist>
 	</filter>
 	<logging>
         <log type="testdox-text" target="./results/report.dotx" />

@@ -30,7 +30,7 @@ class HttpRequestDispatcherLocator {
 	 * @return HttpGetRequestDispatcherInterface|HttpPostRequestDispatcherInterface
 	 */
 	public function getDispatcherFor(HttpRequestInterface $request) {
-		if ($request->isPost()) {
+		if ($request->isPost() || $request->isDelete()) {
 			return $this->frameworkFactory->createHttpPostRequestDispatcher();
 		}
 		

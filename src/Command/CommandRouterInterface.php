@@ -1,7 +1,7 @@
 <?php
 namespace Simovative\Zeus\Command;
 
-use Simovative\Zeus\Http\Post\HttpPostRequest;
+use Simovative\Zeus\Http\Request\HttpRequest;
 
 /**
  * @author mnoerenberg
@@ -10,8 +10,8 @@ interface CommandRouterInterface {
 	
 	/**
 	 * @author mnoerenberg
-	 * @param HttpPostRequest $request
+	 * @param HttpRequest $request
 	 * @return CommandBuilderInterface|NULL
 	 */
-	public function route(HttpPostRequest $request);
+	public function route(HttpRequest $request);
 }
