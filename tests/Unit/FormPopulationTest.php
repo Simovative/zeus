@@ -2,11 +2,12 @@
 namespace Simovative\Zeus\Template;
 
 use Command\CommandValidationResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the bootstrap form population.
  */
-class BootstrapFormPopulationTest extends \PHPUnit_Framework_TestCase {
+class BootstrapFormPopulationTest extends TestCase {
 	
 	/**
 	 * @author Benedikt Schaller
