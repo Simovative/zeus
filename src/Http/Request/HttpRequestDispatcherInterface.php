@@ -1,13 +1,12 @@
 <?php
-namespace Simovative\Zeus\Http\Post;
+namespace Simovative\Zeus\Http\Request;
 
 use Simovative\Zeus\Content\Content;
-use Simovative\Zeus\Http\Request\HttpRequestInterface;
 
 /**
  * @author mnoerenberg
  */
-interface HttpPostRequestDispatcherInterface {
+interface HttpRequestDispatcherInterface {
 	
 	/**
 	 * @author mnoerenberg

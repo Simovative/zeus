@@ -126,4 +126,17 @@ class Url {
 		$url = $protocol . '://' . $host . $port . $serverArray['REQUEST_URI'];
 		return new self($url);
 	}
+	
+	/**
+	 * @author tp
+	 * @param int $componentNumber
+	 * @return string|null
+	 */
+	public function getPathComponent(int $componentNumber): ?string {
+		$components = explode('/', $this->getPath());
+		if (array_key_exists($componentNumber, $components)) {
+			return $components[$componentNumber];
+		}
+		return null;
+	}
 }
