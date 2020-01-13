@@ -130,13 +130,16 @@ class Url {
 	/**
 	 * @author tp
 	 * @param int $componentNumber
-	 * @return string|null
+	 * @return string
 	 */
-	public function getPathComponent(int $componentNumber): ?string {
+	public function getPathComponent(int $componentNumber): string {
+		if ($componentNumber === 0) {
+			throw new \InvalidArgumentException('Component numbers begin at 1.');
+		}
 		$components = explode('/', $this->getPath());
 		if (array_key_exists($componentNumber, $components)) {
 			return $components[$componentNumber];
 		}
-		return null;
+		throw new \InvalidArgumentException("Component '$componentNumber' not found.");
 	}
 }

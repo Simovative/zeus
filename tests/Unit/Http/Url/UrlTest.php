@@ -28,6 +28,24 @@ class UrlTest extends TestCase {
 	}
 	
 	/**
+	 * @author tpawlow
+	 * @return void
+	 */
+	public function testThatExceptionIsThrownForZeroComponent(): void {
+		$this->expectException(\InvalidArgumentException::class);
+		$this->url->getPathComponent(0);
+	}
+	
+	/**
+	 * @author tpawlow
+	 * @return void
+	 */
+	public function testThatExceptionIsThrownForNotExistingComponent(): void {
+		$this->expectException(\InvalidArgumentException::class);
+		$this->url->getPathComponent(5);
+	}
+	
+	/**
 	 * @dataProvider provideNumberAndComponent
 	 * @author tp
 	 * @param int $componentNumber
@@ -35,7 +53,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatUrlComponentIsCorrect(int $componentNumber, ?string $expectedComponent): void {
-		self::assertEquals($expectedComponent, $this->url->getPathComponent($componentNumber));
+		self::assertSame($expectedComponent, $this->url->getPathComponent($componentNumber));
 	}
 	
 	/**
@@ -44,12 +62,10 @@ class UrlTest extends TestCase {
 	 */
 	public function provideNumberAndComponent(): array {
 		return array(
-			array(0, null),
 			array(1, 'api'),
 			array(2, 'v1'),
 			array(3, 'event'),
-			array(4, '20'),
-			array(5, null)
+			array(4, '20')
 		);
 	}
 }
