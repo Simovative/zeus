@@ -1,15 +1,17 @@
 <?php
 namespace Simovative\Zeus\Command;
 
+use Exception;
 use Simovative\Zeus\Content\ValidatedContent;
 use Simovative\Zeus\Dependency\MasterFactory;
-use Simovative\Zeus\Http\Post\HttpPostRequestDispatcherInterface;
+use Simovative\Zeus\Exception\RouteNotFoundException;
+use Simovative\Zeus\Http\Request\HttpRequestDispatcherInterface;
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
 
 /**
  * @author mnoerenberg
  */
-class CommandDispatcher implements HttpPostRequestDispatcherInterface {
+class CommandDispatcher implements HttpRequestDispatcherInterface {
 	
 	/**
 	 * @var CommandRequestRouterChain
@@ -44,15 +46,16 @@ class CommandDispatcher implements HttpPostRequestDispatcherInterface {
 	/**
 	 * @inheritdoc
 	 * @author mnoerenberg
+	 * @throws RouteNotFoundException
+	 * @throws Exception
 	 */
 	public function dispatch(HttpRequestInterface $request) {
 		// match url and create command request.
 		$commandBuilder = $this->router->route($request);
-		if ($request->isDelete()) {
-			$commandRequest = CommandRequest::fromHttpDeleteRequest($request);
-		} else {
-			$commandRequest = CommandRequest::fromHttpPostRequest($request);
+		if (null === $commandBuilder) {
+			throw new RouteNotFoundException($request->getUrl());
 		}
+		$commandRequest = CommandRequest::fromHttpRequest($request);
 		$validationResult = $commandBuilder->getCommandValidator()->validate($commandRequest);
 		if ($validationResult->isValid()) {
 			
@@ -72,7 +75,7 @@ class CommandDispatcher implements HttpPostRequestDispatcherInterface {
 		$content = $this->applicationController->whichContentForFailedValidation($commandBuilder, $commandRequest);
 		if (! ($validationResult->isValid() || $content instanceof ValidatedContent)) {
 			// TODO: Special exception
-			throw new \Exception('Error messaged can not be populated to the content!');
+			throw new Exception('Error messaged can not be populated to the content!');
 		}
 		if ($content instanceof ValidatedContent) {
 			$content->setValidationResult($validationResult);

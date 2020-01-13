@@ -14,7 +14,7 @@ class BootstrapFormPopulationTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatATextFieldValueIsPopulated() {
-		$amount = uniqid('amount_');
+		$amount = uniqid('amount_', true);
 		$html = file_get_contents(__DIR__ . '/data/bootstrap_form.html');
 		$validationResult = new CommandValidationResult(false, array('amount' => $amount));
 		$formPopulation = new BootstrapFormPopulation();

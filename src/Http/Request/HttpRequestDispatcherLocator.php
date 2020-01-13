@@ -3,7 +3,6 @@ namespace Simovative\Zeus\Http\Request;
 
 use Simovative\Zeus\Dependency\FrameworkFactory;
 use Simovative\Zeus\Http\Get\HttpGetRequestDispatcherInterface;
-use Simovative\Zeus\Http\Post\HttpPostRequestDispatcherInterface;
 
 /**
  * @author mnoerenberg
@@ -26,8 +25,8 @@ class HttpRequestDispatcherLocator {
 	/**
 	 * @author mnoerenberg
 	 * @param HttpRequestInterface $request
+	 * @return HttpGetRequestDispatcherInterface|HttpRequestDispatcherInterface
 	 * @throws \Exception
-	 * @return HttpGetRequestDispatcherInterface|HttpPostRequestDispatcherInterface
 	 */
 	public function getDispatcherFor(HttpRequestInterface $request) {
 		if ($request->isPost() || $request->isDelete()) {

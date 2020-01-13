@@ -126,4 +126,20 @@ class Url {
 		$url = $protocol . '://' . $host . $port . $serverArray['REQUEST_URI'];
 		return new self($url);
 	}
+	
+	/**
+	 * @author tp
+	 * @param int $componentNumber
+	 * @return string
+	 */
+	public function getPathComponent(int $componentNumber): string {
+		if ($componentNumber === 0) {
+			throw new \InvalidArgumentException('Component numbers begin at 1.');
+		}
+		$components = explode('/', $this->getPath());
+		if (array_key_exists($componentNumber, $components)) {
+			return $components[$componentNumber];
+		}
+		throw new \InvalidArgumentException("Component '$componentNumber' not found.");
+	}
 }

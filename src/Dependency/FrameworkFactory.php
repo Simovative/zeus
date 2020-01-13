@@ -10,7 +10,7 @@ use Simovative\Zeus\Filesystem\Directory;
 use Simovative\Zeus\Filesystem\File;
 use Simovative\Zeus\Http\Get\HttpGetRequestDispatcher;
 use Simovative\Zeus\Http\Get\HttpGetRequestRouterChain;
-use Simovative\Zeus\Http\Post\HttpPostRequestDispatcherInterface;
+use Simovative\Zeus\Http\Request\HttpRequestDispatcherInterface;
 use Simovative\Zeus\Http\Request\HttpRequestDispatcherLocator;
 use Simovative\Zeus\Http\Response\HttpResponseLocator;
 use Simovative\Zeus\Http\Url\UrlMatcher;
@@ -58,7 +58,7 @@ class FrameworkFactory extends Factory {
 	 * @var HttpResponseLocator
 	 */
 	private $httpResponseLocator;
-
+	
 	/**
 	 * @var UrlMatcherInterface
 	 */
@@ -116,7 +116,7 @@ class FrameworkFactory extends Factory {
 	 * @return ExceptionHandler
 	 */
 	public function createExceptionHandler(KernelInterface $kernel) {
-		return new ExceptionHandler($kernel, $this->createSapiLogger());
+		return new ExceptionHandler($kernel);
 	}
 	
 	//***************************************************
@@ -189,7 +189,7 @@ class FrameworkFactory extends Factory {
 	
 	/**
 	 * @author mnoerenberg
-	 * @return HttpPostRequestDispatcherInterface
+	 * @return HttpRequestDispatcherInterface
 	 */
 	public function createHttpPostRequestDispatcher() {
 		return new CommandDispatcher(
@@ -221,7 +221,7 @@ class FrameworkFactory extends Factory {
 	//***************************************************
 	// START Router
 	//***************************************************
-
+	
 	/**
 	 * Returns a single instance of an url matcher.
 	 *
@@ -234,7 +234,7 @@ class FrameworkFactory extends Factory {
 		}
 		return $this->urlMatcher;
 	}
-
+	
 	/**
 	 * @author mnoerenberg
 	 * @return UrlMatcherInterface
@@ -318,7 +318,7 @@ class FrameworkFactory extends Factory {
 	public function getCliLogfile() {
 		return new File($this->getLogDirectory()->getPath() . '/cli.log', true);
 	}
-
+	
 	/**
 	 * Returns the log directory.
 	 *
@@ -416,7 +416,7 @@ class FrameworkFactory extends Factory {
 		$dateTimeFormat = $this->getConfigurationValue('system_date_time_format');
 		
 		if (empty($timeZoneString)) {
-			$timeZoneString =  date_default_timezone_get();
+			$timeZoneString = date_default_timezone_get();
 		}
 		if (empty($locale)) {
 			$locale = locale_get_default();

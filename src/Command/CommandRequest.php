@@ -1,8 +1,7 @@
 <?php
 namespace Simovative\Zeus\Command;
 
-use Simovative\Zeus\Http\Get\HttpDeleteRequest;
-use Simovative\Zeus\Http\Post\HttpPostRequest;
+use Simovative\Zeus\Http\Request\HttpRequestInterface;
 
 /**
  * @author Benedikt Schaller
@@ -24,27 +23,12 @@ class CommandRequest {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @param HttpPostRequest $postRequest
+	 * @param HttpRequestInterface $httpRequest
 	 * @return CommandRequest
 	 */
-	public static function fromHttpPostRequest(HttpPostRequest $postRequest) {
-		$values = $postRequest->all();
+	public static function fromHttpRequest(HttpRequestInterface $httpRequest) {
+		$values = $httpRequest->all();
 		return new CommandRequest($values);
-	}
-	
-	/**
-	 * @author tp
-	 * @param HttpDeleteRequest $deleteRequest
-	 * @return CommandRequest
-	 */
-	public static function fromHttpDeleteRequest(HttpDeleteRequest $deleteRequest) {
-		$matches = [];
-		preg_match('/\/(\w+)$/m', $deleteRequest->getUrl(), $matches);
-		$id = null;
-		if (array_key_exists(1, $matches)) {
-			$id = $matches[1];
-		}
-		return new CommandRequest(['id' => $id]);
 	}
 	
 	/**
@@ -72,7 +56,7 @@ class CommandRequest {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return array|\mixed[]
+	 * @return mixed[]
 	 */
 	public function all() {
 		return $this->valueMap;
