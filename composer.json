@@ -47,5 +47,10 @@
       "!vendor",
       "tests"
     ]
+  },
+  "config": {
+    "preferred-install": {
+      "*": "dist"
+    }
   }
 }

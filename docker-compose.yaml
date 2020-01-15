@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  php-cli:
+    build: .
+    volumes:
+    - ./bin:/usr/src/myapp/bin
+    - ./build:/usr/src/myapp/build
+    - ./skeleton:/usr/src/myapp/skeleton
+    - ./src:/usr/src/myapp/src
+    - ./tests:/usr/src/myapp/tests
