@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace tests\Unit\Http\Url;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Simovative\Zeus\Http\Url\Url;
 
@@ -32,7 +33,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatExceptionIsThrownForZeroComponent(): void {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->url->getPathComponent(0);
 	}
 	
@@ -41,7 +42,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatExceptionIsThrownForNotExistingComponent(): void {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->url->getPathComponent(5);
 	}
 	
