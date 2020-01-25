@@ -110,7 +110,7 @@ vendor/bin/zeus c:b Test
 Next, register the bundle, which we named "Test" in your Applications Kernel 
 (in this case bundles/Application/DemoKernel.php)
 ```php
-	protected function registerBundles() {
+	protected function registerBundles(HttpRequestInterface $request) {
 		$bundles = array();
 		$bundles[] = new DemoApplicationBundle();
 		$bundles[] = new \Simovative\Demo\Test\TestBundle();
