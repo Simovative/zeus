@@ -18,7 +18,7 @@ class {{prefix}}Kernel extends HttpKernel {
 	/**
 	 * @inheritdoc
 	 */
-	protected function registerBundles() {
+	protected function registerBundles(HttpRequestInterface $request) {
 		$bundles = array();
 		$bundles[] = new {{appPrefix}}Bundle();
 		return $bundles;
