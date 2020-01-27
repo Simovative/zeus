@@ -104,15 +104,8 @@ abstract class Bundle implements BundleInterface {
 	public function registerDeleteController(ApplicationController $applicationController) {}
 	
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @author Benedikt Schaller
 	 */
-	public function registerHeaderRouters(CommandRequestRouterChain $router) {}
-	
-	/**
-	 * @inheritdoc
-	 * @author Benedikt Schaller
-	 */
-	public function registerHeaderController(ApplicationController $applicationController) {}
-	
+	public function registerHeaderRouters(HttpGetRequestRouterChain $router) {}
 }

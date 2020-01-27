@@ -11,8 +11,8 @@ interface HttpGetRequestDispatcherInterface {
 	
 	/**
 	 * @author mnoerenberg
-	 * @param HttpGetRequest|HttpRequestInterface $request
+	 * @param HttpRequestInterface $request
 	 * @return HttpResponseInterface
 	 */
-	public function dispatch(HttpGetRequest $request);
+	public function dispatch(HttpRequestInterface $request);
 }

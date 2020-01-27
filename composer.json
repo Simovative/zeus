@@ -24,7 +24,8 @@
   "autoload": {
     "classmap": [
       "src/",
-      "skeleton/bundles"
+      "skeleton/bundles",
+      "tests/"
     ]
   },
   "require": {

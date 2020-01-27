@@ -42,10 +42,10 @@ interface BundleInterface {
 	 * Register bundles header routers.
 	 *
 	 * @author Benedikt Schaller
-	 * @param CommandRequestRouterChain $router
+	 * @param HttpGetRequestRouterChain $router
 	 * @return void
 	 */
-	public function registerHeaderRouters(CommandRequestRouterChain $router);
+	public function registerHeaderRouters(HttpGetRequestRouterChain $router);
 	
 	/**
 	 * Method to register bundle controller at the main application controller.
@@ -111,11 +111,4 @@ interface BundleInterface {
 	 * @return void
 	 */
 	public function registerDeleteController(ApplicationController $applicationController);
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @param ApplicationController $applicationController
-	 * @return void
-	 */
-	public function registerHeaderController(ApplicationController $applicationController);
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Simovative\Zeus\Http;
 
+use Exception;
 use Simovative\Zeus\Bundle\BundleInterface;
 use Simovative\Zeus\Dependency\FrameworkFactory;
 use Simovative\Zeus\Dependency\KernelInterface;
@@ -93,9 +94,7 @@ abstract class HttpKernel implements KernelInterface {
 					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 				}
 				if ($request->isHeader()) {
-					$bundle->registerHeaderRouters($this->getMasterFactory()->getCommandRequestRouterChain());
-					$bundle->registerHeaderController($this->getMasterFactory()->getApplicationController());
-					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
+					$bundle->registerHeaderRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
 				}
 			}
 		
@@ -109,7 +108,7 @@ abstract class HttpKernel implements KernelInterface {
 			if ($send) {
 				$response->send();
 			}
-		} catch (\Exception $throwable) {
+		} catch (Exception $throwable) {
 			$response = $this->report($throwable, $request);
 			if ($send && $response instanceof HttpResponseInterface) {
 				$response->send();

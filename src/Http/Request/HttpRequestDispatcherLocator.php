@@ -1,6 +1,7 @@
 <?php
 namespace Simovative\Zeus\Http\Request;
 
+use LogicException;
 use Simovative\Zeus\Dependency\FrameworkFactory;
 use Simovative\Zeus\Http\Get\HttpGetRequestDispatcherInterface;
 
@@ -29,14 +30,14 @@ class HttpRequestDispatcherLocator {
 	 * @throws \Exception
 	 */
 	public function getDispatcherFor(HttpRequestInterface $request) {
-		if ($request->isPost() || $request->isDelete()) {
-			return $this->frameworkFactory->createHttpPostRequestDispatcher();
+		if ($request->isPost() || $request->isDelete() || $request->isPatch() || $request->isPut()) {
+			return $this->frameworkFactory->createHttpCommandDispatcher();
 		}
 		
-		if ($request->isGet()) {
+		if ($request->isGet() || $request->isHeader()) {
 			return $this->frameworkFactory->createHttpGetRequestDispatcher();
 		}
 		
-		throw new \LogicException('request method not allowed.');
+		throw new LogicException('request method not allowed.');
 	}
 }

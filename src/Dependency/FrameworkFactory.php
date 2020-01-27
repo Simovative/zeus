@@ -1,11 +1,13 @@
 <?php
 namespace Simovative\Zeus\Dependency;
 
+use DateTimeZone;
 use Simovative\Zeus\Cache\ArrayCache;
 use Simovative\Zeus\Command\ApplicationController;
 use Simovative\Zeus\Command\CommandDispatcher;
 use Simovative\Zeus\Command\CommandRequestRouterChain;
 use Simovative\Zeus\Exception\ExceptionHandler;
+use Simovative\Zeus\Exception\FilesystemException;
 use Simovative\Zeus\Filesystem\Directory;
 use Simovative\Zeus\Filesystem\File;
 use Simovative\Zeus\Http\Get\HttpGetRequestDispatcher;
@@ -28,6 +30,7 @@ use Simovative\Zeus\Template\BootstrapFormPopulation;
 use Simovative\Zeus\Template\SmartyTemplateEngine;
 use Simovative\Zeus\Template\TemplateEngineInterface;
 use Simovative\Zeus\Translator\Translator;
+use Smarty;
 
 /**
  * @author mnoerenberg
@@ -85,7 +88,7 @@ class FrameworkFactory extends Factory {
 	 */
 	public function getHttpResponseLocator() {
 		if ($this->httpResponseLocator === null) {
-			$this->httpResponseLocator = $this->createHttpResponseLocator();
+			$this->httpResponseLocator = $this->getMasterFactory()->createHttpResponseLocator();
 		}
 		return $this->httpResponseLocator;
 	}
@@ -191,7 +194,7 @@ class FrameworkFactory extends Factory {
 	 * @author mnoerenberg
 	 * @return HttpRequestDispatcherInterface
 	 */
-	public function createHttpPostRequestDispatcher() {
+	public function createHttpCommandDispatcher() {
 		return new CommandDispatcher(
 			$this->getCommandRequestRouterChain(),
 			$this->getMasterFactory(),
@@ -295,6 +298,7 @@ class FrameworkFactory extends Factory {
 	/**
 	 * @author mnoerenberg
 	 * @return File[]
+	 * @throws FilesystemException
 	 */
 	public function getLogs() {
 		return array(
@@ -306,6 +310,7 @@ class FrameworkFactory extends Factory {
 	/**
 	 * @author mnoerenberg
 	 * @return File
+	 * @throws FilesystemException
 	 */
 	public function getErrorLogfile() {
 		return new File($this->getLogDirectory()->getPath() . '/error.log', true);
@@ -314,6 +319,7 @@ class FrameworkFactory extends Factory {
 	/**
 	 * @author mnoerenberg
 	 * @return File
+	 * @throws FilesystemException
 	 */
 	public function getCliLogfile() {
 		return new File($this->getLogDirectory()->getPath() . '/cli.log', true);
@@ -324,6 +330,7 @@ class FrameworkFactory extends Factory {
 	 *
 	 * @author Benedikt Schaller
 	 * @return Directory
+	 * @throws FilesystemException
 	 */
 	private function getLogDirectory() {
 		return $this->getMasterFactory()->getDataDirectory()->change('logs');
@@ -332,6 +339,7 @@ class FrameworkFactory extends Factory {
 	/**
 	 * @author mnoerenberg
 	 * @return Directory
+	 * @throws FilesystemException
 	 */
 	public function getRootDirectory() {
 		return new Directory($this->getMasterFactory()->getConfiguration()->getBasePath());
@@ -340,6 +348,7 @@ class FrameworkFactory extends Factory {
 	/**
 	 * @author mnoerenberg
 	 * @return Directory
+	 * @throws FilesystemException
 	 */
 	public function getDataDirectory() {
 		return $this->getRootDirectory()->change('files');
@@ -356,6 +365,7 @@ class FrameworkFactory extends Factory {
 	/**
 	 * @author Benedikt Schaller
 	 * @return Translator
+	 * @throws FilesystemException
 	 */
 	public function getTranslator() {
 		if ($this->translator === null) {
@@ -367,6 +377,7 @@ class FrameworkFactory extends Factory {
 	/**
 	 * @author Benedikt Schaller
 	 * @return Translator
+	 * @throws FilesystemException
 	 */
 	public function createTranslator() {
 		// Fallback smarty directory, used if no separate directories are defined
@@ -422,7 +433,7 @@ class FrameworkFactory extends Factory {
 			$locale = locale_get_default();
 		}
 		return new IntlSettings(
-			new \DateTimeZone($timeZoneString),
+			new DateTimeZone($timeZoneString),
 			$locale,
 			$dateFormat,
 			$timeFormat,
@@ -458,10 +469,11 @@ class FrameworkFactory extends Factory {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return \Smarty
+	 * @return Smarty
+	 * @throws FilesystemException
 	 */
 	public function createSmarty() {
-		$smarty = new \Smarty();
+		$smarty = new Smarty();
 		// Fallback smarty directory, used if no separate directories are defined
 		$smartyDirectoryPath = $this->getConfigurationValue('smarty_dir');
 		if ($smartyDirectoryPath === null) {
@@ -484,8 +496,9 @@ class FrameworkFactory extends Factory {
 	}
 	
 	/**
-	 * @author Benedikt Schaller
 	 * @return TemplateEngineInterface
+	 * @throws FilesystemException
+	 * @author Benedikt Schaller
 	 */
 	public function createSmartyTemplateEngine() {
 		$bundlesPath = $this->getBasePath() . '/bundles';
