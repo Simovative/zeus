@@ -61,11 +61,11 @@ class File {
 	 * @author mnoerenberg
 	 * @param string $content
 	 * @return bool
-	 * @throws Exception
+	 * @throws FilesystemException
 	 */
 	public function write($content) {
 		if (! $this->exists()) {
-			throw new Exception('file ' . $this->path . ' not found');
+			throw FilesystemException::createFileDoesNotExist($this->path);
 		}
 		
 		file_put_contents($this->path, $content);
@@ -81,7 +81,7 @@ class File {
 	 */
 	public function clearContent() {
 		if (! $this->exists()) {
-			throw new Exception('file not found');
+			throw FilesystemException::createFileDoesNotExist($this->path);
 		}
 		
 		file_put_contents($this->path, '');
