@@ -72,10 +72,10 @@ vendor/bin/zeus c:a Simovative\\Demo Demo
 This will create a folder public with an index.php file and a folder "bundles" 
 containing the ApplicationBundle and ApplicationKernel.
 
-You might want to configure your web-server right away to test if this
+You might want to configure your webserver right away to test if this
 worked. 
 
-### Web-Server config
+### Webserver config
 
 #### Apache
 Point your web-root to the $cwd/public
@@ -95,7 +95,7 @@ location / {
 }
 ```
 #### PHP internal webserver
-Just run the web-server and use the public/index.php as router script:
+Just run the webserver and use the public/index.php as router script:
 ```
 php -S localhost:8000 public/index.php
 ``` 
