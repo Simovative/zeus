@@ -19,40 +19,40 @@ class UploadedFileTest extends TestCase {
 		$filesArray = [
 			'file1' => [
 				'name' => 'MyFile.txt',
-            	'type' => 'text/plain',
-            	'tmp_name' => '/tmp/php/php1h4j1o',
-            	'error' => UPLOAD_ERR_OK,
-            	'size' => 123,
+				'type' => 'text/plain',
+				'tmp_name' => '/tmp/php/php1h4j1o',
+				'error' => UPLOAD_ERR_OK,
+				'size' => 123,
 			],
 			'file2' => [
-            	'name' => 'MyFile.jpg',
-            	'type' => 'image/jpeg',
+				'name' => 'MyFile.jpg',
+				'type' => 'image/jpeg',
 				'tmp_name' => '/tmp/php/php6hst32',
-            	'error' => UPLOAD_ERR_OK,
-            	'size' => 98174,
-        	],
-        	'download' => [
-        		'name' => [
-        			'file1' => 'MyFile.txt',
-                    'file2' => 'MyFile.jpg',
-                ],
+				'error' => UPLOAD_ERR_OK,
+				'size' => 98174,
+			],
+			'download' => [
+				'name' => [
+					'file1' => 'MyFile.txt',
+					'file2' => 'MyFile.jpg',
+				],
 				'type' => [
 					'file1' => 'text/plain',
-                    'file2' => 'image/jpeg',
-                ],
+					'file2' => 'image/jpeg',
+				],
 				'tmp_name' => [
 					'file1' => '/tmp/php/php1h4j1o',
-                    'file2' => '/tmp/php/php6hst32',
-                ],
+					'file2' => '/tmp/php/php6hst32',
+				],
 				'error' => [
 					'file1' => UPLOAD_ERR_OK,
-                    'file2' => UPLOAD_ERR_OK,
-                ],
+					'file2' => UPLOAD_ERR_OK,
+				],
 				'size' => [
 					'file1' => 123,
-                    'file2' => 98174,
-                ]
-        	]
+					'file2' => 98174,
+				]
+			]
 		];
 		$uploadedFiles = UploadedFile::createFromGlobal($filesArray);
 		$this->assertEquals(4, count($uploadedFiles));
