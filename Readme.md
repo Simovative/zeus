@@ -168,8 +168,8 @@ and will be used by the command dispatcher to get the single components.
 * LoginCommandHandler.php: The handler does the command execution.
 * LoginCommandValidator.php: The validator checks the command request if the provided data is valid to create
 a command and execute the handler. We recommend basic checks for required data and if the data types are correct and
-data is in the correct format (e. g. like e-mail addresses). If the command can not be successfully executed because of
-the current state of the application (e. g. some data in the database is missing), the command handler should return a
+data is in the correct format (e.g. like e-mail addresses). If the command can not be successfully executed because of
+the current state of the application (e.g. some data in the database is missing), the command handler should return a
 response that indicates that.
 * LoginCommandFactoryMethods.txt: Move this code into your 
 Bundle-Factory (TestFactory.php) to create all required components and access the 
