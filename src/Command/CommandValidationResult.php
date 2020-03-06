@@ -1,5 +1,5 @@
 <?php
-namespace Command;
+namespace Simovative\Zeus\Command;
 
 /**
  * Result of a command validation.

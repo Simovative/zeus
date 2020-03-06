@@ -1,8 +1,8 @@
 <?php
 namespace Simovative\Zeus\Template;
 
-use Command\CommandValidationResult;
 use PHPUnit\Framework\TestCase;
+use Simovative\Zeus\Command\CommandValidationResult;
 
 /**
  * Tests the bootstrap form population.

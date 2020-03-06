@@ -1,7 +1,11 @@
 <?php
+/** @noinspection PhpComposerExtensionStubsInspection */
 namespace Simovative\Zeus\Template;
 
-use Command\CommandValidationResult;
+use DOMDocument;
+use DOMElement;
+use DOMXPath;
+use Simovative\Zeus\Command\CommandValidationResult;
 
 /**
  * Manipulates the HTML DOM to add field values and error messages.
@@ -16,7 +20,7 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 */
 	public function populate($html, CommandValidationResult $validationResult) {
 		libxml_use_internal_errors(true);
-		$domDocument = new \DOMDocument();
+		$domDocument = new DOMDocument();
 		$domDocument->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8"));
 		libxml_use_internal_errors(true);
 		$domDocument->encoding = 'UTF-8';
@@ -48,11 +52,11 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * Returns the populated html content.
 	 *
 	 * @author mnoerenberg
-	 * @param \DOMDocument $document
+	 * @param DOMDocument $document
 	 * @param string $originalHtml
 	 * @return string
 	 */
-	private function getHtml(\DOMDocument $document, $originalHtml) {
+	private function getHtml(DOMDocument $document, $originalHtml) {
 		$html = $document->saveHTML();
 		
 		$strPos = mb_strpos($originalHtml, '<html', null, 'UTF-8');
@@ -66,16 +70,16 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * Populates a value to all text fields with the given name.
 	 *
 	 * @author mnoerenberg
-	 * @param \DOMDocument $document
+	 * @param DOMDocument $document
 	 * @param string $fieldName
 	 * @param mixed $fieldValue
 	 * @return void
 	 */
-	private function populateTextFieldValue(\DOMDocument $document, $fieldName, $fieldValue) {
-		$xpath = new \DOMXPath($document);
+	private function populateTextFieldValue(DOMDocument $document, $fieldName, $fieldValue) {
+		$xpath = new DOMXPath($document);
 		$inputs = $xpath->query('//input[@name="' . $fieldName . '"]');
 		foreach ($inputs as $input) {
-			/* @var $input \DOMElement */
+			/* @var $input DOMElement */
 			if (in_array($input->getAttribute('type'), array('checkbox', 'radio', 'password'))) {
 				continue;
 			}
@@ -87,17 +91,17 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * Populates a value to all textareas with the given name.
 	 *
 	 * @author mnoerenberg
-	 * @param \DOMDocument $document
+	 * @param DOMDocument $document
 	 * @param string $fieldName
 	 * @param mixed $fieldValue
 	 * @return void
 	 */
-	private function populateTextareaFieldValue(\DOMDocument $document, $fieldName, $fieldValue) {
-		$xpath = new \DOMXPath($document);
+	private function populateTextareaFieldValue(DOMDocument $document, $fieldName, $fieldValue) {
+		$xpath = new DOMXPath($document);
 		$areas = $xpath->query('//textarea[@name="' . $fieldName . '"]');
 		
 		foreach ($areas as $area) {
-			/* @var $area \DOMElement */
+			/* @var $area DOMElement */
 			$area->nodeValue = $fieldValue;
 		}
 	}
@@ -106,22 +110,22 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * Populates a value to all select fields with the given name.
 	 *
 	 * @author mnoerenberg
-	 * @param \DOMDocument $document
+	 * @param DOMDocument $document
 	 * @param string $fieldName
 	 * @param mixed $fieldValue
 	 * @return void
 	 */
-	private function populateSelectFieldValue(\DOMDocument $document, $fieldName, $fieldValue) {
+	private function populateSelectFieldValue(DOMDocument $document, $fieldName, $fieldValue) {
 		if (is_array($fieldValue)) {
 			$fieldName .= '[]';
 		} else {
 			$fieldValue = array($fieldValue);
 		}
-		$xpath = new \DOMXPath($document);
+		$xpath = new DOMXPath($document);
 		$options = $xpath->query('//select[@name="' . $fieldName . '"]/option|//select[@name="' . $fieldName . '"]/optgroup/option');
 		foreach ($options as $option) {
-			/* @var $option \DOMElement */
-			if ($option->getAttribute('selected') == 'selected') {
+			/* @var $option DOMElement */
+			if ($option->getAttribute('selected') === 'selected') {
 				$option->removeAttribute('selected');
 			}
 			$optionValue = $option->getAttribute('value');
@@ -135,21 +139,21 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * Populates a value to all checkbox fields with the given name.
 	 *
 	 * @author mnoerenberg
-	 * @param \DOMDocument $document
+	 * @param DOMDocument $document
 	 * @param string $fieldName
 	 * @param mixed $fieldValue
 	 * @return void
 	 */
-	private function populateCheckboxFieldValue(\DOMDocument $document, $fieldName, $fieldValue) {
+	private function populateCheckboxFieldValue(DOMDocument $document, $fieldName, $fieldValue) {
 		if (is_array($fieldValue)) {
 			$fieldName .= '[]';
 		} else {
 			$fieldValue = array($fieldValue);
 		}
-		$xpath = new \DOMXPath($document);
+		$xpath = new DOMXPath($document);
 		$inputs = $xpath->query('//input[@name="' . $fieldName . '"][@type="checkbox"]');
 		foreach ($inputs as $input) {
-			/* @var $input \DOMElement */
+			/* @var $input DOMElement */
 			if (in_array($input->getAttribute('value'), $fieldValue)) {
 				$input->setAttribute('checked', 'checked');
 			}
@@ -160,23 +164,23 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * Populates a the message to a field with the given name.
 	 *
 	 * @author mnoerenberg
-	 * @param \DOMDocument $document
+	 * @param DOMDocument $document
 	 * @param string $fieldName
 	 * @param string $textMessage
 	 * @return void
 	 */
-	public function populateErrorFeedback(\DOMDocument $document, $fieldName, $textMessage) {
-		$xpath = new \DOMXPath($document);
+	public function populateErrorFeedback(DOMDocument $document, $fieldName, $textMessage) {
+		$xpath = new DOMXPath($document);
 		$inputs = $xpath->query('//input[@name="' . $fieldName . '"]');
 		$selects = $xpath->query('//select[@name="' . $fieldName . '"]');
 		$textareas = $xpath->query('//textarea[@name="' . $fieldName . '"]');
 		foreach (array($inputs, $selects, $textareas) as $fields) {
 			foreach ($fields as $field) {
-				/* @var $field \DOMElement */
+				/* @var $field DOMElement */
 				$formGroup = $field->parentNode;
-				if (strstr($formGroup->getAttribute('class'), 'form-group') == false) {
+				if (strpos($formGroup->getAttribute('class'), 'form-group') === false) {
 					$formGroup = $field->parentNode->parentNode;
-					if (strstr($formGroup->getAttribute('class'), 'form-group') == false) {
+					if (strpos($formGroup->getAttribute('class'), 'form-group') === false) {
 						$formGroup = $field->parentNode->parentNode->parentNode;
 					}
 				}
@@ -202,35 +206,35 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * Adds has-success to all input/select/textarea form-group which hasn't css class has-error.
 	 *
 	 * @author mnoerenberg
-	 * @param \DOMDocument $document
+	 * @param DOMDocument $document
 	 * @return void
 	 */
-	private function populateSuccessFeedback(\DOMDocument $document) {
-		$xpath = new \DOMXPath($document);
+	private function populateSuccessFeedback(DOMDocument $document) {
+		$xpath = new DOMXPath($document);
 		$inputs = $xpath->query("//form//input");
 		$selects = $xpath->query('//form//select');
 		$textarea = $xpath->query('//form//textarea');
 		foreach (array($inputs, $selects, $textarea) as $fields) {
 			foreach ($fields as $field) {
-				/* @var $field \DOMElement */
+				/* @var $field DOMElement */
 	
 				$formGroup = $field->parentNode;
-				if (strstr($formGroup->getAttribute('class'), 'form-group') == false) {
+				if (strpos($formGroup->getAttribute('class'), 'form-group') === false) {
 					$formGroup = $field->parentNode->parentNode;
-					if (strstr($formGroup->getAttribute('class'), 'form-group') == false) {
+					if (strpos($formGroup->getAttribute('class'), 'form-group') === false) {
 						$formGroup = $field->parentNode->parentNode->parentNode;
 					}
 				}
 	
-				if (strstr($formGroup->getAttribute('class'), 'has-error') != false) {
+				if (strpos($formGroup->getAttribute('class'), 'has-error') !== false) {
 					continue;
 				}
 	
-				if (strstr($field->getAttribute('class'), 'hidden') != false) {
+				if (strpos($field->getAttribute('class'), 'hidden') !== false) {
 					continue;
 				}
 	
-				if (strstr($field->getAttribute('type'), 'hidden') != false) {
+				if (strpos($field->getAttribute('type'), 'hidden') !== false) {
 					continue;
 				}
 	

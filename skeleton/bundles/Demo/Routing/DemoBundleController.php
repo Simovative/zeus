@@ -1,7 +1,7 @@
 <?php
 namespace Simovative\Skeleton\Demo\Routing;
 
-use Command\CommandValidationResult;
+use Simovative\Zeus\Command\CommandValidationResult;
 use Simovative\Skeleton\Application\ApplicationFactory;
 use Simovative\Skeleton\Demo\Command\LoginCommandBuilder;
 use Simovative\Skeleton\Demo\Command\LogoutCommandBuilder;
