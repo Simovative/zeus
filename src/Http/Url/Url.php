@@ -1,6 +1,8 @@
 <?php
 namespace Simovative\Zeus\Http\Url;
 
+use InvalidArgumentException;
+
 /**
  * @author mnoerenberg
  */
@@ -134,12 +136,12 @@ class Url {
 	 */
 	public function getPathComponent(int $componentNumber): string {
 		if ($componentNumber === 0) {
-			throw new \InvalidArgumentException('Component numbers begin at 1.');
+			throw new InvalidArgumentException('Component numbers begin at 1.');
 		}
 		$components = explode('/', $this->getPath());
 		if (array_key_exists($componentNumber, $components)) {
 			return $components[$componentNumber];
 		}
-		throw new \InvalidArgumentException("Component '$componentNumber' not found.");
+		throw new InvalidArgumentException("Component '$componentNumber' not found.");
 	}
 }

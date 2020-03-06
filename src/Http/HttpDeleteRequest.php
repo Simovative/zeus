@@ -1,5 +1,5 @@
 <?php
-namespace Simovative\Zeus\Http\Get;
+namespace Simovative\Zeus\Http;
 
 use Simovative\Zeus\Http\Request\HttpRequest;
 

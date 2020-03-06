@@ -1,6 +1,10 @@
 <?php
 namespace Simovative\Zeus\Http\Get;
 
+use Simovative\Zeus\Exception\IncompleteSetupException;
+use Simovative\Zeus\Exception\RouteNotFoundException;
+use Simovative\Zeus\Http\Request\HttpRequestInterface;
+
 /**
  * @author mnoerenberg
  */
@@ -20,11 +24,12 @@ class HttpGetRequestDispatcher implements HttpGetRequestDispatcherInterface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Simovative\Zeus\Http\Request\HttpGetRequestDispatcherInterface::dispatch()
+	 * @inheritDoc
 	 * @author mnoerenberg
+	 * @throws RouteNotFoundException
+	 * @throws IncompleteSetupException
 	 */
-	public function dispatch(HttpGetRequest $request) {
+	public function dispatch(HttpRequestInterface $request) {
 		return $this->router->route($request);
 	}
 }

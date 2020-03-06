@@ -1,6 +1,9 @@
 <?php
 namespace Simovative\Zeus\Filesystem;
 
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Simovative\Zeus\Exception\FilesystemException;
 
 /**
@@ -114,7 +117,7 @@ class Directory {
 	 */
 	public function delete($preserveDirectory = false) {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createDirectoryDoesNotExist($this->getPath());
 		}
 		
 		foreach ($this->getFiles() as $index => $file) {
@@ -151,13 +154,13 @@ class Directory {
 	 */
 	public function getFilesRecursive() {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createDirectoryDoesNotExist($this->getPath());
 		}
 		
 		// create file iterator for all files in bundles asset sub directories.
-		$flags = \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS;
-		$directoryIterator = new \RecursiveDirectoryIterator($this->path, $flags);
-		$fileIterator = new \RecursiveIteratorIterator($directoryIterator);
+		$flags = FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS;
+		$directoryIterator = new RecursiveDirectoryIterator($this->path, $flags);
+		$fileIterator = new RecursiveIteratorIterator($directoryIterator);
 		
 		// for each found file in bundle assets subdirectories.
 		$files = array();
@@ -178,7 +181,7 @@ class Directory {
 	 */
 	public function getFiles() {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createDirectoryDoesNotExist($this->getPath());
 		}
 		
 		if (! empty($this->files)) {
@@ -207,7 +210,7 @@ class Directory {
 	 */
 	public function getDirectories() {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createDirectoryDoesNotExist($this->getPath());
 		}
 		
 		if (! empty($this->directories)) {

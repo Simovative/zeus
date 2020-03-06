@@ -1,6 +1,8 @@
 <?php
 namespace Simovative\Zeus\Filesystem;
 
+use DateTime;
+use Exception;
 use Simovative\Zeus\Exception\FilesystemException;
 
 /**
@@ -59,11 +61,11 @@ class File {
 	 * @author mnoerenberg
 	 * @param string $content
 	 * @return bool
-	 * @throws \Exception
+	 * @throws FilesystemException
 	 */
 	public function write($content) {
 		if (! $this->exists()) {
-			throw new \Exception('file ' . $this->path . ' not found');
+			throw FilesystemException::createFileDoesNotExist($this->path);
 		}
 		
 		file_put_contents($this->path, $content);
@@ -74,12 +76,12 @@ class File {
 	 * Removes the files content. Attention!
 	 * 
 	 * @author mnoerenberg
-	 * @throws \Exception
+	 * @throws Exception
 	 * @return void
 	 */
 	public function clearContent() {
 		if (! $this->exists()) {
-			throw new \Exception('file not found');
+			throw FilesystemException::createFileDoesNotExist($this->path);
 		}
 		
 		file_put_contents($this->path, '');
@@ -95,7 +97,7 @@ class File {
 	 */
 	public function append($content) {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createFileDoesNotExist($this->getPath());
 		}
 		
 		file_put_contents($this->path, $content, FILE_APPEND);
@@ -112,7 +114,7 @@ class File {
 	 */
 	public function read() {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createFileDoesNotExist($this->getPath());
 		}
 		
 		if ($this->getSize() > 0) {
@@ -131,7 +133,7 @@ class File {
 	 */
 	public function getSize() {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createFileDoesNotExist($this->getPath());
 		}
 		
 		return filesize($this->path);
@@ -156,7 +158,7 @@ class File {
 	 */
 	public function delete() {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('Directory does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createDirectoryDoesNotExist($this->getPath());
 		}
 		
 		return unlink($this->path);
@@ -192,15 +194,16 @@ class File {
 	 * Returns the timestamp of the last change.
 	 *
 	 * @author mnoerenberg
-	 * @return \DateTime|false
+	 * @return DateTime|false
 	 * @throws FilesystemException
+	 * @throws Exception
 	 */
 	public function getLastChangeTimestamp() {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createFileDoesNotExist($this->getPath());
 		}
 		
-		return new \DateTime(filemtime($this->path));
+		return new DateTime(filemtime($this->path));
 	}
 	
 	/**
@@ -288,7 +291,7 @@ class File {
 	 */
 	public function tail($lines = 10) {
 		if (! $this->exists()) {
-			throw new FilesystemException(sprintf('File does not exist "%s".', $this->getPath()));
+			throw FilesystemException::createFileDoesNotExist($this->getPath());
 		}
 		
 		$data = '';

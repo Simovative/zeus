@@ -1,11 +1,12 @@
 <?php
 namespace Simovative\Zeus\Http\Request;
 
-use Simovative\Zeus\Http\Get\HttpDeleteRequest;
+use LogicException;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
-use Simovative\Zeus\Http\Get\HttpHeaderRequest;
-use Simovative\Zeus\Http\Get\HttpPatchRequest;
-use Simovative\Zeus\Http\Get\HttpPutRequest;
+use Simovative\Zeus\Http\HttpDeleteRequest;
+use Simovative\Zeus\Http\HttpHeaderRequest;
+use Simovative\Zeus\Http\HttpPatchRequest;
+use Simovative\Zeus\Http\HttpPutRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
 use Simovative\Zeus\Http\Post\UploadedFile;
 use Simovative\Zeus\Http\Url\Url;
@@ -30,7 +31,7 @@ abstract class HttpRequest implements HttpRequestInterface {
      * @param Url $url
      * @param mixed[] $parameters
      */
-	protected function __construct(Url $url, array $parameters = array()) {
+	public function __construct(Url $url, array $parameters = array()) {
 		$this->url = $url;
 		$this->parameters = $parameters;
 	}
@@ -60,7 +61,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 				return new HttpHeaderRequest($currentUrl, $_REQUEST);
 		}
 		
-		throw new \LogicException('request method not allowed.');
+		throw new LogicException('request method not allowed.');
 	}
 	
 	/**

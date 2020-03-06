@@ -42,17 +42,16 @@ problem your application can possibly encounter, instead it tries to
 provide an elegant way to implement a very specific task. Unlike
 other frameworks it doesn't try to be a foundation for everything,
 but rather a solid solution for your applications very specific PRG
-needs. Thus, it doesn't abstract the transport protocol away, but
-relies on it to get the job done in a transparent way and leaves
-everything else up to your application. 
+needs. We also implement the majority of all other HTTP-Methods, so it is also easy to
+use for a SPA as Backend or to implement a Web-Api.
  
-It aims to be compatible with other other frameworks for other tasks. 
+It aims to be compatible with other frameworks for other tasks. 
 The commands are re-usable and you should be able to inject any kind 
 of action you already have into the framework using the command-interfaces. 
 
 ### Compatibility
-PHP 5.3 and up for now. We will remove the support for the older PHP versions
-very soon, so if you aim to stay on 5.5 or older, you should not use this framework.
+PHP 7.1 and up for now. We will remove the support for the older PHP versions
+very soon, so if you aim to stay on 7.1 or older, you should not use this framework.
 
 ## Quickstart<a name="quickstart"></a>
 This section explains how you can get the framework up and running as
@@ -165,10 +164,13 @@ vendor/bin/zeus c:c Login Test
 This will create five files in you bundles/Test/Command folder:
 * LoginCommand.php: The command object that holds all the data needed for execution.
 * LoginCommandBuilder.php The command builder connects all the command classes 
-together and will be used by the command dispatcher to get the single components.
+and will be used by the command dispatcher to get the single components.
 * LoginCommandHandler.php: The handler does the command execution.
-* LoginCommandValidator.php: The validator checks the command request if all the data
-is there and valid that is needed for the command execution.
+* LoginCommandValidator.php: The validator checks the command request if the provided data is valid to create
+a command and execute the handler. We recommend basic checks for required data and if the data types are correct and
+data is in the correct format (e.g. like e-mail addresses). If the command can not be successfully executed because of
+the current state of the application (e.g. some data in the database is missing), the command handler should return a
+response that indicates that.
 * LoginCommandFactoryMethods.txt: Move this code into your 
 Bundle-Factory (TestFactory.php) to create all required components and access the 
 builder creation method from the command router.
@@ -193,7 +195,7 @@ $basePath = __DIR__ . '/..';
 require_once $basePath . '/vendor/autoload.php';
 
 if (is_readable($basePath . '/config.ini')) {
-    $config = parse_ini_file($basePath . '/config.ini';
+    $config = parse_ini_file($basePath . '/config.ini');
 } else {
     $config = array();
 }
@@ -205,6 +207,28 @@ $masterFactory = new Simovative\Zeus\Dependency\MasterFactory(
 $kernel = new \Simovative\Skeleton\Application\SkeletonKernel($masterFactory);
 $kernel->run(\Simovative\Zeus\Http\Request\HttpRequest::createFromGlobals());
 ```
+
+A more sophisticated way would be fetching the configuration values from the environment.
+```php
+<?php
+/* public/index.php */
+$basePath = __DIR__ . '/..';
+require_once $basePath . '/vendor/autoload.php';
+
+$config = array(
+    getenv('database_url'),
+    getenv('redis_url'),
+    getenv('queue_url'),
+);
+
+$masterFactory = new Simovative\Zeus\Dependency\MasterFactory(
+	new \Simovative\Zeus\Configuration\Configuration($config, $basePath)
+);
+
+$kernel = new \Simovative\Skeleton\Application\SkeletonKernel($masterFactory);
+$kernel->run(\Simovative\Zeus\Http\Request\HttpRequest::createFromGlobals());
+```
+
 However, if your environments grow very complex you'll need a more
 sophisticated solution. The framework can handle everything as long
 as the resulting configuration can be narrowed down to a
@@ -217,9 +241,9 @@ key-value array.
 Other factories can register in this factory using the Factory Interface.
 
 **Conventions:** All components of the framework usually call the factorymethods  
-with a "get" prefix for singletons and a "create" prefix they explicitly require 
+with a "get" prefix for singletons and a "create" prefix if they explicitly require 
 a new instance of a class. Thus, when injecting another factory into the master 
-factory methods not beginning with either "get" or "create" will be ignored. 
+factory, methods not beginning with either "get" or "create" will be ignored. 
 
 ### Request
 
@@ -244,6 +268,7 @@ Example Implementation:
 namespace Simovative\Skeleton\Application;
 
 use Simovative\Zeus\Http\HttpKernel;
+use Simovative\Zeus\Http\Request\HttpRequestInterface;
 
 /**
  * My Applications wonderful Kernel
@@ -253,7 +278,7 @@ class Kernel extends HttpKernel {
 	/**
 	 * @inheritdoc
 	 */
-	protected function registerBundles() {
+	protected function registerBundles(HttpRequestInterface $request) {
 		return array(new ApplicationBundle());
 	}
 
@@ -266,7 +291,7 @@ class Kernel extends HttpKernel {
 }
 ```
 In most cases everything you need is to provide the bundles to be loaded
-and maybe an ApplicationState (to handle logins and such).
+and an ApplicationState (to handle sessions and such).
 
 ### Bundle
 
@@ -280,7 +305,8 @@ elements, dependencies to other software packages, connections to
 persistent storage systems, the ApplicationState and so on.
 Everything else should be put in other bundles. For example a
 "UserBundle" to handle everything related to user login, registration,
-password changes, displaying profile pages and stuff like that.
+password changes, displaying profile pages and stuff like that. You should keep your bundles
+as independent as possible from any other bundles, otherwise you will create a dependency hell.
 
 
 **The registration of bundles happens in the kernel**
@@ -300,7 +326,7 @@ Todo: Example/Code
 Whatever your application wants to do, it'll happen inside commands.
 For the commands to be reusable by other frameworks and other entry-points
 of your application (like APIs or CLI for cronjobs and so on) the
-requests are seperated in CommandRequest, Command, CommandValidation and
+requests are separated in CommandRequest, Command, CommandValidation and
 CommandHandler. All Commands are supposed to be handled inside a Bundle.
 
 **Commands will be executed in Post-Requests only**
@@ -334,19 +360,18 @@ Method taking the Command and returning a CommandResponse.
 
 ### Routing
 
-The framework does handle POST and GET requests separately. There are
-two different RouterChains in which routers can be registered. Bundles
+The framework does handle POST, GET and all other type of HTTP-requests separately. There are
+different RouterChains for all types in which routers can be registered. Bundles
 will register only the appropriate chain depending on the request type.
 
 Todo: Example
 
 ### Controller
 
-**Controllers are used for POST Requests only.** The HttpPostRequestDispatcher
+**Controllers are used for Command-Requests only.** The CommandDispatcher
 will use Controllers provided by the bundle to determine which Content
 to display after the command execution. It is important for the
-framework to know what to do in case a command doesn't execute or
-validate.
+framework to know what to do in case a command doesn't execute or the validation fails.
 
 ### CommandResponses
 
@@ -357,7 +382,10 @@ CommandFailureResponse), but you can implement any kind of response yourself.
 
 #### Content
 #### HttpResponses & Locator
-This class will translate a content into its http representation.
+This HttpResponseLocator class will translate a content into its http representation. Not all kind of possible
+content and responses are available in the framework. In case you need something that is not yet implemented, you
+can use your own HttpResponseLocator class and implement any content with any kind of http response for it. For very 
+special cases you can bypass this and directly return a http response in the router or controller.
 
 ### TemplateEngine
 The default template engine that is used is smarty. You can replace it
@@ -366,6 +394,27 @@ with any your want in your application factory.
 ### ApplicationState
 This is the equivalent of a session, but it can be anything that represents
 the current state of your application.
+
+## Implementing a login wall
+A very common case for a application is having a login wall and all other functionality is hidden behind this. Zeus
+does provide a very simple way of doing this. We recommend implementing the login functionality and the login check in
+a separate bundle and registering this bundle directly after the application bundle in the "registerBundles" method of
+your kernel.
+
+```php
+	protected function registerBundles(HttpRequestInterface $request) {
+		return array(
+            new ApplicationBundle(),
+            new LoginBundle(),
+            
+            new OtherBundleThatNeedsLogin(),
+        );
+	}
+```
+
+The LoginBundle will implement a login check in its routers and return the login page if the user is not logged in.
+In that way the routers of the other bundles will never get the request, because zeus does call the routers in the order
+in which the bundles are registered. In this way you can do any kind of pre processing.
 
 ## Modifying Components <a name="modifying"></a>
 These examples should make you familiar with the process of modifying
@@ -377,6 +426,7 @@ Scenario: We do not want to use bootstrap as frontend framework but
 		  we love the automatic form population
 		  
 TODO
+
 ### Example: Implementing Pre- and PostFilterChains
 Scenario: We have a huge application with hundreds of routes and didn't
           care about localisation. Now the team decided to implement locales

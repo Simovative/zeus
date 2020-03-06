@@ -24,7 +24,8 @@
   "autoload": {
     "classmap": [
       "src/",
-      "skeleton/bundles"
+      "skeleton/bundles",
+      "tests/"
     ]
   },
   "require": {
@@ -47,5 +48,10 @@
       "!vendor",
       "tests"
     ]
+  },
+  "config": {
+    "preferred-install": {
+      "*": "dist"
+    }
   }
 }
