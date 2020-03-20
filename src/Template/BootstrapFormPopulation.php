@@ -56,11 +56,10 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 		}
 		
 		// add has-success feedback
-		if ($validationResult->isValid()) {
+		if ($this->isSuccessFeedbackPopulated && $validationResult->isValid()) {
 			// if you have more than one form, it effects the others on the same page.
-			if ($this->isSuccessFeedbackPopulated) {
-				$this->populateSuccessFeedback($domDocument);
-			}
+			// This is disabled by default
+			$this->populateSuccessFeedback($domDocument);
 		}
 		
 		return $this->getHtml($domDocument, $html);
@@ -222,7 +221,7 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 		$helpText->setAttribute(self::ATTRIBUTE_CLASS, 'help-block');
 		
 		$parentField = $field->parentNode;
-		if (strstr($parentField->getAttribute(self::ATTRIBUTE_CLASS), 'input-group') == true) {
+		if (strpos($parentField->getAttribute(self::ATTRIBUTE_CLASS), 'input-group') !== false) {
 			$parentField = $field->parentNode->parentNode;
 		}
 		
