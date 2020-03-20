@@ -14,6 +14,23 @@ use Simovative\Zeus\Command\CommandValidationResult;
  */
 class BootstrapFormPopulation implements FormPopulationInterface {
 	
+	private const ATTRIBUTE_SELECTED = 'selected';
+	private const CSS_CLASS_FORM_GROUP = 'form-group';
+	private const ATTRIBUTE_CLASS = 'class';
+	
+	/**
+	 * @var bool
+	 */
+	private $isSuccessFeedbackPopulated;
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param bool $isSuccessFeedbackPopulated
+	 */
+	public function __construct(bool $isSuccessFeedbackPopulated) {
+		$this->isSuccessFeedbackPopulated = $isSuccessFeedbackPopulated;
+	}
+	
 	/**
 	 * @author Benedikt Schaller
 	 * @inheritdoc
@@ -41,7 +58,9 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 		// add has-success feedback
 		if ($validationResult->isValid()) {
 			// if you have more than one form, it effects the others on the same page.
-			//$this->populateSuccessFeedback();
+			if ($this->isSuccessFeedbackPopulated) {
+				$this->populateSuccessFeedback($domDocument);
+			}
 		}
 		
 		return $this->getHtml($domDocument, $html);
@@ -125,12 +144,12 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 		$options = $xpath->query('//select[@name="' . $fieldName . '"]/option|//select[@name="' . $fieldName . '"]/optgroup/option');
 		foreach ($options as $option) {
 			/* @var $option DOMElement */
-			if ($option->getAttribute('selected') === 'selected') {
-				$option->removeAttribute('selected');
+			if ($option->getAttribute(self::ATTRIBUTE_SELECTED) === self::ATTRIBUTE_SELECTED) {
+				$option->removeAttribute(self::ATTRIBUTE_SELECTED);
 			}
 			$optionValue = $option->getAttribute('value');
 			if (in_array($optionValue, $fieldValue)) {
-				$option->setAttribute('selected', 'selected');
+				$option->setAttribute(self::ATTRIBUTE_SELECTED, self::ATTRIBUTE_SELECTED);
 			}
 		}
 	}
@@ -173,33 +192,57 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 		$xpath = new DOMXPath($document);
 		$inputs = $xpath->query('//input[@name="' . $fieldName . '"]');
 		$selects = $xpath->query('//select[@name="' . $fieldName . '"]');
-		$textareas = $xpath->query('//textarea[@name="' . $fieldName . '"]');
-		foreach (array($inputs, $selects, $textareas) as $fields) {
+		$textAreas = $xpath->query('//textarea[@name="' . $fieldName . '"]');
+		foreach (array($inputs, $selects, $textAreas) as $fields) {
 			foreach ($fields as $field) {
 				/* @var $field DOMElement */
-				$formGroup = $field->parentNode;
-				if (strpos($formGroup->getAttribute('class'), 'form-group') === false) {
-					$formGroup = $field->parentNode->parentNode;
-					if (strpos($formGroup->getAttribute('class'), 'form-group') === false) {
-						$formGroup = $field->parentNode->parentNode->parentNode;
-					}
+				$formGroup = $this->findFormGroup($field);
+				if ($formGroup === null) {
+					continue;
 				}
 				
 				if (! empty($textMessage)) {
-					$helpText = $document->createElement("p", $textMessage);
-					$helpText->setAttribute('class', 'help-block');
-					
-					$parentField = $field->parentNode;
-					if (strstr($parentField->getAttribute('class'), 'input-group') == true) {
-						$parentField = $field->parentNode->parentNode;
-					}
-					
-					$parentField->appendChild($helpText);
+					$this->assignTextMessage($document, $textMessage, $field);
 				}
 				
-				$formGroup->setAttribute('class', $formGroup->getAttribute('class') . ' has-error');
+				$formGroup->setAttribute(self::ATTRIBUTE_CLASS, $formGroup->getAttribute(self::ATTRIBUTE_CLASS) . ' has-error');
 			}
 		}
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param DOMDocument $document
+	 * @param string $textMessage
+	 * @param DOMElement $field
+	 * @return void
+	 */
+	private function assignTextMessage(DOMDocument $document, string $textMessage, DOMElement $field): void {
+		$helpText = $document->createElement("p", $textMessage);
+		$helpText->setAttribute(self::ATTRIBUTE_CLASS, 'help-block');
+		
+		$parentField = $field->parentNode;
+		if (strstr($parentField->getAttribute(self::ATTRIBUTE_CLASS), 'input-group') == true) {
+			$parentField = $field->parentNode->parentNode;
+		}
+		
+		$parentField->appendChild($helpText);
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param DOMElement $field
+	 * @return DOMElement|null
+	 */
+	private function findFormGroup(DOMElement $field) {
+		$formGroup = $field->parentNode;
+		if (strpos($formGroup->getAttribute(self::ATTRIBUTE_CLASS), self::CSS_CLASS_FORM_GROUP) === false) {
+			$formGroup = $field->parentNode->parentNode;
+			if (strpos($formGroup->getAttribute(self::ATTRIBUTE_CLASS), self::CSS_CLASS_FORM_GROUP) === false) {
+				$formGroup = $field->parentNode->parentNode->parentNode;
+			}
+		}
+		return $formGroup;
 	}
 	
 	/**
@@ -217,33 +260,34 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 		foreach (array($inputs, $selects, $textarea) as $fields) {
 			foreach ($fields as $field) {
 				/* @var $field DOMElement */
-	
-				$formGroup = $field->parentNode;
-				if (strpos($formGroup->getAttribute('class'), 'form-group') === false) {
-					$formGroup = $field->parentNode->parentNode;
-					if (strpos($formGroup->getAttribute('class'), 'form-group') === false) {
-						$formGroup = $field->parentNode->parentNode->parentNode;
-					}
-				}
-	
-				if (strpos($formGroup->getAttribute('class'), 'has-error') !== false) {
-					continue;
-				}
-	
-				if (strpos($field->getAttribute('class'), 'hidden') !== false) {
-					continue;
-				}
-	
-				if (strpos($field->getAttribute('type'), 'hidden') !== false) {
-					continue;
-				}
-	
-				$helpText = $document->createElement("p", '&nbsp;');
-				$helpText->setAttribute('class', 'help-block');
-	
-				//$field->parentNode->appendChild($helpText);
-				$formGroup->setAttribute('class', $formGroup->getAttribute('class') . ' has-success');
+				$this->assignSuccessClass($field);
 			}
 		}
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param DOMElement $field
+	 * @return void
+	 */
+	private function assignSuccessClass(DOMElement $field) {
+		$formGroup = $this->findFormGroup($field);
+		if ($formGroup === null) {
+			return;
+		}
+		
+		if (strpos($formGroup->getAttribute(self::ATTRIBUTE_CLASS), 'has-error') !== false) {
+			return;
+		}
+		
+		if (strpos($field->getAttribute(self::ATTRIBUTE_CLASS), 'hidden') !== false) {
+			return;
+		}
+		
+		if (strpos($field->getAttribute('type'), 'hidden') !== false) {
+			return;
+		}
+		
+		$formGroup->setAttribute(self::ATTRIBUTE_CLASS, $formGroup->getAttribute(self::ATTRIBUTE_CLASS) . ' has-success');
 	}
 }

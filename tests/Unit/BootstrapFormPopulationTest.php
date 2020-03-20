@@ -17,7 +17,7 @@ class BootstrapFormPopulationTest extends TestCase {
 		$amount = uniqid('amount_', true);
 		$html = file_get_contents(__DIR__ . '/data/bootstrap_form.html');
 		$validationResult = new CommandValidationResult(false, array('amount' => $amount));
-		$formPopulation = new BootstrapFormPopulation();
+		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
 		$this->assertStringContainsString($amount, $populatedHtml);
 	}
@@ -30,7 +30,7 @@ class BootstrapFormPopulationTest extends TestCase {
 		$comment = uniqid('comment_', true);
 		$html = file_get_contents(__DIR__ . '/data/bootstrap_form.html');
 		$validationResult = new CommandValidationResult(false, array('comment' => $comment));
-		$formPopulation = new BootstrapFormPopulation();
+		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
 		$this->assertStringContainsString($comment, $populatedHtml);
 	}
@@ -42,7 +42,7 @@ class BootstrapFormPopulationTest extends TestCase {
 	public function testThatASelectValueIsPopulated() {
 		$html = file_get_contents(__DIR__ . '/data/bootstrap_form.html');
 		$validationResult = new CommandValidationResult(false, array('addressId' => 7998));
-		$formPopulation = new BootstrapFormPopulation();
+		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
 		$this->assertStringContainsString(' value="7998" selected', $populatedHtml);
 	}
@@ -54,7 +54,7 @@ class BootstrapFormPopulationTest extends TestCase {
 	public function testThatOtherSelectValueAreDeselectedOnPopulation() {
 		$html = file_get_contents(__DIR__ . '/data/bootstrap_form.html');
 		$validationResult = new CommandValidationResult(false, array('addressId' => 7998));
-		$formPopulation = new BootstrapFormPopulation();
+		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
 		$this->assertStringNotContainsString(' selected="selected" value="0"', $populatedHtml);
 	}
@@ -66,7 +66,7 @@ class BootstrapFormPopulationTest extends TestCase {
 	public function testThatACheckboxValueIsPopulated() {
 		$html = file_get_contents(__DIR__ . '/data/bootstrap_form.html');
 		$validationResult = new CommandValidationResult(false, array('method' => ['paypal']));
-		$formPopulation = new BootstrapFormPopulation();
+		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
 		$this->assertStringContainsString(' value="paypal" name="method[]" checked', $populatedHtml);
 	}
