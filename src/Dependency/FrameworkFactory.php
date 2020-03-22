@@ -359,7 +359,7 @@ class FrameworkFactory extends Factory {
 	 * @return BootstrapFormPopulation
 	 */
 	public function createBootstrapFormPopulation() {
-		return new BootstrapFormPopulation();
+		return new BootstrapFormPopulation(false);
 	}
 	
 	/**

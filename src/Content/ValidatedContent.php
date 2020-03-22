@@ -1,7 +1,7 @@
 <?php
 namespace Simovative\Zeus\Content;
 
-use Command\CommandValidationResult;
+use Simovative\Zeus\Command\CommandValidationResult;
 
 /**
  * Interface for validated content.

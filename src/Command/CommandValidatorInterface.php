@@ -1,8 +1,6 @@
 <?php
 namespace Simovative\Zeus\Command;
 
-use Command\CommandValidationResult;
-
 /**
  * @author mnoerenberg
  */

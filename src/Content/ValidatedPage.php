@@ -1,9 +1,8 @@
 <?php
 namespace Simovative\Zeus\Content;
 
-use Command\CommandValidationResult;
+use Simovative\Zeus\Command\CommandValidationResult;
 use Simovative\Zeus\Template\FormPopulationInterface;
-use Simovative\Zeus\Template\TemplateEngineInterface;
 
 /**
  * A base class for a page that has validated content like a html form.

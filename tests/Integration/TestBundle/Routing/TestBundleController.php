@@ -1,7 +1,6 @@
 <?php
 namespace Simovative\Test\Integration\TestBundle\Routing;
 
-use Command\CommandValidationResult;
 use Simovative\Test\Integration\TestBundle\ApplicationFactory;
 use Simovative\Test\Integration\TestBundle\Command\TestCommandBuilder;
 use Simovative\Zeus\Bundle\BundleController;
@@ -10,6 +9,7 @@ use Simovative\Zeus\Command\CommandFailureResponse;
 use Simovative\Zeus\Command\CommandRequest;
 use Simovative\Zeus\Command\CommandResponseInterface;
 use Simovative\Zeus\Command\CommandSuccessResponse;
+use Simovative\Zeus\Command\CommandValidationResult;
 use Simovative\Zeus\Content\Redirect;
 use Simovative\Zeus\Dependency\MasterFactory;
 use Simovative\Zeus\Exception\FilesystemException;

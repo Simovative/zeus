@@ -1,6 +1,7 @@
 <?php
 namespace Simovative\Zeus\Template;
-use Command\CommandValidationResult;
+
+use Simovative\Zeus\Command\CommandValidationResult;
 
 /**
  * Manipulates the HTML DOM to add field values and error messages.

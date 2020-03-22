@@ -38,7 +38,9 @@
   "require-dev": {
   },
   "suggest": {
-    "ext-fileinfo": "Better recognition for file mime types in the file system classes."
+    "ext-fileinfo": "Better recognition for file mime types in the file system classes.",
+    "ext-libxml": "For BootstrapFormValidation",
+    "ext-dom": "For BootstrapFormValidation"
   },
   "bin": [
     "bin/zeus"
