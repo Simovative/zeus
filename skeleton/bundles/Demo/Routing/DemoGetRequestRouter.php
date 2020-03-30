@@ -5,8 +5,8 @@ use Simovative\Skeleton\Application\ApplicationFactory;
 use Simovative\Skeleton\Application\ApplicationState;
 use Simovative\Skeleton\Demo\DemoFactory;
 use Simovative\Zeus\Content\Redirect;
-use Simovative\Zeus\Http\Get\HttpGetRequest;
 use Simovative\Zeus\Http\Get\HttpGetRequestRouterInterface;
+use Simovative\Zeus\Http\Request\HttpRequestInterface;
 use Simovative\Zeus\Http\Url\Url;
 use Simovative\Zeus\Http\Url\UrlMatcher;
 
@@ -44,7 +44,7 @@ class DemoGetRequestRouter implements HttpGetRequestRouterInterface {
 	 * @inheritdoc
 	 * @author Benedikt Schaller
 	 */
-	public function route(HttpGetRequest $request) {
+	public function route(HttpRequestInterface $request) {
 		if ($this->urlMatcher->matchAny($request->getUrl(), array('/', '', '/demo/login'))) {
 			return $this->demoFactory->createDemoLoginPage();
 		}
@@ -58,6 +58,7 @@ class DemoGetRequestRouter implements HttpGetRequestRouterInterface {
 		if ($this->urlMatcher->match($request->getUrl(), '/demo/home')) {
 			return $this->demoFactory->createDemoHomePage($request->get('username'));
 		}
+		
 		return null;
 	}
 }

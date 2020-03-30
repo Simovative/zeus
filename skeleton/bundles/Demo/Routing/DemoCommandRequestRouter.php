@@ -40,7 +40,7 @@ class DemoCommandRequestRouter implements CommandRouterInterface {
 			return $this->demoFactory->createDemoLoginCommandBuilder();
 		}
 		if ($this->urlMatcher->match($request->getUrl(), '/demo/logout')) {
-			return $this->demoFactory->createDemoLogoutCommandBuilder();
+			return $this->demoFactory->createDemoLogoutCommand();
 		}
 		return null;
 	}

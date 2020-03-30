@@ -1,10 +1,10 @@
 <?php
 namespace Simovative\Skeleton\Demo\Routing;
 
+use Simovative\Skeleton\Demo\Command\LogoutCommand;
 use Simovative\Zeus\Command\CommandValidationResult;
 use Simovative\Skeleton\Application\ApplicationFactory;
 use Simovative\Skeleton\Demo\Command\LoginCommandBuilder;
-use Simovative\Skeleton\Demo\Command\LogoutCommandBuilder;
 use Simovative\Skeleton\Demo\DemoFactory;
 use Simovative\Zeus\Bundle\BundleController;
 use Simovative\Zeus\Command\CommandBuilderInterface;
@@ -55,7 +55,7 @@ class DemoBundleController extends BundleController {
 				return $loginPage;
 			}
 		}
-		if ($commandBuilder instanceof LogoutCommandBuilder) {
+		if ($commandBuilder instanceof LogoutCommand) {
 			return new Redirect(new Url(ApplicationFactory::URL_PREFIX . '/demo/login'));
 		}
 		return null;

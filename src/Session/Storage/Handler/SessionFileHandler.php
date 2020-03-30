@@ -1,6 +1,9 @@
 <?php
 namespace Simovative\Zeus\Session\Storage\Handler;
 
+use DateInterval;
+use DateTime;
+use RuntimeException;
 use Simovative\Zeus\Filesystem\Directory;
 use Simovative\Zeus\Filesystem\File;
 
@@ -27,11 +30,15 @@ class SessionFileHandler extends SessionHandler {
 	public function __construct(Directory $sessionDirectory = null) {
 		$this->sessionDirectory = $sessionDirectory;
 		if (! $this->sessionDirectory instanceof Directory) {
-			$this->sessionDirectory = new Directory(ini_get('session.save_path'));
+			$directory = ini_get('session.save_path');
+			if ('' === $directory) {
+				$directory = '/tmp';
+			}
+			$this->sessionDirectory = new Directory($directory);
 		}
 		
 		if (! $this->sessionDirectory->exists()) {
-			throw new \RuntimeException('Session directory is not writeable.');
+			throw new RuntimeException('Session directory is not writeable.');
 		}
 		
 		if (session_status() == PHP_SESSION_ACTIVE) {
@@ -105,8 +112,8 @@ class SessionFileHandler extends SessionHandler {
 	 * @inheritdoc
 	 */
 	public function gc($maxlifetime) {
-		$lastKeepTime = new \DateTime();
-		$lastKeepTime->sub(new \DateInterval(sprintf('PT%dS', $maxlifetime)));
+		$lastKeepTime = new DateTime();
+		$lastKeepTime->sub(new DateInterval(sprintf('PT%dS', $maxlifetime)));
 		foreach ($this->sessionDirectory->getFiles() as $file) {
 			if ($file->getLastChangeTimestamp() > $lastKeepTime) {
 				continue;

@@ -5,9 +5,7 @@ use Simovative\Skeleton\Application\ApplicationFactory;
 use Simovative\Skeleton\Demo\Command\LoginCommandBuilder;
 use Simovative\Skeleton\Demo\Command\LoginCommandHandler;
 use Simovative\Skeleton\Demo\Command\LoginCommandValidator;
-use Simovative\Skeleton\Demo\Command\LogoutCommandHandler;
-use Simovative\Skeleton\Demo\Command\LogoutCommandBuilder;
-use Simovative\Skeleton\Demo\Command\LogoutCommandValidator;
+use Simovative\Skeleton\Demo\Command\LogoutCommand;
 use Simovative\Skeleton\Demo\Page\HomePage;
 use Simovative\Skeleton\Demo\Page\LoginPage;
 use Simovative\Skeleton\Demo\Routing\DemoBundleController;
@@ -104,26 +102,11 @@ class DemoFactory extends Factory {
 	}
 	
 	/**
-	 * @author Benedikt Schaller
-	 * @return LogoutCommandHandler
+	 * @author shartmann
+	 * @return LogoutCommand
 	 */
-	public function createDemoLogoutCommandHandler() {
-		return new LogoutCommandHandler($this->getMasterFactory()->createApplicationState());
+	public function createDemoLogoutCommand(): LogoutCommand {
+		return new LogoutCommand($this->getMasterFactory()->createApplicationState());
 	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return LogoutCommandBuilder
-	 */
-	public function createDemoLogoutCommandBuilder() {
-		return new LogoutCommandBuilder($this->createDemoLogoutCommandValidator());
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return LogoutCommandValidator
-	 */
-	private function createDemoLogoutCommandValidator() {
-		return new LogoutCommandValidator();
-	}
+
 }
