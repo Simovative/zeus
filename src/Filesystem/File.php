@@ -74,10 +74,10 @@ class File {
 	
 	/**
 	 * Removes the files content. Attention!
-	 * 
+	 *
 	 * @author mnoerenberg
-	 * @throws Exception
 	 * @return void
+	 * @throws Exception
 	 */
 	public function clearContent() {
 		if (! $this->exists()) {
@@ -141,7 +141,7 @@ class File {
 	
 	/**
 	 * Returns the file extension.
-	 * 
+	 *
 	 * @author mnoerenberg
 	 * @return string
 	 */
@@ -202,8 +202,11 @@ class File {
 		if (! $this->exists()) {
 			throw FilesystemException::createFileDoesNotExist($this->getPath());
 		}
-		
-		return new DateTime(filemtime($this->path));
+		try {
+			return new DateTime(date('Y-m-d H:i:s', filemtime($this->path)));
+		} catch (Exception $exception) {
+			return false;
+		}
 	}
 	
 	/**
@@ -231,7 +234,7 @@ class File {
 	public function changeMode($mode) {
 		chmod($this->path, $mode);
 	}
-
+	
 	/**
 	 * Returns the permission mode of the file.
 	 *
@@ -241,7 +244,7 @@ class File {
 	public function getMode() {
 		return substr(sprintf('%o', fileperms($this->path)), -4);
 	}
-
+	
 	/**
 	 * Returns the path of the file.
 	 *
@@ -265,14 +268,14 @@ class File {
 	
 	/**
 	 * Returns the number of lines.
-	 * 
+	 *
 	 * @author mnoerenberg
 	 * @return int
 	 */
 	public function countLines() {
 		$lineCount = 0;
 		$handle = fopen($this->path, "r");
-		while(!feof($handle)){
+		while (! feof($handle)) {
 			$line = fgets($handle, 4096);
 			$lineCount = $lineCount + substr_count($line, PHP_EOL);
 		}
@@ -301,15 +304,15 @@ class File {
 		
 		for ($len = 0; $len < $max; $len += $block) {
 			$seekSize = ($max - $len > $block) ? $block : $max - $len;
-			fseek($fp, ($len + $seekSize) * - 1, SEEK_END);
+			fseek($fp, ($len + $seekSize) * -1, SEEK_END);
 			$data = fread($fp, $seekSize) . $data;
-				
+			
 			if (substr_count($data, "\n") >= $lines + 1) {
 				/* Make sure that the last line ends with a '\n' */
 				if (substr($data, strlen($data) - 1, 1) !== "\n") {
 					$data .= "\n";
 				}
-	
+				
 				preg_match("!(.*?\n){" . $lines . "}$!", $data, $match);
 				fclose($fp);
 				return $match[0];
@@ -319,7 +322,7 @@ class File {
 		fclose($fp);
 		return $data;
 	}
-
+	
 	/**
 	 * @author Benedikt Schaller
 	 * @return string
