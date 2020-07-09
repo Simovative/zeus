@@ -196,7 +196,6 @@ class File {
 	 * @author mnoerenberg
 	 * @return DateTime|false
 	 * @throws FilesystemException
-	 * @throws Exception
 	 */
 	public function getLastChangeTimestamp() {
 		if (! $this->exists()) {
