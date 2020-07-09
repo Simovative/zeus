@@ -1,6 +1,7 @@
 <?php
 namespace Simovative\Zeus\Session\Storage\Handler;
 
+use Simovative\Zeus\Exception\FilesystemException;
 use Simovative\Zeus\Filesystem\Directory;
 use Simovative\Zeus\Filesystem\File;
 
@@ -108,10 +109,18 @@ class SessionFileHandler extends SessionHandler {
 		$lastKeepTime = new \DateTime();
 		$lastKeepTime->sub(new \DateInterval(sprintf('PT%dS', $maxlifetime)));
 		foreach ($this->sessionDirectory->getFiles() as $file) {
-			if ($file->getLastChangeTimestamp() > $lastKeepTime) {
+			if (! $file->exists()) {
 				continue;
 			}
-			$file->delete();
+			
+			try {
+				if ($file->getLastChangeTimestamp() > $lastKeepTime) {
+					continue;
+				}
+				$file->delete();
+			} catch (FilesystemException $exception) {
+				continue;
+			}
 		}
 		return true;
 	}
