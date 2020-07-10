@@ -61,4 +61,49 @@ class HttpPostRequestTest extends TestCase {
 		$postRequest = new HttpPostRequest(new Url('/my/test/url'), [], [], $uploadedFiles);
 		return $postRequest;
 	}
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatPostDataIsReturnedAsBodyForFormDataRequest(): void {
+        $testParameters = ['test' => 'value'];
+        $postRequest = new HttpPostRequest(
+            new Url('/my/test/url'),
+            $testParameters,
+            ['CONTENT_TYPE' => 'multipart/form-data'],
+            []
+        );
+        $this->assertEquals($testParameters, $postRequest->getParsedBody());
+	}
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatPostDataIsReturnedAsBodyForUrlEncodedRequest(): void {
+        $testParameters = ['test' => 'value'];
+        $postRequest = new HttpPostRequest(
+            new Url('/my/test/url'),
+            $testParameters,
+            ['CONTENT_TYPE' => 'application/x-www-form-urlencoded'],
+            []
+        );
+        $this->assertEquals($testParameters, $postRequest->getParsedBody());
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatPostDataIsNotReturnedAsBodyForOtherRequest(): void {
+        $testParameters = ['test' => 'value'];
+        $postRequest = new HttpPostRequest(
+            new Url('/my/test/url'),
+            $testParameters,
+            ['CONTENT_TYPE' => 'application/other'],
+            []
+        );
+        $this->assertNotEquals($testParameters, $postRequest->getParsedBody());
+    }
 }
