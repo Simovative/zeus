@@ -21,7 +21,7 @@ class TestCommandBuilder extends CommandBuilderAbstract {
 	 * @return CommandInterface
 	 */
 	public function createCommand(CommandRequest $commandRequest) {
-		return new TestCommand();
+		return new TestCommand($commandRequest);
 	}
 	
 	/**

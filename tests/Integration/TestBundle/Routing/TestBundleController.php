@@ -20,7 +20,7 @@ use Simovative\Zeus\Http\Url\Url;
  */
 class TestBundleController extends BundleController {
 	
-	public const TEST_URL_START = '/test?username=';
+	public const TEST_URL_START = '/test';
 	
 	/**
 	 * @author Benedikt Schaller
@@ -49,8 +49,21 @@ class TestBundleController extends BundleController {
 	 */
 	public function whichContentForCommandResult(CommandBuilderInterface $commandBuilder, CommandRequest $commandRequest, CommandResponseInterface $commandResponse) {
 		if ($commandBuilder instanceof TestCommandBuilder) {
+		    $requestBody = $commandRequest->getBody();
+		    if (is_array($requestBody)) {
+		        $values = '';
+		        foreach ($requestBody as $key => $value) {
+		            if (array_key_first($requestBody) === $key) {
+		                $values .= '?';
+                    } else if (array_key_last($requestBody) !== $key) {
+                        $values .= '&';
+                    }
+                    $values .= $key . '=' . urlencode($value);
+                }
+                return new Redirect(new Url(ApplicationFactory::URL_PREFIX . self::TEST_URL_START . $values));
+            }
 			if ($commandResponse instanceof CommandSuccessResponse) {
-				return new Redirect(new Url(ApplicationFactory::URL_PREFIX . self::TEST_URL_START . urlencode($commandResponse->getValue())));
+				return new Redirect(new Url(ApplicationFactory::URL_PREFIX . self::TEST_URL_START . '?value=' . urlencode((string) $requestBody)));
 			}
 			if ($commandResponse instanceof CommandFailureResponse) {
 				$testPage = $this->getMasterFactory()->createTestPage();

@@ -32,6 +32,6 @@ class TestCommandHandler implements CommandHandlerInterface {
 	 */
 	public function execute(CommandInterface $command) {
 		$this->state->logout();
-		return new CommandSuccessResponse();
+		return new CommandSuccessResponse($command);
 	}
 }

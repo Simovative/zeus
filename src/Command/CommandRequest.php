@@ -2,6 +2,7 @@
 namespace Simovative\Zeus\Command;
 
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
+use Simovative\Zeus\Stream\StreamInterface;
 
 /**
  * @author Benedikt Schaller
@@ -12,14 +13,21 @@ class CommandRequest {
 	 * @var array|mixed[]
 	 */
 	private $valueMap;
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @param array|mixed[] $valueMap
-	 */
-	public function __construct(array $valueMap) {
+
+    /**
+     * @var null|array|StreamInterface
+     */
+    private $body;
+
+    /**
+     * @param array|mixed[] $valueMap
+     * @param null|array|StreamInterface $body
+     * @author Benedikt Schaller
+     */
+	public function __construct(array $valueMap, $body) {
 		$this->valueMap = $valueMap;
-	}
+        $this->body = $body;
+    }
 	
 	/**
 	 * @author Benedikt Schaller
@@ -28,7 +36,7 @@ class CommandRequest {
 	 */
 	public static function fromHttpRequest(HttpRequestInterface $httpRequest) {
 		$values = $httpRequest->all();
-		return new CommandRequest($values);
+		return new CommandRequest($values, $httpRequest->getParsedBody());
 	}
 	
 	/**
@@ -61,4 +69,11 @@ class CommandRequest {
 	public function all() {
 		return $this->valueMap;
 	}
+
+    /**
+     * @return null|array|StreamInterface
+     */
+    public function getBody() {
+        return $this->body;
+    }
 }

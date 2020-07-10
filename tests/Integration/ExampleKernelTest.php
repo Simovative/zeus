@@ -129,7 +129,25 @@ class ExampleKernelTest extends TestCase {
 		
 		parent::tearDown();
 	}
-	
-	
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatCommandRequestHasBody() {
+        $bodyParameters = ['test' => 'body'];
+        $request = new HttpPostRequest(
+            new Url('/test'),
+            $bodyParameters,
+            ['CONTENT_TYPE' => 'application/x-www-form-urlencoded'],
+            []
+        );
+        $response = $this->kernel->run($request, false);
+        $content = '';
+        if ($response instanceof HttpTestResponse) {
+            $content = $response->getContent()->render();
+        }
+        $this->assertEquals(TestBundleController::TEST_URL_START . '?test=body', $content);
+    }
 }
 
