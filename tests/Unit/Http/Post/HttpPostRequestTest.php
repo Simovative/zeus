@@ -42,7 +42,7 @@ class HttpPostRequestTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatPostRequestWithoutFilesHasNoFiles() {
-		$postRequest = new HttpPostRequest(new Url('/my/test/url'), [], []);
+		$postRequest = new HttpPostRequest(new Url('/my/test/url'), [], [], []);
 		$this->assertFalse($postRequest->hasUploadedFiles());
 		$this->assertEquals(0, count($postRequest->getUploadedFiles()));
 	}
@@ -58,7 +58,7 @@ class HttpPostRequestTest extends TestCase {
 			new UploadedFile('testInput3', 1, 'testLabel3', 'testType', '/my/test/path', 1, 11000),
 			new UploadedFile('testInput3', 2, 'testLabel4', 'testType', '/my/test/path', 1, 8000),
 		];
-		$postRequest = new HttpPostRequest(new Url('/my/test/url'), [], $uploadedFiles);
+		$postRequest = new HttpPostRequest(new Url('/my/test/url'), [], [], $uploadedFiles);
 		return $postRequest;
 	}
 }
