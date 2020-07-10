@@ -103,7 +103,6 @@ class Stream implements StreamInterface {
 		if (false === $this->isOpen()) {
 			return;
 		}
-		$handle = $this->getHandle();
-		fclose($handle);
+		fclose($this->getHandle());
 	}
 }
