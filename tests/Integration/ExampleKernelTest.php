@@ -55,7 +55,7 @@ class ExampleKernelTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatSuccessfulPostRequestReturnsRedirect() {
-		$request = new HttpPostRequest(new Url('/test'), [], []);
+		$request = new HttpPostRequest(new Url('/test'), [], [], []);
 		$response = $this->kernel->run($request, false);
 		$content = '';
 		if ($response instanceof HttpTestResponse) {

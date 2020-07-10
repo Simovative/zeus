@@ -90,4 +90,38 @@ interface HttpRequestInterface {
 	 * @return boolean
 	 */
 	public function isHeader();
+	
+	/**
+	 * Retrieve any parameters provided in the request body.
+	 *
+	 * If the request Content-Type is either application/x-www-form-urlencoded
+	 * or multipart/form-data, and the request method is POST, this method MUST
+	 * return the contents of $_POST.
+	 *
+	 * Otherwise, this method may return any results of deserializing
+	 * the request body content; as parsing returns structured content, the
+	 * potential types MUST be arrays or objects only. A null value indicates
+	 * the absence of body content.
+	 *
+	 * @return null|array|object The deserialized body parameters, if any.
+	 *     These will typically be an array or object.
+	 */
+	public function getParsedBody();
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @return string|null
+	 */
+	public function getContentType(): ?string;
+	
+	/**
+	 * Retrieve server parameters.
+	 *
+	 * Retrieves data related to the incoming request environment,
+	 * typically derived from PHP's $_SERVER superglobal. The data IS NOT
+	 * REQUIRED to originate from $_SERVER.
+	 *
+	 * @return array
+	 */
+	public function getServerParams(): array;
 }
