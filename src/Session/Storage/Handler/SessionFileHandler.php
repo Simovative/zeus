@@ -7,6 +7,7 @@ use Simovative\Zeus\Filesystem\File;
 
 /**
  * Required PHP >= 5.4
+ *
  * @author mnoerenberg
  */
 class SessionFileHandler extends SessionHandler {
@@ -20,7 +21,7 @@ class SessionFileHandler extends SessionHandler {
 	 * @var string
 	 */
 	private $sessionChecksum;
-
+	
 	/**
 	 * @author mnoerenberg
 	 * @param Directory $sessionDirectory - default: null
@@ -98,7 +99,16 @@ class SessionFileHandler extends SessionHandler {
 	 * @inheritdoc
 	 */
 	public function destroy($session_id) {
-		return $this->getFile($session_id)->delete();
+		$file = $this->getFile($session_id);
+		if (! $file->exists()) {
+			return false;
+		}
+		
+		try {
+			return $file->delete();
+		} catch (FilesystemException $exception) {
+			return false;
+		}
 	}
 	
 	/**
