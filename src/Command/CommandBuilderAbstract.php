@@ -23,7 +23,7 @@ abstract class CommandBuilderAbstract implements CommandBuilderInterface {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return CommandValidatorInterface
+	 * @inheritDoc
 	 */
 	public function getCommandValidator() {
 		return $this->commandValidator;

@@ -35,7 +35,7 @@ interface CommandBuilderInterface {
 	 * parameter because it will always be used.
 	 *
 	 * @author Benedikt Schaller
-	 * @return CommandValidatorInterface
+	 * @return CommandValidatorInterface|null
 	 */
 	public function getCommandValidator();
 }
