@@ -5,6 +5,7 @@ namespace Simovative\Zeus\Command;
  * Implements the command validator passthrough for the command builder.
  *
  * @author Benedikt Schaller
+ * @deprecated Please use the interface CommandBuilderInterface
  */
 abstract class CommandBuilderAbstract implements CommandBuilderInterface {
 	
@@ -23,7 +24,7 @@ abstract class CommandBuilderAbstract implements CommandBuilderInterface {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return CommandValidatorInterface
+	 * @inheritDoc
 	 */
 	public function getCommandValidator() {
 		return $this->commandValidator;
