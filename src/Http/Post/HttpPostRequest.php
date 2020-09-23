@@ -21,10 +21,11 @@ class HttpPostRequest extends HttpRequest {
 	 * @param Url $url
 	 * @param array|mixed[] $parameters
 	 * @param array $serverParameters
+	 * @param StreamInterface|array $parsedBody
 	 * @param UploadedFile[] $uploadedFiles
 	 */
-	public function __construct(Url $url, array $parameters, array $serverParameters, array $uploadedFiles) {
-		parent::__construct($url, $parameters, $serverParameters);
+	public function __construct(Url $url, array $parameters, array $serverParameters, $parsedBody, array $uploadedFiles) {
+		parent::__construct($url, $parameters, $serverParameters, $parsedBody);
 		$this->uploadedFiles = $uploadedFiles;
 	}
 	

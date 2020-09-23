@@ -8,6 +8,7 @@
 2.[Quickstart](#quickstart)<br>
 3.[General structure](#structure)<br>
 4.[Modifying components](#modifying)<br>
+5.[Build](#build)<br>
 
 
 ## Design principles<a name="design"></a>
@@ -447,3 +448,12 @@ TODO
 TODO
 ### Add a consul key/value store
 TODO
+
+## Build <a name="build"></a>
+```
+docker-compose up
+```
+### Run tests
+```
+php build/phpunit.phar --configuration tests/phpunit.xml
+```
