@@ -32,6 +32,7 @@
     "smarty/smarty": "v3.*",
     "php": ">=7.1.0",
     "ext-intl": "*",
+    "ext-json": "*",
     "symfony/debug": ">=v2.5.0",
     "symfony/console": ">=v2.5.0"
   },

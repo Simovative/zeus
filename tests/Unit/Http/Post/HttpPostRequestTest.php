@@ -19,8 +19,8 @@ class HttpPostRequestTest extends TestCase {
 	 */
 	public function testThatPostReuqestSavesUploadedFiles() {
 		$postRequest = $this->createRequestWithFiles();
-		$this->assertTrue($postRequest->hasUploadedFiles());
-		$this->assertEquals(4, count($postRequest->getUploadedFiles()));
+		self::assertTrue($postRequest->hasUploadedFiles());
+		self::assertEquals(4, count($postRequest->getUploadedFiles()));
 	}
 	
 	/**
@@ -31,9 +31,9 @@ class HttpPostRequestTest extends TestCase {
 		$inputName = 'testInput3';
 		$postRequest = $this->createRequestWithFiles();
 		$inputFiles = $postRequest->getUploadedFilesOfInput($inputName);
-		$this->assertEquals(2, count($inputFiles));
+		self::assertEquals(2, count($inputFiles));
 		foreach ($inputFiles as $inputFile) {
-			$this->assertEquals($inputName, $inputFile->getInputName());
+			self::assertEquals($inputName, $inputFile->getInputName());
 		}
 	}
 	
@@ -42,9 +42,9 @@ class HttpPostRequestTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatPostRequestWithoutFilesHasNoFiles() {
-		$postRequest = new HttpPostRequest(new Url('/my/test/url'), [], [], []);
-		$this->assertFalse($postRequest->hasUploadedFiles());
-		$this->assertEquals(0, count($postRequest->getUploadedFiles()));
+		$postRequest = new HttpPostRequest(new Url('/my/test/url'), [], [], [], []);
+		self::assertFalse($postRequest->hasUploadedFiles());
+		self::assertEquals(0, count($postRequest->getUploadedFiles()));
 	}
 	
 	/**
@@ -58,7 +58,7 @@ class HttpPostRequestTest extends TestCase {
 			new UploadedFile('testInput3', 1, 'testLabel3', 'testType', '/my/test/path', 1, 11000),
 			new UploadedFile('testInput3', 2, 'testLabel4', 'testType', '/my/test/path', 1, 8000),
 		];
-		$postRequest = new HttpPostRequest(new Url('/my/test/url'), [], [], $uploadedFiles);
+		$postRequest = new HttpPostRequest(new Url('/my/test/url'), [], [], [], $uploadedFiles);
 		return $postRequest;
 	}
 
@@ -72,9 +72,10 @@ class HttpPostRequestTest extends TestCase {
             new Url('/my/test/url'),
             $testParameters,
             ['CONTENT_TYPE' => 'multipart/form-data'],
+			[],
             []
         );
-        $this->assertEquals($testParameters, $postRequest->getParsedBody());
+        self::assertEquals($testParameters, $postRequest->getParsedBody());
 	}
 
     /**
@@ -87,9 +88,10 @@ class HttpPostRequestTest extends TestCase {
             new Url('/my/test/url'),
             $testParameters,
             ['CONTENT_TYPE' => 'application/x-www-form-urlencoded'],
-            []
+			[],
+			[]
         );
-        $this->assertEquals($testParameters, $postRequest->getParsedBody());
+        self::assertEquals($testParameters, $postRequest->getParsedBody());
     }
 
     /**
@@ -102,8 +104,9 @@ class HttpPostRequestTest extends TestCase {
             new Url('/my/test/url'),
             $testParameters,
             ['CONTENT_TYPE' => 'application/other'],
+			[],
             []
         );
-        $this->assertNotEquals($testParameters, $postRequest->getParsedBody());
+		self::assertNotEquals($testParameters, $postRequest->getParsedBody());
     }
 }
