@@ -1,6 +1,8 @@
 <?php
 namespace Simovative\Zeus\Dependency;
 
+use Simovative\Zeus\Http\HttpRequestFactory;
+
 /**
  * @author mnoerenberg
  */
@@ -21,7 +23,7 @@ abstract class Factory implements FactoryInterface {
 	
 	/**
 	 * @author mnoerenberg
-	 * @return MasterFactory|FrameworkFactory
+	 * @return MasterFactory|FrameworkFactory|HttpRequestFactory
 	 */
 	protected function getMasterFactory() {
 		return $this->masterFactory;
@@ -34,7 +36,7 @@ abstract class Factory implements FactoryInterface {
 	 * @param string $key
 	 * @return mixed|null
 	 */
-	protected function getConfigurationValue($key) {
+	protected function getConfigurationValue(string $key) {
 		$configuration = $this->getMasterFactory()->getConfiguration();
 		return $configuration->get($key);
 	}
@@ -43,7 +45,7 @@ abstract class Factory implements FactoryInterface {
 	 * @author Benedikt Schaller
 	 * @return string
 	 */
-	protected function getBasePath() {
+	protected function getBasePath(): string {
 		return $this->getMasterFactory()->getConfiguration()->getBasePath();
 	}
 	

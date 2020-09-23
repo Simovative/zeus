@@ -36,7 +36,11 @@ class CommandRequest {
 	 */
 	public static function fromHttpRequest(HttpRequestInterface $httpRequest) {
 		$values = $httpRequest->all();
-		return new CommandRequest($values, $httpRequest->getParsedBody());
+		$body = $httpRequest->getParsedBody();
+		if ($body instanceof StreamInterface) {
+			$body = $body->getContents();
+		}
+		return new CommandRequest($values, $body);
 	}
 	
 	/**

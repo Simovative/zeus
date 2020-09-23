@@ -7,19 +7,20 @@ use function json_encode;
 use function json_decode;
 
 /**
- * @author mnoerenberg
+ * @author Benedikt Schaller
  */
 final class JsonEncodingService implements JsonEncodingServiceInterface {
 
 	private const DEFAULT_OPTIONS = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PARTIAL_OUTPUT_ON_ERROR;
 	private const DEFAULT_DEPTH = 512;
-
+	
 	/**
-	 * @author mnoerenberg
+	 * @author Benedikt Schaller
 	 * @param mixed $value
 	 * @param int|null $options
 	 * @param int|null $depth
 	 * @return string|null
+	 * @throws JsonEncodingException
 	 */
 	public function encode($value, ?int $options = null, ?int $depth = null) : ?string {
 		if ($options === null) {
@@ -30,22 +31,27 @@ final class JsonEncodingService implements JsonEncodingServiceInterface {
 			$depth = self::DEFAULT_DEPTH;
 		}
 
-		$value = json_encode($value, $options, $depth);
-
-		if ($value !== false) {
-			return $value;
+		$encodedValue = json_encode($value, $options, $depth);
+		$lastError = json_last_error();
+		if ($lastError !== JSON_ERROR_NONE) {
+			$errorMessage = json_last_error_msg();
+			throw JsonEncodingException::createForEncoding($errorMessage, $value);
 		}
-
+		
+		if ($encodedValue !== false) {
+			return $encodedValue;
+		}
 		return null;
 	}
-
+	
 	/**
-	 * @author mnoerenberg
+	 * @author Benedikt Schaller
 	 * @param string $jsonString
 	 * @param bool $assoc
 	 * @param int|null $depth
 	 * @param int|null $options
 	 * @return mixed|null
+	 * @throws JsonEncodingException
 	 */
 	public function decode(string $jsonString, bool $assoc = false, ?int $depth = null, ?int $options = null) {
 		if ($options === null) {
@@ -56,6 +62,12 @@ final class JsonEncodingService implements JsonEncodingServiceInterface {
 			$depth = self::DEFAULT_DEPTH;
 		}
 
-		return json_decode($jsonString, $assoc, $depth, $options);
+		$decodedValue = json_decode($jsonString, $assoc, $depth, $options);
+		$lastError = json_last_error();
+		if ($lastError !== JSON_ERROR_NONE) {
+			$errorMessage = json_last_error_msg();
+			throw JsonEncodingException::createForDecoding($errorMessage, $jsonString);
+		}
+		return $decodedValue;
 	}
 }
