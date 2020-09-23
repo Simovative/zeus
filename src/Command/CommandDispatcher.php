@@ -55,9 +55,15 @@ class CommandDispatcher implements HttpRequestDispatcherInterface {
 		if (null === $commandBuilder) {
 			throw new RouteNotFoundException($request->getUrl());
 		}
+		
 		$commandRequest = CommandRequest::fromHttpRequest($request);
-		$validationResult = $commandBuilder->getCommandValidator()->validate($commandRequest);
-		if ($validationResult->isValid()) {
+		$commandValidator = $commandBuilder->getCommandValidator();
+		$validationResult = null;
+		if (null !== $commandValidator) {
+			$validationResult = $commandValidator->validate($commandRequest);
+		}
+		
+		if (null === $validationResult || $validationResult->isValid()) {
 			
 			// create command handler by command.
 			$command = $commandBuilder->createCommand($commandRequest);
