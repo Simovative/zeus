@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace Simovative\Zeus\Http;
 
 use LogicException;
+use Simovative\Zeus\Dependency\Factory;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
-use Simovative\Zeus\Http\Json\JsonEncodingService;
-use Simovative\Zeus\Http\Json\JsonEncodingServiceInterface;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
 use Simovative\Zeus\Http\Post\UploadedFile;
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
@@ -17,7 +16,7 @@ use Simovative\Zeus\Stream\StreamInterface;
 /**
  * @author Benedikt Schaller
  */
-class HttpRequestFactory {
+class HttpRequestFactory extends Factory {
 	
 	private const SERVER_PARAMETER_CONTENT_TYPE = 'CONTENT_TYPE';
 	
@@ -25,16 +24,9 @@ class HttpRequestFactory {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return JsonEncodingServiceInterface
-	 */
-	private function createEncodingService() : JsonEncodingServiceInterface {
-		return new JsonEncodingService();
-	}
-	
-	/**
-	 * @author Benedikt Schaller
 	 * @return HttpRequestInterface
 	 * @throws LogicException
+	 * @throws Json\JsonEncodingException
 	 */
 	public function createRequestFromGlobals() {
 		$currentUrl = Url::createFromServerArray($_SERVER);
@@ -52,7 +44,7 @@ class HttpRequestFactory {
 				return new HttpPatchRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
 			case 'DELETE':
 				return new HttpDeleteRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
-			case 'HEADER':
+			case 'HEAD':
 				return new HttpHeaderRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
 		}
 		
@@ -69,23 +61,25 @@ class HttpRequestFactory {
 		if (array_key_exists(self::SERVER_PARAMETER_CONTENT_TYPE, $serverParameters)) {
 			$contentType = $serverParameters[self::SERVER_PARAMETER_CONTENT_TYPE];
 		}
-		return ($contentType === self::CONTENT_TYPE_JSON);
+		return $contentType === self::CONTENT_TYPE_JSON;
 	}
 	
 	/**
 	 * @author Benedikt Schaller
 	 * @param array $serverParameters
 	 * @return array|StreamInterface
+	 * @throws Json\JsonEncodingException
 	 */
 	private function createParsedBody(array $serverParameters) {
 		$parsedBody = new PhpInputStream();
 		if ($this->isJsonContent($serverParameters)) {
 			$streamContents = $parsedBody->getContents();
-			$parsedBody = $this->createEncodingService()->decode(
+			$parsedBody = $this->getMasterFactory()->createJsonEncodingService()->decode(
 				$streamContents,
 				true
 			);
 		}
 		return $parsedBody;
 	}
+	
 }
