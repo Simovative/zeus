@@ -1,8 +1,9 @@
 <?php
-namespace Simovative\Zeus\Template;
+namespace Simovative\Zeus\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Simovative\Zeus\Command\CommandValidationResult;
+use Simovative\Zeus\Template\BootstrapFormPopulation;
 
 /**
  * Tests the bootstrap form population.
@@ -19,7 +20,7 @@ class BootstrapFormPopulationTest extends TestCase {
 		$validationResult = new CommandValidationResult(false, array('amount' => $amount));
 		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
-		$this->assertStringContainsString($amount, $populatedHtml);
+		self::assertStringContainsString($amount, $populatedHtml);
 	}
 	
 	/**
@@ -32,7 +33,7 @@ class BootstrapFormPopulationTest extends TestCase {
 		$validationResult = new CommandValidationResult(false, array('comment' => $comment));
 		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
-		$this->assertStringContainsString($comment, $populatedHtml);
+		self::assertStringContainsString($comment, $populatedHtml);
 	}
 	
 	/**
@@ -44,7 +45,7 @@ class BootstrapFormPopulationTest extends TestCase {
 		$validationResult = new CommandValidationResult(false, array('addressId' => 7998));
 		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
-		$this->assertStringContainsString(' value="7998" selected', $populatedHtml);
+		self::assertStringContainsString(' value="7998" selected', $populatedHtml);
 	}
 	
 	/**
@@ -56,7 +57,7 @@ class BootstrapFormPopulationTest extends TestCase {
 		$validationResult = new CommandValidationResult(false, array('addressId' => 7998));
 		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
-		$this->assertStringNotContainsString(' selected="selected" value="0"', $populatedHtml);
+		self::assertStringNotContainsString(' selected="selected" value="0"', $populatedHtml);
 	}
 	
 	/**
@@ -68,7 +69,7 @@ class BootstrapFormPopulationTest extends TestCase {
 		$validationResult = new CommandValidationResult(false, array('method' => ['paypal']));
 		$formPopulation = new BootstrapFormPopulation(false);
 		$populatedHtml = $formPopulation->populate($html, $validationResult);
-		$this->assertStringContainsString(' value="paypal" name="method[]" checked', $populatedHtml);
+		self::assertStringContainsString(' value="paypal" name="method[]" checked', $populatedHtml);
 	}
 }
 

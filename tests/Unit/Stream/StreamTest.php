@@ -31,8 +31,7 @@ class StreamTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatStreamCanBeRead(): void {
-
-		$this->assertEquals('stream test content', $this->testStream->getContents());
+		self::assertEquals('stream test content', $this->testStream->getContents());
 	}
 
     /**
@@ -40,7 +39,7 @@ class StreamTest extends TestCase {
      * @return void
      */
     public function testThatStreamCanBeUsedAsString(): void {
-        $this->assertEquals('stream test content', (string) $this->testStream);
+		self::assertEquals('stream test content', (string) $this->testStream);
     }
 
     /**
@@ -49,9 +48,9 @@ class StreamTest extends TestCase {
      */
     public function testThatStreamCanBeReadPartially(): void {
         $text = $this->testStream->read(8);
-        $this->assertEquals('stream t', $text);
+		self::assertEquals('stream t', $text);
         $text2 = $this->testStream->read(11);
-        $this->assertEquals('est content', $text2);
+		self::assertEquals('est content', $text2);
     }
 
     /**
@@ -60,9 +59,9 @@ class StreamTest extends TestCase {
      */
     public function testThatStreamEndOfFileIsReached(): void {
         $this->testStream->read(8);
-        $this->assertFalse($this->testStream->eof());
+		self::assertFalse($this->testStream->eof());
         $this->testStream->read(12);
-        $this->assertTrue($this->testStream->eof());
+		self::assertTrue($this->testStream->eof());
     }
 
     /**
@@ -73,7 +72,7 @@ class StreamTest extends TestCase {
         $text = $this->testStream->read(8);
         $this->testStream->close();
         $text2 = $this->testStream->read(8);
-        $this->assertEquals($text, $text2);
+		self::assertEquals($text, $text2);
     }
 
     /**
@@ -85,7 +84,7 @@ class StreamTest extends TestCase {
         $this->testStream->close();
         $this->testStream->close();
         $text2 = $this->testStream->read(8);
-        $this->assertEquals($text, $text2);
+		self::assertEquals($text, $text2);
     }
 
     /**
@@ -94,6 +93,6 @@ class StreamTest extends TestCase {
      */
     public function testThatNewStreamIsNotEndOfFile(): void {
         $endOfFile = $this->testStream->eof();
-        $this->assertFalse($endOfFile);
+		self::assertFalse($endOfFile);
     }
 }

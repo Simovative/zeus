@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Simovative\Zeus\Tests\Unit\Stream;
+namespace Simovative\Zeus\Test\Unit\Stream;
 
 use PHPUnit\Framework\TestCase;
 use Simovative\Zeus\Stream\PhpInputStream;
@@ -18,6 +18,6 @@ class PhpInputStreamTest extends TestCase {
      */
     public function testThatStreamCanBeConstructed(): void {
         $inputSteam = new PhpInputStream();
-        $this->assertFalse($inputSteam->eof());
+		self::assertFalse($inputSteam->eof());
     }
 }
