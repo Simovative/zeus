@@ -17,5 +17,6 @@
         <log type="testdox-text" target="./results/report.dotx" />
         <log type="coverage-clover" target="./results/coverage.xml" />
         <log type="coverage-html" target="./results/report" />
+        <log type="junit" target="./results/junit.xml"/>
 	</logging>
 </phpunit>
