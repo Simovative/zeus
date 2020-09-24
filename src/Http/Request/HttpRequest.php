@@ -1,16 +1,7 @@
 <?php
 namespace Simovative\Zeus\Http\Request;
 
-use LogicException;
-use Simovative\Zeus\Http\Get\HttpGetRequest;
-use Simovative\Zeus\Http\HttpDeleteRequest;
-use Simovative\Zeus\Http\HttpHeaderRequest;
-use Simovative\Zeus\Http\HttpPatchRequest;
-use Simovative\Zeus\Http\HttpPutRequest;
-use Simovative\Zeus\Http\Post\HttpPostRequest;
-use Simovative\Zeus\Http\Post\UploadedFile;
 use Simovative\Zeus\Http\Url\Url;
-use Simovative\Zeus\Stream\PhpInputStream;
 use Simovative\Zeus\Stream\StreamInterface;
 
 /**
@@ -31,48 +22,27 @@ abstract class HttpRequest implements HttpRequestInterface {
 	private $parameters;
 	
 	/**
-	 * @var array
+	 * @var mixed[]
 	 */
 	private $serverParameters;
+	
+	/**
+	 * @var null|mixed[]|StreamInterface
+	 */
+	private $parsedBody;
 	
 	/**
 	 * @author mnoerenberg
 	 * @param Url $url
 	 * @param mixed[] $parameters
-	 * @param array $serverParameters
+	 * @param mixed[] $serverParameters
+	 * @param null|StreamInterface|mixed[] $parsedBody
 	 */
-	public function __construct(Url $url, array $parameters = [], array $serverParameters = []) {
+	public function __construct(Url $url, array $parameters, array $serverParameters, $parsedBody) {
 		$this->url = $url;
 		$this->parameters = $parameters;
 		$this->serverParameters = $serverParameters;
-	}
-	
-	/**
-	 * Returns a request by globals.
-	 *
-	 * @author mnoerenberg
-	 * @return HttpRequestInterface
-	 */
-	public static function createFromGlobals() {
-		$currentUrl = Url::createFromServerArray($_SERVER);
-		
-		switch ($_SERVER['REQUEST_METHOD']) {
-			case 'POST':
-				$uploadedFiles = UploadedFile::createFromGlobal($_FILES);
-				return new HttpPostRequest($currentUrl, $_REQUEST, $_SERVER, $uploadedFiles);
-			case 'GET':
-				return new HttpGetRequest($currentUrl, $_GET, $_SERVER);
-			case 'PUT':
-				return new HttpPutRequest($currentUrl, $_REQUEST, $_SERVER);
-			case 'PATCH':
-				return new HttpPatchRequest($currentUrl, $_REQUEST, $_SERVER);
-			case 'DELETE':
-				return new HttpDeleteRequest($currentUrl, $_REQUEST, $_SERVER);
-			case 'HEADER':
-				return new HttpHeaderRequest($currentUrl, $_REQUEST, $_SERVER);
-		}
-		
-		throw new LogicException('request method not allowed.');
+		$this->parsedBody = $parsedBody;
 	}
 	
 	/**
@@ -155,17 +125,16 @@ abstract class HttpRequest implements HttpRequestInterface {
 	 * @inheritdoc
 	 * @author Benedikt Schaller
 	 */
-	public function isHeader() {
+	public function isHead() {
 		return false;
 	}
 	
 	/**
 	 * @author Benedikt Schaller
 	 * @inheritDoc
-	 * @return StreamInterface|array
 	 */
 	public function getParsedBody() {
-		return new PhpInputStream();
+		return $this->parsedBody;
 	}
 	
 	/**
@@ -181,7 +150,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return array
+	 * @return mixed[]
 	 */
 	public function getServerParams(): array {
 		return $this->serverParameters;

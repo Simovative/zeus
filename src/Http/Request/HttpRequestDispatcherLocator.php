@@ -34,7 +34,7 @@ class HttpRequestDispatcherLocator {
 			return $this->frameworkFactory->createHttpCommandDispatcher();
 		}
 		
-		if ($request->isGet() || $request->isHeader()) {
+		if ($request->isGet() || $request->isHead()) {
 			return $this->frameworkFactory->createHttpGetRequestDispatcher();
 		}
 		

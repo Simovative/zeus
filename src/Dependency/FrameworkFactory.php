@@ -12,6 +12,8 @@ use Simovative\Zeus\Filesystem\Directory;
 use Simovative\Zeus\Filesystem\File;
 use Simovative\Zeus\Http\Get\HttpGetRequestDispatcher;
 use Simovative\Zeus\Http\Get\HttpGetRequestRouterChain;
+use Simovative\Zeus\Http\Json\JsonEncodingService;
+use Simovative\Zeus\Http\Json\JsonEncodingServiceInterface;
 use Simovative\Zeus\Http\Request\HttpRequestDispatcherInterface;
 use Simovative\Zeus\Http\Request\HttpRequestDispatcherLocator;
 use Simovative\Zeus\Http\Response\HttpResponseLocator;
@@ -521,5 +523,13 @@ class FrameworkFactory extends Factory {
 			$this->getMasterFactory()->getIntlFormatter(),
 			$this->getMasterFactory()->getIntlDateTimeConverter()
 		);
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @return JsonEncodingServiceInterface
+	 */
+	public function createJsonEncodingService() : JsonEncodingServiceInterface {
+		return new JsonEncodingService();
 	}
 }
