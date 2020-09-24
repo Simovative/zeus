@@ -22,21 +22,21 @@ abstract class HttpRequest implements HttpRequestInterface {
 	private $parameters;
 	
 	/**
-	 * @var array
+	 * @var mixed[]
 	 */
 	private $serverParameters;
 	
 	/**
-	 * @var null|array|StreamInterface
+	 * @var null|mixed[]|StreamInterface
 	 */
 	private $parsedBody;
 	
 	/**
 	 * @author mnoerenberg
 	 * @param Url $url
-	 * @param array $parameters
-	 * @param array $serverParameters
-	 * @param null|StreamInterface|array $parsedBody
+	 * @param mixed[] $parameters
+	 * @param mixed[] $serverParameters
+	 * @param null|StreamInterface|mixed[] $parsedBody
 	 */
 	public function __construct(Url $url, array $parameters, array $serverParameters, $parsedBody) {
 		$this->url = $url;
@@ -125,7 +125,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	 * @inheritdoc
 	 * @author Benedikt Schaller
 	 */
-	public function isHeader() {
+	public function isHead() {
 		return false;
 	}
 	
@@ -150,7 +150,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return array
+	 * @return mixed[]
 	 */
 	public function getServerParams(): array {
 		return $this->serverParameters;

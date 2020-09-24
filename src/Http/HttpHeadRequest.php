@@ -6,13 +6,13 @@ use Simovative\Zeus\Http\Request\HttpRequest;
 /**
  * @author Benedikt Schaller
  */
-class HttpHeaderRequest extends HttpRequest {
+class HttpHeadRequest extends HttpRequest {
 	
 	/**
 	 * @inheritdoc
 	 * @author Benedikt Schaller
 	 */
-	public function isHeader() {
+	public function isHead() {
 		return true;
 	}
 }
