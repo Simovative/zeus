@@ -93,8 +93,8 @@ abstract class HttpKernel implements KernelInterface {
 					$bundle->registerDeleteController($this->getMasterFactory()->getApplicationController());
 					$bundle->registerBundleController($this->getMasterFactory()->getApplicationController());
 				}
-				if ($request->isHeader()) {
-					$bundle->registerHeaderRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
+				if ($request->isHead()) {
+					$bundle->registerHeadRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
 				}
 			}
 		
