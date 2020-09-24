@@ -13,8 +13,8 @@ addons:
 
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - sonar-scanner
   - php build/phpunit.phar --configuration tests/phpunit.xml
+  - sonar-scanner
 
 after_success:
   # Submit coverage report to Coveralls servers, see .coveralls.yml
