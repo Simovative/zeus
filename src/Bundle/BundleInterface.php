@@ -45,7 +45,7 @@ interface BundleInterface {
 	 * @param HttpGetRequestRouterChain $router
 	 * @return void
 	 */
-	public function registerHeaderRouters(HttpGetRequestRouterChain $router);
+	public function registerHeadRouters(HttpGetRequestRouterChain $router);
 	
 	/**
 	 * Method to register bundle controller at the main application controller.

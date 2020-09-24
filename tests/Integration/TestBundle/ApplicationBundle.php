@@ -109,7 +109,7 @@ class ApplicationBundle extends Bundle {
 	 * @param HttpGetRequestRouterChain $router
 	 * @return void
 	 */
-	public function registerHeaderRouters(HttpGetRequestRouterChain $router) {
+	public function registerHeadRouters(HttpGetRequestRouterChain $router) {
 		$router->register($this->applicationFactory->createTestGetRequestRouter());
 	}
 	

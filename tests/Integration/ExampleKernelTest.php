@@ -9,7 +9,7 @@ use Simovative\Zeus\Configuration\Configuration;
 use Simovative\Zeus\Dependency\MasterFactory;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
 use Simovative\Zeus\Http\HttpDeleteRequest;
-use Simovative\Zeus\Http\HttpHeaderRequest;
+use Simovative\Zeus\Http\HttpHeadRequest;
 use Simovative\Zeus\Http\HttpPatchRequest;
 use Simovative\Zeus\Http\HttpPutRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
@@ -69,7 +69,7 @@ class ExampleKernelTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatSuccessfulHeaderRequestIsDispatched() {
-		$request = new HttpHeaderRequest(new Url('/test'), [], [], null);
+		$request = new HttpHeadRequest(new Url('/test'), [], [], null);
 		$response = $this->kernel->run($request, false);
 		$content = '';
 		if ($response instanceof HttpTestResponse) {

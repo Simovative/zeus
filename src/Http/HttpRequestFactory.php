@@ -45,7 +45,7 @@ class HttpRequestFactory extends Factory {
 			case 'DELETE':
 				return new HttpDeleteRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
 			case 'HEAD':
-				return new HttpHeaderRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
+				return new HttpHeadRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
 		}
 		
 		throw new LogicException('request method not allowed.');
@@ -66,7 +66,7 @@ class HttpRequestFactory extends Factory {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @param array $serverParameters
+	 * @param mixed[] $serverParameters
 	 * @return array|StreamInterface
 	 * @throws Json\JsonEncodingException
 	 */
