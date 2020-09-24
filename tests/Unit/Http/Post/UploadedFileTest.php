@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Simovative\Zeus\Test\Unit\Http\Post;
+namespace Simovative\Zeus\Tests\Unit\Http\Post;
 
 use PHPUnit\Framework\TestCase;
 use Simovative\Zeus\Http\Post\UploadedFile;

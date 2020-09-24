@@ -1,6 +1,6 @@
 <?php
 
-namespace Simovative\Zeus\Test\Unit\Http\Json;
+namespace Simovative\Zeus\Tests\Unit\Http\Json;
 
 use PHPUnit\Framework\TestCase;
 use Simovative\Zeus\Http\Json\JsonEncodingException;

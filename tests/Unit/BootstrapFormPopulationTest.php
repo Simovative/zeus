@@ -1,5 +1,5 @@
 <?php
-namespace Simovative\Zeus\Test\Unit;
+namespace Simovative\Zeus\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Simovative\Zeus\Command\CommandValidationResult;

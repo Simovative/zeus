@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Simovative\Zeus\Test\Unit\Http\Url;
+namespace Simovative\Zeus\Tests\Unit\Http\Url;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;

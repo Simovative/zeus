@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Simovative\Zeus\Test\Unit\Stream;
+namespace Simovative\Zeus\Tests\Unit\Stream;
 
 use Simovative\Zeus\Stream\Stream;
 use PHPUnit\Framework\TestCase;
