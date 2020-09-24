@@ -33,6 +33,7 @@
     "php": ">=7.1.0",
     "ext-intl": "*",
     "ext-json": "*",
+    "roave/security-advisories": "dev-latest",
     "symfony/debug": ">=v2.5.0",
     "symfony/console": ">=v2.5.0"
   },
