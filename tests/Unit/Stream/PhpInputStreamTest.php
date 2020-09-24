@@ -18,6 +18,6 @@ class PhpInputStreamTest extends TestCase {
      */
     public function testThatStreamCanBeConstructed(): void {
         $inputSteam = new PhpInputStream();
-        $this->assertFalse($inputSteam->eof());
+		self::assertFalse($inputSteam->eof());
     }
 }

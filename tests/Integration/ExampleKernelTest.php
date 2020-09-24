@@ -1,5 +1,5 @@
 <?php
-namespace Simovative\Zeus\Template;
+namespace Simovative\Zeus\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
 use Simovative\Test\Integration\TestBundle\HttpTestResponse;

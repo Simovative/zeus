@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Unit\Http\Post;
+namespace Simovative\Zeus\Tests\Unit\Http\Post;
 
 use PHPUnit\Framework\TestCase;
 use Simovative\Zeus\Http\Post\UploadedFile;
@@ -55,18 +55,18 @@ class UploadedFileTest extends TestCase {
 			]
 		];
 		$uploadedFiles = UploadedFile::createFromGlobal($filesArray);
-		$this->assertEquals(4, count($uploadedFiles));
+		self::assertEquals(4, count($uploadedFiles));
 		
-		$this->assertEquals(1, $this->countFilesByInput('file1', $uploadedFiles));
-		$this->assertEquals(1, $this->countFilesByInput('file2', $uploadedFiles));
+		self::assertEquals(1, $this->countFilesByInput('file1', $uploadedFiles));
+		self::assertEquals(1, $this->countFilesByInput('file2', $uploadedFiles));
 		foreach ($uploadedFiles as $uploadedFile) {
 			if ($uploadedFile->getInputName() === 'file1') {
-				$this->assertEquals('/tmp/php/php1h4j1o', $uploadedFile->getPath());
-				$this->assertEquals('MyFile.txt', $uploadedFile->getLabel());
-				$this->assertEquals(UPLOAD_ERR_OK, $uploadedFile->getInputIndex());
-				$this->assertEquals(123, $uploadedFile->getSize());
-				$this->assertEquals('text/plain', $uploadedFile->getType());
-				$this->assertFalse($uploadedFile->isValidUploadedFile());
+				self::assertEquals('/tmp/php/php1h4j1o', $uploadedFile->getPath());
+				self::assertEquals('MyFile.txt', $uploadedFile->getLabel());
+				self::assertEquals(UPLOAD_ERR_OK, $uploadedFile->getInputIndex());
+				self::assertEquals(123, $uploadedFile->getSize());
+				self::assertEquals('text/plain', $uploadedFile->getType());
+				self::assertFalse($uploadedFile->isValidUploadedFile());
 			}
 		}
 	}

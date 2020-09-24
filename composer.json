@@ -37,6 +37,7 @@
     "symfony/console": ">=v2.5.0"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-latest"
   },
   "suggest": {
     "ext-fileinfo": "Better recognition for file mime types in the file system classes.",

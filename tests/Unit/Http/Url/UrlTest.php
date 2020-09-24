@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace tests\Unit\Http\Url;
+namespace Simovative\Zeus\Tests\Unit\Http\Url;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -75,7 +75,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatSchemeIsParsed() {
-		$this->assertSame('https', $this->url->getScheme());
+		self::assertSame('https', $this->url->getScheme());
 	}
 	
 	/**
@@ -83,7 +83,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatHostIsParsed() {
-		$this->assertSame('www.simovative.com', $this->url->getHost());
+		self::assertSame('www.simovative.com', $this->url->getHost());
 	}
 	
 	/**
@@ -91,7 +91,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatFragmentIsParsed() {
-		$this->assertSame('myFragment', $this->url->getFragment());
+		self::assertSame('myFragment', $this->url->getFragment());
 	}
 	
 	/**
@@ -99,7 +99,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatPasswordIsParsed() {
-		$this->assertSame('password', $this->url->getPassword());
+		self::assertSame('password', $this->url->getPassword());
 	}
 	
 	/**
@@ -107,7 +107,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatUsernameIsParsed() {
-		$this->assertSame('username', $this->url->getUser());
+		self::assertSame('username', $this->url->getUser());
 	}
 	
 	/**
@@ -115,7 +115,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatPortIsParsed() {
-		$this->assertSame(443, $this->url->getPort());
+		self::assertSame(443, $this->url->getPort());
 	}
 	
 	/**
@@ -123,7 +123,7 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatPathIsParsed() {
-		$this->assertSame('/api/v1/event/20', $this->url->getPath());
+		self::assertSame('/api/v1/event/20', $this->url->getPath());
 	}
 	
 	/**
@@ -131,6 +131,6 @@ class UrlTest extends TestCase {
 	 * @return void
 	 */
 	public function testThatQueryIsParsed() {
-		$this->assertSame('param=1&user=1', $this->url->getQuery());
+		self::assertSame('param=1&user=1', $this->url->getQuery());
 	}
 }
