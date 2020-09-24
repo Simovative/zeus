@@ -84,12 +84,12 @@ interface HttpRequestInterface {
 	public function isDelete();
 	
 	/**
-	 * Returns if we have a header request.
+	 * Returns if we have a head request.
 	 *
 	 * @author Benedikt Schaller
 	 * @return boolean
 	 */
-	public function isHeader();
+	public function isHead();
 	
 	/**
 	 * Retrieve any parameters provided in the request body.

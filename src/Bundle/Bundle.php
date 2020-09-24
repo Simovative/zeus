@@ -107,5 +107,5 @@ abstract class Bundle implements BundleInterface {
 	 * @inheritDoc
 	 * @author Benedikt Schaller
 	 */
-	public function registerHeaderRouters(HttpGetRequestRouterChain $router) {}
+	public function registerHeadRouters(HttpGetRequestRouterChain $router) {}
 }

@@ -17,39 +17,7 @@ class JsonEncodingException extends Exception {
 	 * @return JsonEncodingException
 	 */
 	public static function createForEncoding(string $errorMessage, $valueToEncode): JsonEncodingException {
-		switch (true) {
-			case is_string($valueToEncode):
-				$valueStringRepresentation = $valueToEncode;
-				break;
-			case is_numeric($valueToEncode):
-				$valueStringRepresentation = (string) $valueToEncode;
-				break;
-			case $valueToEncode === null:
-				$valueStringRepresentation = 'null';
-				break;
-			case is_array($valueToEncode):
-				$valueStringRepresentation = print_r($valueToEncode, true);
-				break;
-			/** @noinspection PhpMissingBreakStatementInspection */
-			case is_object($valueToEncode):
-				if (in_array('__toString', get_class_methods($valueToEncode), true)) {
-					$valueStringRepresentation = $valueToEncode->__toString();
-					break;
-				}
-				
-				$testResult = @(string) $valueToEncode;
-				if (false === empty($testResult)) {
-					$valueStringRepresentation = $testResult;
-					break;
-				}
-				// Important, dont add break here, because we use the default case for objects that can not be represented as string
-			default:
-				$valueStringRepresentation = get_class($valueToEncode);
-				if ($valueStringRepresentation === false) {
-					$valueStringRepresentation = 'value can not be displayed as string';
-				}
-				break;
-		}
+		$valueStringRepresentation = self::getVariableStringRepresentation($valueToEncode);
 		return new self(
 			'Error while trying to encode value to json: ' . $errorMessage .
 			PHP_EOL . 'Value to encode: ' . $valueStringRepresentation
@@ -67,5 +35,32 @@ class JsonEncodingException extends Exception {
 			'Error while trying to decode json string: ' . $errorMessage .
 			PHP_EOL . 'Value to decode: ' . $jsonString
 		);
+	}
+	
+	/**
+	 * @author Benedikt Schaller
+	 * @param mixed $variable
+	 * @return string
+	 */
+	private static function getVariableStringRepresentation($variable): string {
+		switch (gettype($variable)) {
+			case 'boolean':
+			case 'integer':
+			case 'double':
+			case 'string':
+				return (string) $variable;
+			case 'NULL':
+				return 'null';
+			case 'array':
+				return print_r($variable, true);
+			case 'object':
+				if (in_array('__toString', get_class_methods($variable), true)) {
+					return $variable->__toString();
+				}
+				
+				return get_class($variable);
+			default:
+				return gettype($variable);
+		}
 	}
 }
