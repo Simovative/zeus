@@ -11,7 +11,7 @@ use function json_decode;
  */
 final class JsonEncodingService implements JsonEncodingServiceInterface {
 
-	private const DEFAULT_OPTIONS = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PARTIAL_OUTPUT_ON_ERROR;
+	private const DEFAULT_OPTIONS = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE;
 	private const DEFAULT_DEPTH = 512;
 	
 	/**

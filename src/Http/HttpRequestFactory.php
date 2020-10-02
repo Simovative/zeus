@@ -76,7 +76,7 @@ class HttpRequestFactory extends Factory {
 			$streamContents = $parsedBody->getContents();
 			$parsedBody = $this->getMasterFactory()->createJsonEncodingService()->decode(
 				$streamContents,
-				true
+				false
 			);
 		}
 		return $parsedBody;
