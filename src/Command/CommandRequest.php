@@ -3,6 +3,8 @@ namespace Simovative\Zeus\Command;
 
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
 use Simovative\Zeus\Stream\StreamInterface;
+use stdClass;
+use function array_key_exists;
 
 /**
  * @author Benedikt Schaller
@@ -34,7 +36,7 @@ class CommandRequest {
 	 * @param HttpRequestInterface $httpRequest
 	 * @return CommandRequest
 	 */
-	public static function fromHttpRequest(HttpRequestInterface $httpRequest) {
+	public static function fromHttpRequest(HttpRequestInterface $httpRequest): CommandRequest {
 		$values = $httpRequest->all();
 		$body = $httpRequest->getParsedBody();
 		if ($body instanceof StreamInterface) {
@@ -50,7 +52,7 @@ class CommandRequest {
 	 * @param string $key
 	 * @return mixed|null
 	 */
-	public function get($key) {
+	public function get(string $key) {
 		if ($this->has($key)) {
 			return $this->valueMap[$key];
 		}
@@ -62,7 +64,7 @@ class CommandRequest {
 	 * @param string $key
 	 * @return bool
 	 */
-	public function has($key) {
+	public function has(string $key): bool {
 		return array_key_exists($key, $this->valueMap);
 	}
 	
@@ -70,12 +72,12 @@ class CommandRequest {
 	 * @author Benedikt Schaller
 	 * @return mixed[]
 	 */
-	public function all() {
+	public function all(): array {
 		return $this->valueMap;
 	}
 
     /**
-     * @return null|array|StreamInterface
+     * @return null|array|stdClass|string
      */
     public function getBody() {
         return $this->body;
