@@ -142,10 +142,7 @@ abstract class HttpRequest implements HttpRequestInterface {
 	 * @return string|null
 	 */
 	public function getContentType(): ?string {
-		if (array_key_exists(self::SERVER_PARAMETER_CONTENT_TYPE, $this->serverParameters)) {
-			return $this->serverParameters[self::SERVER_PARAMETER_CONTENT_TYPE];
-		}
-		return null;
+		return $this->serverParameters[self::SERVER_PARAMETER_CONTENT_TYPE] ?? null;
 	}
 	
 	/**

@@ -67,13 +67,16 @@ class HttpRequestFactory extends Factory {
 	/**
 	 * @author Benedikt Schaller
 	 * @param mixed[] $serverParameters
-	 * @return array|StreamInterface
+	 * @return array|StreamInterface|null
 	 * @throws Json\JsonEncodingException
 	 */
 	private function createParsedBody(array $serverParameters) {
 		$parsedBody = new PhpInputStream();
 		if ($this->isJsonContent($serverParameters)) {
 			$streamContents = $parsedBody->getContents();
+			if (empty($streamContents)) {
+				return null;
+			}
 			$parsedBody = $this->getMasterFactory()->createJsonEncodingService()->decode(
 				$streamContents,
 				false
