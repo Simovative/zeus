@@ -29,12 +29,15 @@
     ]
   },
   "require": {
-    "smarty/smarty": "v3.*",
-    "php": ">=7.1.0",
     "ext-intl": "*",
     "ext-json": "*",
-    "symfony/debug": ">=v2.5.0",
-    "symfony/console": ">=v2.5.0"
+    "guzzlehttp/guzzle": ">=6.0.0, <7.0.0",
+    "php": ">=7.1.0",
+    "psr/http-message": "^1.0",
+    "psr/http-server-handler": "^1.0",
+    "smarty/smarty": "v3.*",
+    "symfony/debug": "<4.0.0",
+    "symfony/console": "<4.0.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"

@@ -451,7 +451,9 @@ TODO
 
 ## Build <a name="build"></a>
 ```
-docker-compose up
+cd {YOUR_PATH_TO_PROJECTS}/zeus
+docker run --rm --interactive --tty --volume %cd%:/app composer install --ignore-platform-reqs --no-scripts --prefer-dist -v
+docker-compose up -d --build
 ```
 ### Run tests
 ```
