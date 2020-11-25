@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 interface EmitterInterface
 {
     /**
+     * @author mnoernberg
      * @param ResponseInterface $response
      *
      * @return void

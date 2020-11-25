@@ -14,9 +14,13 @@ use function sprintf;
 use function ob_get_length;
 use function ob_get_level;
 
+/**
+ * @author mnoernberg
+ */
 final class Emitter implements EmitterInterface
 {
     /**
+     * @author mnoernberg
      * @param ResponseInterface $response
      *
      * @return void
@@ -29,6 +33,7 @@ final class Emitter implements EmitterInterface
     }
 
     /**
+     * @author mnoernberg
      * @param ResponseInterface $response
      *
      * @return void
@@ -39,6 +44,7 @@ final class Emitter implements EmitterInterface
     }
 
     /**
+     * @author mnoernberg
      * @return void
      */
     private function ensureNoPreviousOutput(): void
@@ -53,6 +59,7 @@ final class Emitter implements EmitterInterface
     }
 
     /**
+     * @author mnoernberg
      * @param ResponseInterface $response
      *
      * @return void
@@ -79,6 +86,7 @@ final class Emitter implements EmitterInterface
     }
 
     /**
+     * @author mnoernberg
      * @param ResponseInterface $response
      *
      * @return void
