@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=0);
+declare(strict_types=1);
 
 namespace Simovative\Zeus\Http;
 
@@ -22,7 +22,7 @@ use Simovative\Zeus\State\ApplicationStateInterface;
 abstract class HttpKernel implements KernelInterface
 {
 
-    const LOG_TO_SAPI = 4;
+    private const LOG_TO_SAPI = 4;
 
     /**
      * @var MasterFactory
@@ -167,7 +167,6 @@ abstract class HttpKernel implements KernelInterface
         if ($request !== null) {
             $message .= ' - Request-Url: ' . (string)$request->getUrl();
         }
-        /** @noinspection ForgottenDebugOutputInspection */
         error_log($message, self::LOG_TO_SAPI);
         return $message;
     }
