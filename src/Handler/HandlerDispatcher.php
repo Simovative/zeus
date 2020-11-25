@@ -37,13 +37,13 @@ class HandlerDispatcher implements HandlerDispatcherInterface
      */
     public function dispatch(HttpRequestInterface $request): ResponseInterface
     {
-        $commandRequest = CommandRequest::fromHttpRequest($request);
         $serverRequest = ServerRequest::fromGlobals();
+        $serverRequest = $serverRequest->withUri($request->getUrl());
         $handler = $this->routerChain->route($serverRequest);
         if (null === $handler) {
             throw new RouteNotFoundException($request->getUrl());
         }
-        $serverRequest = $serverRequest->withParsedBody($commandRequest->getBody());
+        $serverRequest = $serverRequest->withParsedBody($request->getParsedBody());
         return $handler->handle($serverRequest);
     }
 }

@@ -49,7 +49,7 @@ class TestGetRequestRouter implements HttpGetRequestRouterInterface {
 		if ($this->urlMatcher->matchAny($request->getUrl(), array('/', '', '/test'))) {
 			return $this->applicationFactory->createTestPage();
 		}
-		
+
 		if (! $this->state->isLoggedIn()) {
 			return new Redirect(new Url(ApplicationFactory::URL_PREFIX . '/test'));
 		}

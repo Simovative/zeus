@@ -1,6 +1,8 @@
 <?php
+
 namespace Simovative\Zeus\Tests\Integration;
 
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Simovative\Test\Integration\TestBundle\HttpTestResponse;
 use Simovative\Test\Integration\TestBundle\Routing\TestBundleController;
@@ -18,123 +20,157 @@ use Simovative\Zeus\Http\Url\Url;
 /**
  * Tests the features of the kernel with all needed components like bundles, routing, dispatching, etc.
  */
-class ExampleKernelTest extends TestCase {
-	
-	/**
-	 * @var TestKernel
-	 */
-	private $kernel;
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return void
-	 */
-	protected function setUp() {
-		parent::setUp();
-		
-		$factory = new MasterFactory(new Configuration(['bundle_dir' => __DIR__], dirname(__DIR__)));
-		$this->kernel = new TestKernel($factory);
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return void
-	 */
-	public function testThatGetRequestIsDispatched() {
-		$request = new HttpGetRequest(new Url('/test'), [], [], null);
-		$response = $this->kernel->run($request, false);
-		$content = '';
-		if ($response instanceof HttpTestResponse) {
-			$content = $response->getContent()->render();
-		}
-		self::assertStringContainsString('Welcome to your home page', $content, 'Expected string of test template is not contained in output of /test page');
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return void
-	 */
-	public function testThatSuccessfulPostRequestReturnsRedirect() {
-		$request = new HttpPostRequest(new Url('/test'), [], [], [], []);
-		$response = $this->kernel->run($request, false);
-		$content = '';
-		if ($response instanceof HttpTestResponse) {
-			$content = $response->getContent()->render();
-		}
-		self::assertStringStartsWith(TestBundleController::TEST_URL_START, $content, 'Expected string of test url start is not returned as redirect for test post request');
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return void
-	 */
-	public function testThatSuccessfulHeaderRequestIsDispatched() {
-		$request = new HttpHeadRequest(new Url('/test'), [], [], null);
-		$response = $this->kernel->run($request, false);
-		$content = '';
-		if ($response instanceof HttpTestResponse) {
-			$content = $response->getContent()->render();
-		}
-		self::assertStringContainsString('Welcome to your home page', $content, 'Expected string of test template is not contained in output of /test page');
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return void
-	 */
-	public function testThatSuccessfulPutRequestReturnsRedirect() {
-		$request = new HttpPutRequest(new Url('/test'), [], [], null);
-		$response = $this->kernel->run($request, false);
-		$content = '';
-		if ($response instanceof HttpTestResponse) {
-			$content = $response->getContent()->render();
-		}
-		self::assertStringStartsWith(TestBundleController::TEST_URL_START, $content, 'Expected string of test url start is not returned as redirect for test put request');
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return void
-	 */
-	public function testThatSuccessfulPatchRequestReturnsRedirect() {
-		$request = new HttpPatchRequest(new Url('/test'), [], [], null);
-		$response = $this->kernel->run($request, false);
-		$content = '';
-		if ($response instanceof HttpTestResponse) {
-			$content = $response->getContent()->render();
-		}
-		self::assertStringStartsWith(TestBundleController::TEST_URL_START, $content, 'Expected string of test url start is not returned as redirect for test patch request');
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return void
-	 */
-	public function testThatSuccessfulDeleteRequestReturnsRedirect() {
-		$request = new HttpDeleteRequest(new Url('/test'), [], [], null);
-		$response = $this->kernel->run($request, false);
-		$content = '';
-		if ($response instanceof HttpTestResponse) {
-			$content = $response->getContent()->render();
-		}
-		self::assertStringStartsWith(TestBundleController::TEST_URL_START, $content, 'Expected string of test url start is not returned as redirect for test delete request');
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return void
-	 */
-	protected function tearDown() {
-		$this->kernel = null;
-		
-		parent::tearDown();
-	}
+class ExampleKernelTest extends TestCase
+{
+
+    /**
+     * @var TestKernel
+     */
+    private $kernel;
 
     /**
      * @author Benedikt Schaller
      * @return void
      */
-    public function testThatCommandRequestHasBody() {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $factory = new MasterFactory(new Configuration(['bundle_dir' => __DIR__], dirname(__DIR__)));
+        $this->kernel = new TestKernel($factory);
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    protected function tearDown()
+    {
+        $this->kernel = null;
+
+        parent::tearDown();
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatGetRequestIsDispatched()
+    {
+        $request = new HttpGetRequest(new Url('/test'), [], [], null);
+        $response = $this->kernel->run($request, false);
+        $content = '';
+        if ($response instanceof HttpTestResponse) {
+            $content = $response->getContent()->render();
+        }
+        self::assertStringContainsString(
+            'Welcome to your home page',
+            $content,
+            'Expected string of test template is not contained in output of /test page'
+        );
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatSuccessfulPostRequestReturnsRedirect()
+    {
+        $request = new HttpPostRequest(new Url('/test'), [], [], [], []);
+        $response = $this->kernel->run($request, false);
+        $content = '';
+        if ($response instanceof HttpTestResponse) {
+            $content = $response->getContent()->render();
+        }
+        self::assertStringStartsWith(
+            TestBundleController::TEST_URL_START,
+            $content,
+            'Expected string of test url start is not returned as redirect for test post request'
+        );
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatSuccessfulHeaderRequestIsDispatched()
+    {
+        $request = new HttpHeadRequest(new Url('/test'), [], [], null);
+        $response = $this->kernel->run($request, false);
+        $content = '';
+        if ($response instanceof HttpTestResponse) {
+            $content = $response->getContent()->render();
+        }
+        self::assertStringContainsString(
+            'Welcome to your home page',
+            $content,
+            'Expected string of test template is not contained in output of /test page'
+        );
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatSuccessfulPutRequestReturnsRedirect()
+    {
+        $request = new HttpPutRequest(new Url('/test'), [], [], null);
+        $response = $this->kernel->run($request, false);
+        $content = '';
+        if ($response instanceof HttpTestResponse) {
+            $content = $response->getContent()->render();
+        }
+        self::assertStringStartsWith(
+            TestBundleController::TEST_URL_START,
+            $content,
+            'Expected string of test url start is not returned as redirect for test put request'
+        );
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatSuccessfulPatchRequestReturnsRedirect()
+    {
+        $request = new HttpPatchRequest(new Url('/test'), [], [], null);
+        $response = $this->kernel->run($request, false);
+        $content = '';
+        if ($response instanceof HttpTestResponse) {
+            $content = $response->getContent()->render();
+        }
+        self::assertStringStartsWith(
+            TestBundleController::TEST_URL_START,
+            $content,
+            'Expected string of test url start is not returned as redirect for test patch request'
+        );
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatSuccessfulDeleteRequestReturnsRedirect()
+    {
+        $request = new HttpDeleteRequest(new Url('/test'), [], [], null);
+        $response = $this->kernel->run($request, false);
+        $content = '';
+        if ($response instanceof HttpTestResponse) {
+            $content = $response->getContent()->render();
+        }
+        self::assertStringStartsWith(
+            TestBundleController::TEST_URL_START,
+            $content,
+            'Expected string of test url start is not returned as redirect for test delete request'
+        );
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatCommandRequestHasBody()
+    {
         $bodyParameters = ['test' => 'body'];
         $request = new HttpPostRequest(
             new Url('/test'),
@@ -149,6 +185,25 @@ class ExampleKernelTest extends TestCase {
             $content = $response->getContent()->render();
         }
         self::assertEquals(TestBundleController::TEST_URL_START . '?test=body', $content);
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatHandlerRequestIsDispatched(): void
+    {
+        $request = new HttpPatchRequest(new Url('/handler'), [], [], null);
+        $response = $this->kernel->run($request, false);
+        $content = '';
+        if ($response instanceof Response) {
+            $content = (string)$response->getBody();
+        }
+        self::assertStringContainsString(
+            'Welcome to your handler',
+            $content,
+            'Expected string of "Welcome to your handler"  is not contained in output of /handler page'
+        );
     }
 }
 

@@ -36,7 +36,7 @@ class UrlMatcher implements UrlMatcherInterface
         } else {
             $toMatch = strtok('/', (string)$uri) . '/' . $this->urlPrefix . '/' . $uri->getPath();
         }
-        
+
         // simple match
         if (strpos($route, '%') === false) {
             return $toMatch === $route;
@@ -52,6 +52,7 @@ class UrlMatcher implements UrlMatcherInterface
         $search = array('~', '/%s', '/%d');
         $replace = array('\\~', '/([^/]+)', '/([0-9]+)');
         $pattern = '~^' . str_replace($search, $replace, $route) . '/?(\?.*)?$~i';
+
         return 1 === preg_match($pattern, $toMatch);
     }
     
