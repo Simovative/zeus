@@ -21,24 +21,24 @@ use Simovative\Zeus\State\ApplicationStateInterface;
  */
 abstract class HttpKernel implements KernelInterface
 {
-    
+
     const LOG_TO_SAPI = 4;
-    
+
     /**
      * @var MasterFactory
      */
     protected $masterFactory;
-    
+
     /**
      * @var ExceptionHandler
      */
     protected $exceptionHandler;
-    
+
     /**
      * @var BundleInterface[]
      */
     protected $bundles;
-    
+
     /**
      * @author mnoerenberg
      * @param MasterFactory $masterFactory
@@ -48,7 +48,7 @@ abstract class HttpKernel implements KernelInterface
         $this->masterFactory = $masterFactory;
         $this->initializeExceptionHandler();
     }
-    
+
     /**
      * @author shartmann
      * @return void
@@ -58,7 +58,7 @@ abstract class HttpKernel implements KernelInterface
         $this->exceptionHandler = $this->getMasterFactory()->createExceptionHandler($this);
         $this->exceptionHandler->register();
     }
-    
+
     /**
      * Entry point of the application.
      *
@@ -74,7 +74,7 @@ abstract class HttpKernel implements KernelInterface
             foreach ($this->bundles as $bundle) {
                 $bundle->registerFactories($this->getMasterFactory());
             }
-            
+
             foreach ($this->bundles as $index => $bundle) {
                 if ($request->isGet()) {
                     $bundle->registerGetRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
@@ -82,7 +82,7 @@ abstract class HttpKernel implements KernelInterface
                         $bundle->registerGetHandlerRouters($this->getMasterFactory()->getHandlerRouterChain());
                     }
                 }
-                
+
                 if ($request->isPost()) {
                     $bundle->registerPostRouters($this->getMasterFactory()->getCommandRequestRouterChain());
                     $bundle->registerPostController($this->getMasterFactory()->getApplicationController());
@@ -91,7 +91,7 @@ abstract class HttpKernel implements KernelInterface
                         $bundle->registerPostHandlerRouters($this->getMasterFactory()->getHandlerRouterChain());
                     }
                 }
-                
+
                 if ($request->isPatch()) {
                     $bundle->registerPatchRouters($this->getMasterFactory()->getCommandRequestRouterChain());
                     $bundle->registerPatchController($this->getMasterFactory()->getApplicationController());
@@ -100,7 +100,7 @@ abstract class HttpKernel implements KernelInterface
                         $bundle->registerPatchHandlerRouters($this->getMasterFactory()->getHandlerRouterChain());
                     }
                 }
-                
+
                 if ($request->isPut()) {
                     $bundle->registerPutRouters($this->getMasterFactory()->getCommandRequestRouterChain());
                     $bundle->registerPutController($this->getMasterFactory()->getApplicationController());
@@ -109,7 +109,7 @@ abstract class HttpKernel implements KernelInterface
                         $bundle->registerPutHandlerRouters($this->getMasterFactory()->getHandlerRouterChain());
                     }
                 }
-                
+
                 if ($request->isDelete()) {
                     $bundle->registerDeleteRouters($this->getMasterFactory()->getCommandRequestRouterChain());
                     $bundle->registerDeleteController($this->getMasterFactory()->getApplicationController());
@@ -118,12 +118,12 @@ abstract class HttpKernel implements KernelInterface
                         $bundle->registerDeleteHandlerRouters($this->getMasterFactory()->getHandlerRouterChain());
                     }
                 }
-                
+
                 if ($request->isHead()) {
                     $bundle->registerHeadRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
                 }
             }
-            
+
             $locator = $this->getMasterFactory()->createHttpRequestDispatcherLocator();
             $dispatcher = $locator->getDispatcherFor($request);
             try {
@@ -139,12 +139,7 @@ abstract class HttpKernel implements KernelInterface
                 $handlerDispatcher = $this->getMasterFactory()->createHandlerDispatcher();
                 $response = $handlerDispatcher->dispatch($request);
                 if ($send) {
-                    foreach ($response->getHeaders() as $name => $values) {
-                        foreach ($values as $value) {
-                            header(sprintf('%s: %s', $name, $value), false);
-                        }
-                    }
-                    echo (string)$response->getBody();
+                    $this->getMasterFactory()->createEmitter()->emit($response);
                 }
             }
         } catch (Exception $throwable) {
@@ -155,7 +150,7 @@ abstract class HttpKernel implements KernelInterface
         }
         return $response;
     }
-    
+
     /**
      * @author Benedikt Schaller
      * @inheritdoc
@@ -176,7 +171,7 @@ abstract class HttpKernel implements KernelInterface
         error_log($message, self::LOG_TO_SAPI);
         return $message;
     }
-    
+
     /**
      * @author shartmann
      * @return MasterFactory|FrameworkFactory
@@ -185,7 +180,7 @@ abstract class HttpKernel implements KernelInterface
     {
         return $this->masterFactory;
     }
-    
+
     /**
      * Returns installed Bundles.
      *
@@ -194,7 +189,7 @@ abstract class HttpKernel implements KernelInterface
      * @return \Simovative\Zeus\Bundle\BundleInterface[]
      */
     abstract protected function registerBundles(HttpRequestInterface $request);
-    
+
     /**
      * If the application has no state, just return null.
      *
