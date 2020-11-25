@@ -450,10 +450,20 @@ TODO
 TODO
 
 ## Build <a name="build"></a>
+Windows:
 ```
-docker-compose up
+cd {YOUR_PATH_TO_PROJECTS}/zeus
+docker run --rm --interactive --tty --volume %cd%:/app composer install --ignore-platform-reqs --no-scripts --prefer-dist -v
+docker-compose up -d --build
+```
+Linux:
+```
+cd {YOUR_PATH_TO_PROJECTS}/zeus
+docker run --rm -it --volume $PWD:/app composer install --ignore-platform-reqs --prefer-dist -v
+docker-compose up -d --build
 ```
 ### Run tests
 ```
-php build/phpunit.phar --configuration tests/phpunit.xml
+cd tests
+php ../build/phpunit.phar
 ```

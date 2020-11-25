@@ -26,8 +26,8 @@ class HttpGetRequestDispatcher implements HttpGetRequestDispatcherInterface {
 	/**
 	 * @inheritDoc
 	 * @author mnoerenberg
-	 * @throws RouteNotFoundException
-	 * @throws IncompleteSetupException
+     * @throws RouteNotFoundException
+     * @throws IncompleteSetupException
 	 */
 	public function dispatch(HttpRequestInterface $request) {
 		return $this->router->route($request);

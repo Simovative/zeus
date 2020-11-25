@@ -46,8 +46,8 @@ class CommandDispatcher implements HttpRequestDispatcherInterface {
 	/**
 	 * @inheritdoc
 	 * @author mnoerenberg
-	 * @throws RouteNotFoundException
-	 * @throws Exception
+     * @throws RouteNotFoundException
+     * @throws Exception
 	 */
 	public function dispatch(HttpRequestInterface $request) {
 		// match url and create command request.

@@ -4,111 +4,113 @@ declare(strict_types=1);
 namespace Simovative\Zeus\Http\Url;
 
 use InvalidArgumentException;
+use Psr\Http\Message\UriInterface;
+use RuntimeException;
 
 /**
  * @author mnoerenberg
  */
-class Url {
-	
-	/**
-	 * @var string
-	 */
-	private $url;
-	
-	/**
-	 * @author mnoerenberg
-	 * @param string $url
-	 */
-	public function __construct($url) {
-		$this->url = $url;
-	}
-    
-    /**
-	 * @author mnoerenberg
-	 * @return string
-	 */
-	public function getPath() {
-		return parse_url($this->url, PHP_URL_PATH);
-	}
+class Url implements UriInterface {
 
-	/**
-	 * @author mnoerenberg
-	 * @return string
-	 */
-	public function __toString() {
-		return (string) $this->url;
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return string
-	 */
-	public function getScheme() {
-		return parse_url($this->url, PHP_URL_SCHEME);
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return string
-	 */
-	public function getHost() {
-		return parse_url($this->url, PHP_URL_HOST);
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return string
-	 */
-	public function getPort() {
-		return parse_url($this->url, PHP_URL_PORT);
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return string
-	 */
-	public function getUser() {
-		return parse_url($this->url, PHP_URL_USER);
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return string
-	 */
-	public function getPassword() {
-		return parse_url($this->url, PHP_URL_PASS);
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return string
-	 */
-	public function getQuery() {
-		return parse_url($this->url, PHP_URL_QUERY);
-	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @return string
-	 */
-	public function getFragment() {
-		return parse_url($this->url, PHP_URL_FRAGMENT);
-	}
-	
-	/**
-	 * Creates the called url from the given server array.
-	 *
-	 * @author Benedikt Schaller
-	 * @param mixed[] $serverArray
-	 * @return Url
-	 */
-	public static function createFromServerArray($serverArray) {
-	    if (self::isForwardedRequest($serverArray)) {
-	        return self::createUrlForForwardedRequest($serverArray);
+    /**
+     * @var string
+     */
+    private $url;
+
+    /**
+     * @author mnoerenberg
+     * @param string $url
+     */
+    public function __construct($url) {
+        $this->url = $url;
+    }
+
+    /**
+     * @author mnoerenberg
+     * @return string
+     */
+    public function getPath(): string {
+        return parse_url($this->url, PHP_URL_PATH) ?? '';
+    }
+
+    /**
+     * @author mnoerenberg
+     * @return string
+     */
+    public function __toString() {
+        return (string) $this->url;
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return string
+     */
+    public function getScheme(): string {
+        return parse_url($this->url, PHP_URL_SCHEME) ?? '';
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return string
+     */
+    public function getHost(): string {
+        return parse_url($this->url, PHP_URL_HOST) ?? '';
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return int|null
+     */
+    public function getPort(): ?int {
+        return parse_url($this->url, PHP_URL_PORT);
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return string|null
+     */
+    public function getUser(): ?string {
+        return parse_url($this->url, PHP_URL_USER);
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return string|null
+     */
+    public function getPassword(): ?string {
+        return parse_url($this->url, PHP_URL_PASS);
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return string
+     */
+    public function getQuery(): string {
+        return parse_url($this->url, PHP_URL_QUERY) ?? '';
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return string
+     */
+    public function getFragment(): string {
+        return parse_url($this->url, PHP_URL_FRAGMENT) ?? '';
+    }
+
+    /**
+     * Creates the called url from the given server array.
+     *
+     * @author Benedikt Schaller
+     * @param mixed[] $serverArray
+     * @return Url
+     */
+    public static function createFromServerArray(array $serverArray): Url {
+        if (self::isForwardedRequest($serverArray)) {
+            return self::createUrlForForwardedRequest($serverArray);
         }
         return self::createUrlForNormalRequest($serverArray);
-	}
-    
+    }
+
     /**
      * @author Benedikt Schaller
      * @param mixed[] $serverArray
@@ -118,7 +120,7 @@ class Url {
     {
         return isset($serverArray['HTTP_X_FORWARDED_HOST']);
     }
-    
+
     /**
      * @author Benedikt Schaller
      * @param mixed[] $serverArray
@@ -140,7 +142,7 @@ class Url {
         $url = $serverProtocol . '://' . $host . $port . $serverArray['REQUEST_URI'];
         return new self($url);
     }
-    
+
     /**
      * @author Benedikt Schaller
      * @param mixed[] $serverArray
@@ -159,7 +161,7 @@ class Url {
         if ($isSslEnabled && $protocol === 'http') {
             $protocol .= 's';
         }
-        
+
         # Extract host and port
         $host = $serverArray['HTTP_HOST'];
         $hostContainsPort = preg_match('/:(\d+)$/', $serverArray['HTTP_HOST'], $portPosition);
@@ -179,24 +181,105 @@ class Url {
         if ($port !== null && ! in_array($port, $standardHttpPorts, true)) {
             $portString = ':' . $port;
         }
-        
+
         $url = $protocol . '://' . $host . $portString . $serverArray['REQUEST_URI'];
         return new self($url);
     }
-	
-	/**
-	 * @author tp
-	 * @param int $componentNumber
-	 * @return string
-	 */
-	public function getPathComponent(int $componentNumber): string {
-		if ($componentNumber === 0) {
-			throw new InvalidArgumentException('Component numbers begin at 1.');
-		}
-		$components = explode('/', $this->getPath());
-		if (array_key_exists($componentNumber, $components)) {
-			return $components[$componentNumber];
-		}
-		throw new InvalidArgumentException("Component '$componentNumber' not found.");
-	}
+
+    /**
+     * @author tp
+     * @param int $componentNumber
+     * @return string
+     */
+    public function getPathComponent(int $componentNumber): string {
+        if ($componentNumber === 0) {
+            throw new InvalidArgumentException('Component numbers begin at 1.');
+        }
+        $components = explode('/', $this->getPath());
+        if (array_key_exists($componentNumber, $components)) {
+            return $components[$componentNumber];
+        }
+        throw new InvalidArgumentException("Component '$componentNumber' not found.");
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return string
+     */
+    public function getUserInfo(): string
+    {
+        return $this->getUser() ?? '';
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @inheritDoc
+     */
+    public function getAuthority()
+    {
+        throw new RuntimeException(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @inheritDoc
+     */
+    public function withScheme($scheme)
+    {
+        throw new RuntimeException(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @inheritDoc
+     */
+    public function withUserInfo($user, $password = null)
+    {
+        throw new RuntimeException(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @inheritDoc
+     */
+    public function withHost($host)
+    {
+        throw new RuntimeException(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @inheritDoc
+     */
+    public function withPort($port)
+    {
+        throw new RuntimeException(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @inheritDoc
+     */
+    public function withPath($path)
+    {
+        throw new RuntimeException(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @inheritDoc
+     */
+    public function withQuery($query)
+    {
+        throw new RuntimeException(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @inheritDoc
+     */
+    public function withFragment($fragment)
+    {
+        throw new RuntimeException(__METHOD__ . ' is not implemented');
+    }
 }

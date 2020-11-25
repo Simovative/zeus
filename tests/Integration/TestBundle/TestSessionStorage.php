@@ -34,7 +34,10 @@ class TestSessionStorage implements SessionStorageInterface {
 	 * @inheritDoc
 	 */
 	public function get($name) {
-		return $this->sessionValues[$name];
+	    if ($this->has($name)) {
+            return $this->sessionValues[$name];
+        }
+        return null;
 	}
 	
 	/**
