@@ -18,6 +18,15 @@ class FilesystemException extends Exception {
 	}
 	
 	/**
+	 * @author tp
+	 * @param string $directory
+	 * @return FilesystemException
+	 */
+	public static function createPermissionDenied(string $directory): FilesystemException {
+		return new self(sprintf('Permission denied for "%s"', $directory));
+	}
+	
+	/**
 	 * @author Benedikt Schaller
 	 * @param string $file
 	 * @return FilesystemException

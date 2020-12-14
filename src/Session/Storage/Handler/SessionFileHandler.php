@@ -128,6 +128,26 @@ class SessionFileHandler extends SessionHandler
      */
     public function gc($maxlifetime)
     {
+        $lastKeepTime = new \DateTime();
+        $lastKeepTime->sub(new \DateInterval(sprintf('PT%dS', $maxlifetime)));
+        try {
+            foreach ($this->sessionDirectory->getFiles() as $file) {
+                if (! $file->exists()) {
+                    continue;
+                }
+        
+                try {
+                    if ($file->getLastChangeTimestamp() > $lastKeepTime) {
+                        continue;
+                    }
+                    $file->delete();
+                } catch (FilesystemException $exception) {
+                    continue;
+                }
+            }
+        } catch (FilesystemException $exception) {
+            return true;
+        }
         return true;
     }
     
