@@ -23,6 +23,13 @@ class HandlerRouterChain implements HandlerRouterChainInterface
     private $routers;
     
     /**
+     * @author therion86
+     */
+    public function __construct() {
+        $this->routers = [];
+    }
+
+    /**
      * @inheritDoc
      * @author tp
      */
