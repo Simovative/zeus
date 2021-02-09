@@ -73,9 +73,12 @@ class FileMimeType {
 			
 			// ms office
 			'doc' => 'application/msword',
+			'docx' => 'application/msword',
 			'rtf' => 'application/rtf',
 			'xls' => 'application/vnd.ms-excel',
+			'xlsx' => 'application/vnd.ms-excel',
 			'ppt' => 'application/vnd.ms-powerpoint',
+			'pptx' => 'application/vnd.ms-powerpoint',
 			
 			// open office
 			'odt' => 'application/vnd.oasis.opendocument.text',
@@ -87,28 +90,28 @@ class FileMimeType {
 		if (array_key_exists($fileExtension, $mimeTypes)) {
 			return $mimeTypes[$fileExtension];
 		}
-		return null;
+		return 'application/octet-stream';
 	}
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return string|null
+	 * @return string
 	 */
-	private function getMimeTypeByFileInfo(): ?string {
+	private function getMimeTypeByFileInfo(): string {
 		$fileInfo = finfo_open(FILEINFO_MIME);
 		$mimeType = finfo_file($fileInfo, $this->file->getPath());
 		finfo_close($fileInfo);
 		if (false === $mimeType) {
-			return null;
+			return 'application/octet-stream';
 		}
 		return $mimeType;
 	}
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @return string|null
+	 * @return string
 	 */
-	public function getMimeType(): ?string {
+	public function getMimeType(): string {
 		if (function_exists('finfo_open') && self::FILE_PROTOCOL_FILE === $this->getFileProtocol()) {
 			return $this->getMimeTypeByFileInfo();
 		}
