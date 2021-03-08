@@ -113,7 +113,7 @@ class FileMimeType {
 	 */
 	public function getMimeType(): string {
 		if (function_exists('finfo_open') && self::FILE_PROTOCOL_FILE === $this->getFileProtocol()) {
-			return $this->getMimeTypeByFileInfo();
+			return $this->getMimeTypeByFileInfo() ?? $this->getMimeTypeByExtension();
 		}
 		return $this->getMimeTypeByExtension();
 	}
