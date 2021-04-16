@@ -1,6 +1,8 @@
 <?php
 namespace Simovative\Zeus\Session\Storage;
 
+use RuntimeException;
+
 /**
  * @author mnoerenberg
  */
@@ -16,8 +18,6 @@ class NativeSessionStorage implements SessionStorageInterface {
 	 * @param \SessionHandlerInterface|NULL $handler - default: null
 	 */
 	public function __construct($handler = null) {
-		ini_set('session.use_cookies', 1);
-		
 		if ($handler !== null) {
 			if (PHP_VERSION_ID >= 50400) {
 				session_set_save_handler($handler, false);
@@ -52,7 +52,7 @@ class NativeSessionStorage implements SessionStorageInterface {
 	 */
 	public function set($name, $value) {
 		if (! $this->started) {
-			throw new \RuntimeException('session not started');
+			throw new RuntimeException('session not started');
 		}
 		
 		$_SESSION[$name] = $value;
@@ -64,7 +64,7 @@ class NativeSessionStorage implements SessionStorageInterface {
 	 */
 	public function has($name) {
 		if (! $this->started) {
-			throw new \RuntimeException('Session not started');
+			throw new RuntimeException('Session not started');
 		}
 		
 		return array_key_exists($name, $_SESSION);
@@ -92,7 +92,7 @@ class NativeSessionStorage implements SessionStorageInterface {
 		}
 		
 		if (! session_start()) {
-			throw new \RuntimeException('session start failed');
+			throw new RuntimeException('session start failed');
 		}
 		
 		$this->started = true;
@@ -112,7 +112,7 @@ class NativeSessionStorage implements SessionStorageInterface {
 	 */
 	public function destroy() {
 		if (! $this->started) {
-			throw new \RuntimeException('Session not started');
+			throw new RuntimeException('Session not started');
 		}
 		
 		session_destroy();
@@ -124,7 +124,7 @@ class NativeSessionStorage implements SessionStorageInterface {
 	 */
 	public function all() {
 		if (! $this->started) {
-			throw new \RuntimeException('Session not started');
+			throw new RuntimeException('Session not started');
 		}
 		return $_SESSION;
 	}
