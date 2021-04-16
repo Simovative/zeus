@@ -16,7 +16,13 @@ class NativeSessionStorage implements SessionStorageInterface {
 	 * @param \SessionHandlerInterface|NULL $handler - default: null
 	 */
 	public function __construct($handler = null) {
-		ini_set('session.use_cookies', 1);
+     
+	    // ini_set will cause an error if a session already exists
+	    if (session_status() === PHP_SESSION_ACTIVE) {
+            return;
+        }
+	    
+	    ini_set('session.use_cookies', 1);
 		
 		if ($handler !== null) {
 			if (PHP_VERSION_ID >= 50400) {
