@@ -31,7 +31,7 @@ class CreateApplicationCliCommand extends Command {
 	 */
 	public function __construct(ApplicationTemplateBuilder $applicationTemplateBuilder, $name = null) {
 		$this->applicationTemplateBuilder = $applicationTemplateBuilder;
-		return parent::__construct($name);
+		parent::__construct($name);
 	}
 	
 	/**

@@ -31,7 +31,7 @@ class CreateBundleCliCommand extends Command {
 	 */
 	public function __construct(BundleTemplateBuilder $bundleTemplateBuilder, $name = null) {
 		$this->bundleTemplateBuilder = $bundleTemplateBuilder;
-		return parent::__construct($name);
+		parent::__construct($name);
 	}
 	
 	/**

@@ -35,7 +35,7 @@ class CreateCommandCliCommand extends Command {
 		$name = null
 	) {
 		$this->commandTemplateBuilder = $commandTemplateBuilder;
-		return parent::__construct($name);
+		parent::__construct($name);
 	}
 	
 	/**

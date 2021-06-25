@@ -32,7 +32,7 @@ class CreatePageCliCommand extends Command {
 	 */
 	public function __construct(PageTemplateBuilder $pageTemplateBuilder, $name = null) {
 		$this->pageTemplateBuilder = $pageTemplateBuilder;
-		return parent::__construct($name);
+		parent::__construct($name);
 	}
 	
 	/**
