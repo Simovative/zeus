@@ -206,7 +206,7 @@ $masterFactory = new Simovative\Zeus\Dependency\MasterFactory(
 );
 
 $kernel = new \Simovative\Skeleton\Application\SkeletonKernel($masterFactory);
-$kernel->run(\Simovative\Zeus\Http\Request\HttpRequest::createFromGlobals());
+$kernel->run($masterFactory->createRequestFromGlobals());
 ```
 
 A more sophisticated way would be fetching the configuration values from the environment.
@@ -227,7 +227,7 @@ $masterFactory = new Simovative\Zeus\Dependency\MasterFactory(
 );
 
 $kernel = new \Simovative\Skeleton\Application\SkeletonKernel($masterFactory);
-$kernel->run(\Simovative\Zeus\Http\Request\HttpRequest::createFromGlobals());
+$kernel->run($masterFactory->createRequestFromGlobals());
 ```
 
 However, if your environments grow very complex you'll need a more

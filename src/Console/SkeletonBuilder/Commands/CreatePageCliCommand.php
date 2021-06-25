@@ -60,7 +60,7 @@ class CreatePageCliCommand extends Command {
 			$input->setArgument(self::ARG_PROJECT_ROOT, getcwd());
 		}
 		// convert relative path to absolute path
-		if ('/' !== substr($path, 0, 1)) {
+		if (strpos($path, '/') !== 0) {
 			$input->setArgument(self::ARG_PROJECT_ROOT, realpath(getcwd() . '/' . $path));
 		}
 	}

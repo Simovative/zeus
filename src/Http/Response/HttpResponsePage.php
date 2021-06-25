@@ -2,7 +2,6 @@
 namespace Simovative\Zeus\Http\Response;
 
 use Simovative\Zeus\Content\Content;
-use Simovative\Zeus\Content\Page;
 
 /**
  * @author mnoerenberg

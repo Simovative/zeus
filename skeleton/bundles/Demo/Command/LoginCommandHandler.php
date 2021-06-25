@@ -32,11 +32,11 @@ class LoginCommandHandler implements CommandHandlerInterface {
 	 * @return CommandResponseInterface
 	 */
 	public function execute(CommandInterface $command) {
-		if ($command->getPassword() == 'test123') {
+		if ($command->getPassword() === 'test123') {
 			$this->state->setUser(123, $command->getUsername());
 			return new CommandSuccessResponse($command->getUsername());
-		} else {
-			return new CommandFailureResponse('Wrong password! The right one is "test123".');
 		}
-	}
+
+        return new CommandFailureResponse('Wrong password! The right one is "test123".');
+    }
 }

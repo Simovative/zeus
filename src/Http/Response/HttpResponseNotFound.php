@@ -9,10 +9,11 @@ use Simovative\Zeus\Content\Content;
 class HttpResponseNotFound extends HttpResponsePage {
 	
 	/**
-	 * @author mnoerenberg
 	 * @param Content $page
-	 * @noinspection PhpMissingParentConstructorInspection
-	 */
+     * @author mnoerenberg
+	 * @noinspection MagicMethodsValidityInspection
+     * @noinspection PhpMissingParentConstructorInspection
+     */
 	public function __construct(Content $page) {
 		$this->page = $page;
 		$this->addHeader('HTTP/1.1 404 Not Found');
