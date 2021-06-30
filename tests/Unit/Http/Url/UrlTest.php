@@ -32,7 +32,7 @@ class UrlTest extends TestCase {
 	 * @author tp
 	 * @inheritDoc
 	 */
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
         $this->url = new Url(self::URL_WITH_CREDENTIALS);
 	}

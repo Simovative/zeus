@@ -38,7 +38,7 @@ class Directory
      */
     public function __construct($path, $createIfNotExists = false)
     {
-        if ($path == '') {
+        if ($path === '') {
             throw new FilesystemException('Path of directory ist empty.');
         }
         
@@ -93,7 +93,7 @@ class Directory
     public function create($mode = self::MODE_DEFAULT)
     {
         if (! $this->exists()) {
-            if (false === mkdir($this->getPath(), $mode, true)) {
+            if (!mkdir($this->getPath(), $mode, true) && !is_dir($this->getPath())) {
                 throw new FilesystemException(
                     sprintf('Could not create directory "%s". Permission denied.', $this->getPath())
                 );

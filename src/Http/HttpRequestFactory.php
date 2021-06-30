@@ -57,11 +57,8 @@ class HttpRequestFactory extends Factory {
 	 * @return bool
 	 */
 	private function isJsonContent(array $serverParameters): bool {
-		$contentType = null;
-		if (array_key_exists(self::SERVER_PARAMETER_CONTENT_TYPE, $serverParameters)) {
-			$contentType = $serverParameters[self::SERVER_PARAMETER_CONTENT_TYPE];
-		}
-		return $contentType === self::CONTENT_TYPE_JSON;
+        $contentType = $serverParameters[self::SERVER_PARAMETER_CONTENT_TYPE] ?? null;
+        return $contentType === self::CONTENT_TYPE_JSON;
 	}
 	
 	/**

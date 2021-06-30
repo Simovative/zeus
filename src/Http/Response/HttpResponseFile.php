@@ -33,7 +33,7 @@ class HttpResponseFile extends HttpResponse {
 	 * @return string
 	 */
 	private function detectMimeType(File $file) {
-		if ($file->getFile()->getExtension() == 'css') {
+		if ($file->getFile()->getExtension() === 'css') {
 			return 'text/css';
 		}
 		return $file->getFile()->getMimeType();

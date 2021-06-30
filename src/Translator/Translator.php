@@ -74,7 +74,7 @@ class Translator implements TranslatorInterface {
 		
 		// get value from cache.
 		$value = $this->getFromCacheByKeys($sectionKey, $valueKey);
-		if ($value != false) {
+		if ($value !== false) {
 			return $value;
 		}
 		
@@ -89,7 +89,7 @@ class Translator implements TranslatorInterface {
 		
 		// find text key.
 		$value = $this->getFromCacheByKeys($sectionKey, $valueKey);
-		if ($value != false) {
+		if ($value !== false) {
 			return $value;
 		}
 		

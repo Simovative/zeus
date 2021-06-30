@@ -41,12 +41,11 @@ class SessionFileHandler extends SessionHandler
             throw new \RuntimeException('Session directory is not writeable.');
         }
         
-        if (session_status() == PHP_SESSION_ACTIVE) {
+        if (session_status() === PHP_SESSION_ACTIVE) {
             return;
         }
         ini_set('session.save_handler', 'files');
         ini_set('session.save_path', realpath($this->sessionDirectory->getPath()));
-        $this->sessionChecksum = null;
     }
     
     /**
@@ -79,7 +78,7 @@ class SessionFileHandler extends SessionHandler
     public function write($session_id, $session_data)
     {
         $newSessionChecksum = hash("crc32b", $session_data);
-        if ($this->sessionChecksum == $newSessionChecksum) {
+        if ($this->sessionChecksum === $newSessionChecksum) {
             $this->getFile($session_id)->touch();
             return true;
         }

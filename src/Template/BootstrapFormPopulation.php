@@ -147,7 +147,7 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 				$option->removeAttribute(self::ATTRIBUTE_SELECTED);
 			}
 			$optionValue = $option->getAttribute('value');
-			if (in_array($optionValue, $fieldValue)) {
+			if (in_array($optionValue, $fieldValue, false)) {
 				$option->setAttribute(self::ATTRIBUTE_SELECTED, self::ATTRIBUTE_SELECTED);
 			}
 		}
@@ -172,7 +172,7 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 		$inputs = $xpath->query('//input[@name="' . $fieldName . '"][@type="checkbox"]');
 		foreach ($inputs as $input) {
 			/* @var $input DOMElement */
-			if (in_array($input->getAttribute('value'), $fieldValue)) {
+			if (in_array($input->getAttribute('value'), $fieldValue, false)) {
 				$input->setAttribute('checked', 'checked');
 			}
 		}

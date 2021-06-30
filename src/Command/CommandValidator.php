@@ -14,7 +14,7 @@ abstract class CommandValidator implements CommandValidatorInterface {
 	/**
 	 * @var boolean
 	 */
-	private $isValid = null;
+	private $isValid;
 	
 	/**
 	 * @inheritdoc
@@ -30,7 +30,7 @@ abstract class CommandValidator implements CommandValidatorInterface {
 	 */
 	private function isValid() {
 		if ($this->isValid === null) {
-			$this->isValid = count($this->getErrors()) == 0;
+			$this->isValid = count($this->getErrors()) === 0;
 		}
 		return $this->isValid;
 	}
