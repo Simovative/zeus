@@ -90,6 +90,11 @@ class NativeSessionStorage implements SessionStorageInterface {
 		if ($this->started) {
 			return;
 		}
+        
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            $this->started = true;
+            return;
+        }
 		
 		if (! session_start()) {
 			throw new RuntimeException('session start failed');
