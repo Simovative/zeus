@@ -199,7 +199,7 @@ abstract class HttpKernel implements KernelInterface
      * @author Benedikt Schaller
      * @return ApplicationStateInterface|null
      */
-    abstract protected function getApplicationState(): ?ApplicationStateInterface;
+    abstract protected function getApplicationState();
 
     private function createPsrRequestFromZeusRequest(HttpRequestInterface $request): ServerRequestInterface
     {
