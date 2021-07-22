@@ -4,61 +4,19 @@ declare(strict_types=1);
 
 namespace Simovative\Zeus\Command;
 
-use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
-use Simovative\Zeus\Exception\RouteNotFoundException;
-use Simovative\Zeus\Http\Request\HttpRequestInterface;
+use Simovative\Zeus\Http\Request\HttpRequestDispatcherInterface;
+use Simovative\Zeus\Http\Routing\RouteInterface;
 
 /**
  * @author tp
  */
-class HandlerDispatcher implements HandlerDispatcherInterface
+class HandlerDispatcher implements HttpRequestDispatcherInterface
 {
-    
-    /**
-     * @var HandlerRouterChainInterface
-     */
-    private $routerChain;
-    
-    /**
-     * @author tp
-     * @param HandlerRouterChainInterface $routerChain
-     */
-    public function __construct(
-        HandlerRouterChainInterface $routerChain
-    ) {
-        $this->routerChain = $routerChain;
-    }
-    
-    /**
-     * @inheritdoc
-     * @author tp
-     * @throws RouteNotFoundException
-     */
-    public function dispatch(HttpRequestInterface $request): ResponseInterface
+    public function dispatch(RouteInterface $route): ResponseInterface
     {
-        $serverRequest = ServerRequest::fromGlobals();
-        $serverRequest = $serverRequest->withUri($request->getUrl());
-        $handler = $this->routerChain->route($serverRequest);
-        if (null === $handler) {
-            throw new RouteNotFoundException($request->getUrl());
-        }
-        $serverRequest = $serverRequest->withParsedBody($request->getParsedBody());
-        $serverRequest = $serverRequest->withAttribute(
-            HandlerRouteParameterMapInterface::class,
-            $this->createRouteParameterMap($serverRequest->getUri())
-        );
+        $serverRequest = $route->getRoutedRequest();
+        $handler = $route->getHandler();
         return $handler->handle($serverRequest);
-    }
-    
-    /**
-     * @author tpawlow
-     * @param UriInterface $uri
-     * @return HandlerRouteParameterMapInterface
-     */
-    private function createRouteParameterMap(UriInterface $uri): HandlerRouteParameterMapInterface {
-        $routeParameters = explode('/', $uri->getPath());
-        return new HandlerRouteParameterMap($routeParameters);
     }
 }

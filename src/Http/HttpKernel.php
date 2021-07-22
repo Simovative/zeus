@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Simovative\Zeus\Http;
 
 use Exception;
+use GuzzleHttp\Psr7\ServerRequest;
+use Psr\Http\Message\ServerRequestInterface;
 use Simovative\Zeus\Bundle\BundleHandlerInterface;
 use Simovative\Zeus\Bundle\BundleInterface;
 use Simovative\Zeus\Dependency\FrameworkFactory;
@@ -75,7 +77,7 @@ abstract class HttpKernel implements KernelInterface
                 $bundle->registerFactories($this->getMasterFactory());
             }
 
-            foreach ($this->bundles as $index => $bundle) {
+            foreach ($this->bundles as $bundle) {
                 if ($request->isGet()) {
                     $bundle->registerGetRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
                     if ($bundle instanceof BundleHandlerInterface) {
@@ -125,21 +127,22 @@ abstract class HttpKernel implements KernelInterface
             }
 
             $locator = $this->getMasterFactory()->createHttpRequestDispatcherLocator();
-            $dispatcher = $locator->getDispatcherFor($request);
-            try {
-                $content = $dispatcher->dispatch($request);
-                $response = $this->getMasterFactory()->getHttpResponseLocator()->getResponseFor($content);
-                if ($this->getApplicationState() !== null) {
-                    $this->getApplicationState()->commit();
-                }
-                if ($send) {
-                    $response->send();
-                }
-            } catch (RouteNotFoundException $routeNotFoundException) {
-                $handlerDispatcher = $this->getMasterFactory()->createHandlerDispatcher();
-                $response = $handlerDispatcher->dispatch($request);
-                if ($send) {
+            $router = $this->getMasterFactory()->createRouter();
+            $psrRequest = $this->createPsrRequestFromZeusRequest($request);
+            $route = $router->route($request, $psrRequest);
+            if ($route === null) {
+                throw new RouteNotFoundException($request->getUrl());
+            }
+            $dispatcher = $locator->getDispatcherFor($route);
+            $response = $dispatcher->dispatch($route);
+            if ($this->getApplicationState() !== null) {
+                $this->getApplicationState()->commit();
+            }
+            if ($send) {
+                if ($route->isPsrRoute()) {
                     $this->getMasterFactory()->createEmitter()->emit($response);
+                } else {
+                    $response->send();
                 }
             }
         } catch (Exception $throwable) {
@@ -165,6 +168,7 @@ abstract class HttpKernel implements KernelInterface
             $throwable->getMessage()
         );
         if ($request !== null) {
+            // Cast is needed, even if your ide tells you it is not!
             $message .= ' - Request-Url: ' . (string)$request->getUrl();
         }
         error_log($message, self::LOG_TO_SAPI);
@@ -185,9 +189,9 @@ abstract class HttpKernel implements KernelInterface
      *
      * @author mnoerenberg
      * @param HttpRequestInterface $request
-     * @return \Simovative\Zeus\Bundle\BundleInterface[]
+     * @return BundleInterface[]
      */
-    abstract protected function registerBundles(HttpRequestInterface $request);
+    abstract protected function registerBundles(HttpRequestInterface $request): array;
 
     /**
      * If the application has no state, just return null.
@@ -195,5 +199,11 @@ abstract class HttpKernel implements KernelInterface
      * @author Benedikt Schaller
      * @return ApplicationStateInterface|null
      */
-    abstract protected function getApplicationState();
+    abstract protected function getApplicationState(): ?ApplicationStateInterface;
+
+    private function createPsrRequestFromZeusRequest(HttpRequestInterface $request): ServerRequestInterface
+    {
+        $psrRequest = ServerRequest::fromGlobals();
+        return $psrRequest->withUri($request->getUrl());
+    }
 }
