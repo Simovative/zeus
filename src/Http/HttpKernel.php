@@ -191,7 +191,7 @@ abstract class HttpKernel implements KernelInterface
      * @param HttpRequestInterface $request
      * @return BundleInterface[]
      */
-    abstract protected function registerBundles(HttpRequestInterface $request): array;
+    abstract protected function registerBundles(HttpRequestInterface $request);
 
     /**
      * If the application has no state, just return null.
