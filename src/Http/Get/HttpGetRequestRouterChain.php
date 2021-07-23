@@ -2,7 +2,6 @@
 namespace Simovative\Zeus\Http\Get;
 
 use Simovative\Zeus\Exception\IncompleteSetupException;
-use Simovative\Zeus\Exception\RouteNotFoundException;
 use Simovative\Zeus\Content\Content;
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
 
@@ -30,8 +29,8 @@ class HttpGetRequestRouterChain {
 	 * @author mnoerenberg
 	 * @author shartmann
 	 * @param HttpRequestInterface $request
-	 * @throws RouteNotFoundException|IncompleteSetupException
-	 * @return Content
+	 * @throws IncompleteSetupException
+	 * @return Content|null
 	 */
 	public function route(HttpRequestInterface $request) {
 		foreach ($this->routers as $router) {
@@ -43,6 +42,6 @@ class HttpGetRequestRouterChain {
 		if (empty($this->routers)) {
 			throw new IncompleteSetupException('No routers registred!');
 		}
-		throw new RouteNotFoundException($request->getUrl());
+		return null;
 	}
 }

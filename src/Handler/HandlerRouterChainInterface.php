@@ -27,5 +27,5 @@ interface HandlerRouterChainInterface
      * @return RequestHandlerInterface
      * @throws RouteNotFoundException
      */
-    public function route(ServerRequestInterface $request): RequestHandlerInterface;
+    public function route(ServerRequestInterface $request): ?RequestHandlerInterface;
 }

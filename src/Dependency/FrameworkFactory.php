@@ -21,8 +21,11 @@ use Simovative\Zeus\Http\Get\HttpGetRequestRouterChain;
 use Simovative\Zeus\Http\Json\JsonEncodingService;
 use Simovative\Zeus\Http\Json\JsonEncodingServiceInterface;
 use Simovative\Zeus\Http\Request\HttpRequestDispatcherLocator;
+use Simovative\Zeus\Http\Request\HttpRequestDispatcherLocatorInterface;
 use Simovative\Zeus\Http\Response\HttpResponseLocator;
+use Simovative\Zeus\Http\Response\HttpResponseLocatorInterface;
 use Simovative\Zeus\Http\Routing\HttpRouter;
+use Simovative\Zeus\Http\Routing\HttpRouterInterface;
 use Simovative\Zeus\Http\Routing\RouteFactory;
 use Simovative\Zeus\Http\Routing\RouteFactoryInterface;
 use Simovative\Zeus\Http\Url\UrlMatcher;
@@ -66,7 +69,7 @@ class FrameworkFactory extends Factory
     private $session;
 
     /**
-     * @var HttpResponseLocator
+     * @var HttpResponseLocatorInterface
      */
     private $httpResponseLocator;
 
@@ -100,7 +103,7 @@ class FrameworkFactory extends Factory
         return new Emitter();
     }
 
-    public function getHttpResponseLocator(): HttpResponseLocator
+    public function getHttpResponseLocator(): HttpResponseLocatorInterface
     {
         if ($this->httpResponseLocator === null) {
             $this->httpResponseLocator = $this->getMasterFactory()->createHttpResponseLocator();
@@ -108,17 +111,17 @@ class FrameworkFactory extends Factory
         return $this->httpResponseLocator;
     }
 
-    public function createHttpResponseLocator(): HttpResponseLocator
+    public function createHttpResponseLocator(): HttpResponseLocatorInterface
     {
         return new HttpResponseLocator();
     }
 
-    public function createHttpRequestDispatcherLocator(): HttpRequestDispatcherLocator
+    public function createHttpRequestDispatcherLocator(): HttpRequestDispatcherLocatorInterface
     {
         return new HttpRequestDispatcherLocator($this);
     }
 
-    public function createRouter(): HttpRouter
+    public function createRouter(): HttpRouterInterface
     {
         return new HttpRouter(
             $this->getCommandRequestRouterChain(),
