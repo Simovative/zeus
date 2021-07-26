@@ -22,6 +22,8 @@ use Simovative\Zeus\Http\Json\JsonEncodingService;
 use Simovative\Zeus\Http\Json\JsonEncodingServiceInterface;
 use Simovative\Zeus\Http\Request\HttpRequestDispatcherLocator;
 use Simovative\Zeus\Http\Request\HttpRequestDispatcherLocatorInterface;
+use Simovative\Zeus\Http\Request\ServerRequestFactory;
+use Simovative\Zeus\Http\Request\ServerRequestFactoryInterface;
 use Simovative\Zeus\Http\Response\HttpResponseLocator;
 use Simovative\Zeus\Http\Response\HttpResponseLocatorInterface;
 use Simovative\Zeus\Http\Routing\HttpRouter;
@@ -501,5 +503,9 @@ class FrameworkFactory extends Factory
     private function createRouteFactory(): RouteFactoryInterface
     {
         return new RouteFactory();
+    }
+
+    public function createServerRequestFactory(): ServerRequestFactoryInterface {
+        return new ServerRequestFactory();
     }
 }

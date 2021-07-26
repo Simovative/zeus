@@ -1,4 +1,5 @@
 <?php
+
 namespace Simovative\Zeus\Command;
 
 use Exception;
@@ -10,17 +11,18 @@ use Simovative\Zeus\Http\Response\HttpResponseInterface;
 use Simovative\Zeus\Http\Response\HttpResponseLocatorInterface;
 use Simovative\Zeus\Http\Routing\RouteInterface;
 
-class CommandDispatcher implements HttpRequestDispatcherInterface {
-	
-	/**
-	 * @var ApplicationController
-	 */
-	private $applicationController;
-	
-	/**
-	 * @var MasterFactory
-	 */
-	private $masterFactory;
+class CommandDispatcher implements HttpRequestDispatcherInterface
+{
+
+    /**
+     * @var ApplicationController
+     */
+    private $applicationController;
+
+    /**
+     * @var MasterFactory
+     */
+    private $masterFactory;
 
     /**
      * @var HttpResponseLocatorInterface
@@ -28,15 +30,15 @@ class CommandDispatcher implements HttpRequestDispatcherInterface {
     private $httpResponseLocator;
 
     public function __construct(
-		MasterFactory $masterFactory,
-		ApplicationController $applicationController,
+        MasterFactory $masterFactory,
+        ApplicationController $applicationController,
         HttpResponseLocatorInterface $httpResponseLocator
     ) {
-		$this->applicationController = $applicationController;
-		$this->masterFactory = $masterFactory;
+        $this->applicationController = $applicationController;
+        $this->masterFactory = $masterFactory;
         $this->httpResponseLocator = $httpResponseLocator;
     }
-	
+
     /**
      * @throws Exception
      */
@@ -51,26 +53,23 @@ class CommandDispatcher implements HttpRequestDispatcherInterface {
         }
 
         if (null === $validationResult || $validationResult->isValid()) {
-            // create command handler by command.
             $command = $commandBuilder->createCommand($commandRequest);
             $commandHandler = $commandBuilder->createCommandHandler($this->masterFactory);
-
-            // execute command handler.
             $result = $commandHandler->execute($command);
-
-            // which redirect on success
-            $content = $this->applicationController->whichContentForCommandResult($commandBuilder, $commandRequest, $result);
-        } else {
-            // which redirect on invalid
-            // apply validation result
-            $content = $this->applicationController->whichContentForFailedValidation($commandBuilder, $commandRequest);
-            if ($content instanceof ValidatedContent) {
-                $content->setValidationResult($validationResult);
-            } else {
-                throw DispatchingException::createForPopulationError();
-            }
+            $content = $this->applicationController->whichContentForCommandResult(
+                $commandBuilder,
+                $commandRequest,
+                $result
+            );
+            return $this->httpResponseLocator->getResponseFor($content);
         }
 
+        $content = $this->applicationController->whichContentForFailedValidation($commandBuilder, $commandRequest);
+        if ($content instanceof ValidatedContent) {
+            $content->setValidationResult($validationResult);
+        } else {
+            throw DispatchingException::createForPopulationError();
+        }
         return $this->httpResponseLocator->getResponseFor($content);
     }
 }

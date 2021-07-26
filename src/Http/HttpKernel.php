@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Simovative\Zeus\Http;
 
 use Exception;
-use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ServerRequestInterface;
 use Simovative\Zeus\Bundle\BundleHandlerInterface;
 use Simovative\Zeus\Bundle\BundleInterface;
@@ -13,7 +12,6 @@ use Simovative\Zeus\Dependency\FrameworkFactory;
 use Simovative\Zeus\Dependency\KernelInterface;
 use Simovative\Zeus\Dependency\MasterFactory;
 use Simovative\Zeus\Exception\ExceptionHandler;
-use Simovative\Zeus\Exception\RouteNotFoundException;
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
 use Simovative\Zeus\Http\Response\HttpResponseInterface;
 use Simovative\Zeus\State\ApplicationStateInterface;
@@ -42,8 +40,8 @@ abstract class HttpKernel implements KernelInterface
     protected $bundles;
 
     /**
-     * @author mnoerenberg
      * @param MasterFactory $masterFactory
+     * @author mnoerenberg
      */
     public function __construct(MasterFactory $masterFactory)
     {
@@ -52,8 +50,8 @@ abstract class HttpKernel implements KernelInterface
     }
 
     /**
-     * @author shartmann
      * @return void
+     * @author shartmann
      */
     protected function initializeExceptionHandler(): void
     {
@@ -130,9 +128,7 @@ abstract class HttpKernel implements KernelInterface
             $router = $this->getMasterFactory()->createRouter();
             $psrRequest = $this->createPsrRequestFromZeusRequest($request);
             $route = $router->route($request, $psrRequest);
-            if ($route === null) {
-                throw new RouteNotFoundException($request->getUrl());
-            }
+
             $dispatcher = $locator->getDispatcherFor($route);
             $response = $dispatcher->dispatch($route);
             if ($this->getApplicationState() !== null) {
@@ -176,8 +172,8 @@ abstract class HttpKernel implements KernelInterface
     }
 
     /**
-     * @author shartmann
      * @return MasterFactory|FrameworkFactory
+     * @author shartmann
      */
     protected function getMasterFactory()
     {
@@ -187,23 +183,23 @@ abstract class HttpKernel implements KernelInterface
     /**
      * Returns installed Bundles.
      *
-     * @author mnoerenberg
      * @param HttpRequestInterface $request
      * @return BundleInterface[]
+     * @author mnoerenberg
      */
     abstract protected function registerBundles(HttpRequestInterface $request);
 
     /**
      * If the application has no state, just return null.
      *
-     * @author Benedikt Schaller
      * @return ApplicationStateInterface|null
+     * @author Benedikt Schaller
      */
     abstract protected function getApplicationState();
 
     private function createPsrRequestFromZeusRequest(HttpRequestInterface $request): ServerRequestInterface
     {
-        $psrRequest = ServerRequest::fromGlobals();
-        return $psrRequest->withUri($request->getUrl());
+        $serverRequestFactory = $this->getMasterFactory()->createServerRequestFactory();
+        return $serverRequestFactory->createFromZeusRequest($request);
     }
 }
