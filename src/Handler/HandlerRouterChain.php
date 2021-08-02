@@ -8,8 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Simovative\Zeus\Command\HandlerRouterChainInterface;
 use Simovative\Zeus\Command\HandlerRouterInterface;
-use Simovative\Zeus\Exception\RouteNotFoundException;
-use Simovative\Zeus\Http\Url\Url;
 
 /**
  * @author tp
@@ -42,7 +40,7 @@ class HandlerRouterChain implements HandlerRouterChainInterface
      * @inheritDoc
      * @author tp
      */
-    public function route(ServerRequestInterface $request): RequestHandlerInterface
+    public function route(ServerRequestInterface $request): ?RequestHandlerInterface
     {
         foreach ($this->routers as $router) {
             $result = $router->route($request);
@@ -51,6 +49,6 @@ class HandlerRouterChain implements HandlerRouterChainInterface
             }
         }
         
-        throw new RouteNotFoundException(new Url($request->getUri()->getPath()));
+        return null;
     }
 }

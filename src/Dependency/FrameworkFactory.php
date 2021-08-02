@@ -20,9 +20,16 @@ use Simovative\Zeus\Http\Get\HttpGetRequestDispatcher;
 use Simovative\Zeus\Http\Get\HttpGetRequestRouterChain;
 use Simovative\Zeus\Http\Json\JsonEncodingService;
 use Simovative\Zeus\Http\Json\JsonEncodingServiceInterface;
-use Simovative\Zeus\Http\Request\HttpRequestDispatcherInterface;
 use Simovative\Zeus\Http\Request\HttpRequestDispatcherLocator;
+use Simovative\Zeus\Http\Request\HttpRequestDispatcherLocatorInterface;
+use Simovative\Zeus\Http\Request\ServerRequestFactory;
+use Simovative\Zeus\Http\Request\ServerRequestFactoryInterface;
 use Simovative\Zeus\Http\Response\HttpResponseLocator;
+use Simovative\Zeus\Http\Response\HttpResponseLocatorInterface;
+use Simovative\Zeus\Http\Routing\HttpRouter;
+use Simovative\Zeus\Http\Routing\HttpRouterInterface;
+use Simovative\Zeus\Http\Routing\RouteFactory;
+use Simovative\Zeus\Http\Routing\RouteFactoryInterface;
 use Simovative\Zeus\Http\Url\UrlMatcher;
 use Simovative\Zeus\Http\Url\UrlMatcherInterface;
 use Simovative\Zeus\Intl\IntlDateTimeConverter;
@@ -40,9 +47,6 @@ use Simovative\Zeus\Template\TemplateEngineInterface;
 use Simovative\Zeus\Translator\Translator;
 use Smarty;
 
-/**
- * @author mnoerenberg
- */
 class FrameworkFactory extends Factory
 {
 
@@ -67,7 +71,7 @@ class FrameworkFactory extends Factory
     private $session;
 
     /**
-     * @var HttpResponseLocator
+     * @var HttpResponseLocatorInterface
      */
     private $httpResponseLocator;
 
@@ -96,20 +100,12 @@ class FrameworkFactory extends Factory
      */
     private $handlerRouterChain;
 
-    /**
-     * @author mnoerenberg
-     * @return EmitterInterface
-     */
     public function createEmitter(): EmitterInterface
     {
         return new Emitter();
     }
 
-    /**
-     * @author mnoerenberg
-     * @return HttpResponseLocator
-     */
-    public function getHttpResponseLocator()
+    public function getHttpResponseLocator(): HttpResponseLocatorInterface
     {
         if ($this->httpResponseLocator === null) {
             $this->httpResponseLocator = $this->getMasterFactory()->createHttpResponseLocator();
@@ -117,34 +113,31 @@ class FrameworkFactory extends Factory
         return $this->httpResponseLocator;
     }
 
-    /**
-     * @author mnoerenberg
-     * @return HttpResponseLocator
-     */
-    public function createHttpResponseLocator()
+    public function createHttpResponseLocator(): HttpResponseLocatorInterface
     {
         return new HttpResponseLocator();
     }
 
-    /**
-     * @author mnoerenberg
-     * @return HttpRequestDispatcherLocator
-     */
-    public function createHttpRequestDispatcherLocator()
+    public function createHttpRequestDispatcherLocator(): HttpRequestDispatcherLocatorInterface
     {
         return new HttpRequestDispatcherLocator($this);
+    }
+
+    public function createRouter(): HttpRouterInterface
+    {
+        return new HttpRouter(
+            $this->getCommandRequestRouterChain(),
+            $this->getHttpGetRequestRouterChain(),
+            $this->getHandlerRouterChain(),
+            $this->createRouteFactory()
+        );
     }
 
     //***************************************************
     // START EXCEPTION
     //***************************************************
 
-    /**
-     * @author mnoerenberg
-     * @param KernelInterface $kernel
-     * @return ExceptionHandler
-     */
-    public function createExceptionHandler(KernelInterface $kernel)
+    public function createExceptionHandler(KernelInterface $kernel): ExceptionHandler
     {
         return new ExceptionHandler($kernel);
     }
@@ -153,11 +146,7 @@ class FrameworkFactory extends Factory
     // START Logger
     //***************************************************
 
-    /**
-     * @author Benedikt Schaller
-     * @return SapiLogger
-     */
-    public function createSapiLogger()
+    public function createSapiLogger(): SapiLogger
     {
         return new SapiLogger();
     }
@@ -166,11 +155,7 @@ class FrameworkFactory extends Factory
     // START GET
     //***************************************************
 
-    /**
-     * @author mnoerenberg
-     * @return HttpGetRequestRouterChain
-     */
-    public function getHttpGetRequestRouterChain()
+    public function getHttpGetRequestRouterChain(): HttpGetRequestRouterChain
     {
         if ($this->getRequestRouterChain === null) {
             $this->getRequestRouterChain = $this->createHttpGetRequestRouterChain();
@@ -178,23 +163,15 @@ class FrameworkFactory extends Factory
         return $this->getRequestRouterChain;
     }
 
-    /**
-     * @author mnoerenberg
-     * @return HttpGetRequestRouterChain
-     */
-    private function createHttpGetRequestRouterChain()
+    private function createHttpGetRequestRouterChain(): HttpGetRequestRouterChain
     {
         return new HttpGetRequestRouterChain();
     }
 
-    /**
-     * @author mnoerenberg
-     * @return HttpGetRequestDispatcher
-     */
-    public function createHttpGetRequestDispatcher()
+    public function createHttpGetRequestDispatcher(): HttpGetRequestDispatcher
     {
         return new HttpGetRequestDispatcher(
-            $this->getHttpGetRequestRouterChain()
+            $this->getMasterFactory()->getHttpResponseLocator()
         );
     }
 
@@ -202,11 +179,7 @@ class FrameworkFactory extends Factory
     // START POST
     //***************************************************
 
-    /**
-     * @author mnoerenberg
-     * @return CommandRequestRouterChain
-     */
-    public function getCommandRequestRouterChain()
+    public function getCommandRequestRouterChain(): CommandRequestRouterChain
     {
         if ($this->commandRequestRouterChain === null) {
             $this->commandRequestRouterChain = $this->createHttpPostRequestRouterChain();
@@ -214,33 +187,21 @@ class FrameworkFactory extends Factory
         return $this->commandRequestRouterChain;
     }
 
-    /**
-     * @author mnoerenberg
-     * @return CommandRequestRouterChain
-     */
-    private function createHttpPostRequestRouterChain()
+    private function createHttpPostRequestRouterChain(): CommandRequestRouterChain
     {
         return new CommandRequestRouterChain();
     }
 
-    /**
-     * @author mnoerenberg
-     * @return HttpRequestDispatcherInterface
-     */
-    public function createHttpCommandDispatcher()
+    public function createHttpCommandDispatcher(): CommandDispatcher
     {
         return new CommandDispatcher(
-            $this->getCommandRequestRouterChain(),
             $this->getMasterFactory(),
-            $this->getApplicationController()
+            $this->getApplicationController(),
+            $this->getMasterFactory()->getHttpResponseLocator()
         );
     }
 
-    /**
-     * @author mnoerenberg
-     * @return ApplicationController
-     */
-    public function getApplicationController()
+    public function getApplicationController(): ApplicationController
     {
         if ($this->applicationController === null) {
             $this->applicationController = $this->createApplicationController();
@@ -248,11 +209,7 @@ class FrameworkFactory extends Factory
         return $this->applicationController;
     }
 
-    /**
-     * @author mnoerenberg
-     * @return ApplicationController
-     */
-    private function createApplicationController()
+    private function createApplicationController(): ApplicationController
     {
         return new ApplicationController($this->getMasterFactory());
     }
@@ -262,21 +219,11 @@ class FrameworkFactory extends Factory
     // START Handler
     //***************************************************
 
-    /**
-     * @author tp
-     * @return HandlerDispatcher
-     */
     public function createHandlerDispatcher(): HandlerDispatcher
     {
-        return new HandlerDispatcher(
-            $this->getHandlerRouterChain()
-        );
+        return new HandlerDispatcher();
     }
 
-    /**
-     * @author tp
-     * @return HandlerRouterChainInterface
-     */
     public function getHandlerRouterChain(): HandlerRouterChainInterface
     {
         if ($this->handlerRouterChain === null) {
@@ -285,10 +232,6 @@ class FrameworkFactory extends Factory
         return $this->handlerRouterChain;
     }
 
-    /**
-     * @author tp
-     * @return HandlerRouterChainInterface
-     */
     private function createHandlerRouterChain(): HandlerRouterChainInterface
     {
         return new HandlerRouterChain();
@@ -298,13 +241,7 @@ class FrameworkFactory extends Factory
     // START Router
     //***************************************************
 
-    /**
-     * Returns a single instance of an url matcher.
-     *
-     * @author Benedikt Schaller
-     * @return UrlMatcherInterface
-     */
-    public function getUrlMatcher()
+    public function getUrlMatcher(): UrlMatcher
     {
         if ($this->urlMatcher === null) {
             $this->urlMatcher = $this->getMasterFactory()->createUrlMatcher();
@@ -312,11 +249,7 @@ class FrameworkFactory extends Factory
         return $this->urlMatcher;
     }
 
-    /**
-     * @author mnoerenberg
-     * @return UrlMatcherInterface
-     */
-    public function createUrlMatcher()
+    public function createUrlMatcher(): UrlMatcher
     {
         return new UrlMatcher();
     }
@@ -325,11 +258,7 @@ class FrameworkFactory extends Factory
     // START Session
     //***************************************************
 
-    /**
-     * @author mnoerenberg
-     * @return SessionInterface
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         if ($this->session === null) {
             $this->session = $this->createSession();
@@ -337,36 +266,20 @@ class FrameworkFactory extends Factory
         return $this->session;
     }
 
-    /**
-     * @author mnoerenberg
-     * @return SessionInterface
-     */
-    private function createSession()
+    private function createSession(): Session
     {
         $session = new Session($this->createSessionStorage());
         $session->start();
         return $session;
     }
 
-    /**
-     * @author mnoerenberg
-     * @return NativeSessionStorage
-     */
-    private function createSessionStorage()
+    private function createSessionStorage(): NativeSessionStorage
     {
         return new NativeSessionStorage($this->createSessionFileHandler());
     }
 
-    /**
-     * @author mnoerenberg
-     * @return SessionFileHandler|NULL - returns NULL if PHP_VERSION < 5.4
-     */
-    private function createSessionFileHandler()
+    private function createSessionFileHandler(): SessionFileHandler
     {
-        if (PHP_VERSION_ID < 50400) {
-            return null;
-        }
-
         return new SessionFileHandler();
     }
 
@@ -375,11 +288,10 @@ class FrameworkFactory extends Factory
     //***************************************************
 
     /**
-     * @author mnoerenberg
      * @return File[]
      * @throws FilesystemException
      */
-    public function getLogs()
+    public function getLogs(): array
     {
         return array(
             $this->getErrorLogfile(),
@@ -388,72 +300,54 @@ class FrameworkFactory extends Factory
     }
 
     /**
-     * @author mnoerenberg
-     * @return File
      * @throws FilesystemException
      */
-    public function getErrorLogfile()
+    public function getErrorLogfile(): File
     {
         return new File($this->getLogDirectory()->getPath() . '/error.log', true);
     }
 
     /**
-     * @author mnoerenberg
-     * @return File
      * @throws FilesystemException
      */
-    public function getCliLogfile()
+    public function getCliLogfile(): File
     {
         return new File($this->getLogDirectory()->getPath() . '/cli.log', true);
     }
 
     /**
-     * Returns the log directory.
-     *
-     * @author Benedikt Schaller
-     * @return Directory
      * @throws FilesystemException
      */
-    private function getLogDirectory()
+    private function getLogDirectory(): Directory
     {
         return $this->getMasterFactory()->getDataDirectory()->change('logs');
     }
 
     /**
-     * @author mnoerenberg
-     * @return Directory
      * @throws FilesystemException
      */
-    public function getRootDirectory()
+    public function getRootDirectory(): Directory
     {
         return new Directory($this->getMasterFactory()->getConfiguration()->getBasePath());
     }
 
     /**
-     * @author mnoerenberg
-     * @return Directory
      * @throws FilesystemException
      */
-    public function getDataDirectory()
+    public function getDataDirectory(): Directory
     {
         return $this->getRootDirectory()->change('files');
     }
 
-    /**
-     * @author Benedikt Schaller
-     * @return BootstrapFormPopulation
-     */
-    public function createBootstrapFormPopulation()
+    public function createBootstrapFormPopulation(): BootstrapFormPopulation
     {
         return new BootstrapFormPopulation(false);
     }
 
     /**
-     * @author Benedikt Schaller
-     * @return Translator
      * @throws FilesystemException
      */
-    public function getTranslator()
+    public function getTranslator(): Translator
     {
         if ($this->translator === null) {
             $this->translator = $this->getMasterFactory()->createTranslator();
@@ -462,11 +356,9 @@ class FrameworkFactory extends Factory
     }
 
     /**
-     * @author Benedikt Schaller
-     * @return Translator
      * @throws FilesystemException
      */
-    public function createTranslator()
+    public function createTranslator(): Translator
     {
         // Fallback smarty directory, used if no separate directories are defined
         $translationDirectoryPath = $this->getConfigurationValue('translation_dir');
@@ -482,7 +374,6 @@ class FrameworkFactory extends Factory
     }
 
     /**
-     * @author Benedikt Schaller
      * @return IntlFormatterInterface
      */
     public function getIntlFormatter()
@@ -494,7 +385,6 @@ class FrameworkFactory extends Factory
     }
 
     /**
-     * @author Benedikt Schaller
      * @return IntlFormatterInterface
      */
     public function createIntlFormatter()
@@ -505,11 +395,8 @@ class FrameworkFactory extends Factory
     /**
      * Creates the settings from the config values. Will use system defaults
      * from php config, if no values provided.
-     *
-     * @author Benedikt Schaller
-     * @return IntlSettings
      */
-    public function createIntlSystemSettings()
+    public function createIntlSystemSettings(): IntlSettings
     {
         $timeZoneString = $this->getConfigurationValue('system_time_zone');
         $locale = $this->getConfigurationValue('system_locale');
@@ -532,11 +419,7 @@ class FrameworkFactory extends Factory
         );
     }
 
-    /**
-     * @author Benedikt Schaller
-     * @return IntlDateTimeConverter
-     */
-    public function getIntlDateTimeConverter()
+    public function getIntlDateTimeConverter(): IntlDateTimeConverter
     {
         if ($this->intlDateTimeConverter === null) {
             $this->intlDateTimeConverter = $this->getMasterFactory()->createIntlDateTimeConverter();
@@ -548,11 +431,8 @@ class FrameworkFactory extends Factory
      * Default method will use system settings as user settings.
      * Should be replaced with a method from the application factory
      * that loads the real user settings.
-     *
-     * @author Benedikt Schaller
-     * @return IntlDateTimeConverter
      */
-    public function createIntlDateTimeConverter()
+    public function createIntlDateTimeConverter(): IntlDateTimeConverter
     {
         return new IntlDateTimeConverter(
             $this->createIntlSystemSettings(),
@@ -561,11 +441,9 @@ class FrameworkFactory extends Factory
     }
 
     /**
-     * @author Benedikt Schaller
-     * @return Smarty
      * @throws FilesystemException
      */
-    public function createSmarty()
+    public function createSmarty(): Smarty
     {
         $smarty = new Smarty();
         // Fallback smarty directory, used if no separate directories are defined
@@ -592,7 +470,6 @@ class FrameworkFactory extends Factory
     /**
      * @return TemplateEngineInterface
      * @throws FilesystemException
-	 * @author Benedikt Schaller
      */
     public function createSmartyTemplateEngine()
     {
@@ -618,12 +495,17 @@ class FrameworkFactory extends Factory
         );
     }
 
-    /**
-     * @author Benedikt Schaller
-     * @return JsonEncodingServiceInterface
-     */
     public function createJsonEncodingService(): JsonEncodingServiceInterface
     {
         return new JsonEncodingService();
+    }
+
+    private function createRouteFactory(): RouteFactoryInterface
+    {
+        return new RouteFactory();
+    }
+
+    public function createServerRequestFactory(): ServerRequestFactoryInterface {
+        return new ServerRequestFactory();
     }
 }

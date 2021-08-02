@@ -1,21 +1,15 @@
 <?php
 namespace Simovative\Zeus\Http\Request;
 
-use Exception;
-use Simovative\Zeus\Content\Content;
-use Simovative\Zeus\Exception\RouteNotFoundException;
+use Psr\Http\Message\ResponseInterface;
+use Simovative\Zeus\Http\Response\HttpResponseInterface;
+use Simovative\Zeus\Http\Routing\RouteInterface;
 
-/**
- * @author mnoerenberg
- */
 interface HttpRequestDispatcherInterface {
 	
 	/**
-	 * @author mnoerenberg
-	 * @param HttpRequestInterface $request
-	 * @return Content
-	 * @throws RouteNotFoundException
-	 * @throws Exception
+	 * @param RouteInterface $route
+	 * @return HttpResponseInterface|ResponseInterface
 	 */
-	public function dispatch(HttpRequestInterface $request);
+	public function dispatch(RouteInterface $route);
 }
