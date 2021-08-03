@@ -45,6 +45,7 @@ use Simovative\Zeus\Template\BootstrapFormPopulation;
 use Simovative\Zeus\Template\SmartyTemplateEngine;
 use Simovative\Zeus\Template\TemplateEngineInterface;
 use Simovative\Zeus\Translator\Translator;
+use Simovative\Zeus\Translator\TranslatorInterface;
 use Smarty;
 
 class FrameworkFactory extends Factory
@@ -347,7 +348,7 @@ class FrameworkFactory extends Factory
     /**
      * @throws FilesystemException
      */
-    public function getTranslator(): Translator
+    public function getTranslator(): TranslatorInterface
     {
         if ($this->translator === null) {
             $this->translator = $this->getMasterFactory()->createTranslator();
