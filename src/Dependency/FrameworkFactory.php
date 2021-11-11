@@ -11,7 +11,6 @@ use Simovative\Zeus\Command\HandlerDispatcher;
 use Simovative\Zeus\Command\HandlerRouterChainInterface;
 use Simovative\Zeus\Emitter\Emitter;
 use Simovative\Zeus\Emitter\EmitterInterface;
-use Simovative\Zeus\Exception\ExceptionHandler;
 use Simovative\Zeus\Exception\FilesystemException;
 use Simovative\Zeus\Filesystem\Directory;
 use Simovative\Zeus\Filesystem\File;
@@ -133,19 +132,6 @@ class FrameworkFactory extends Factory
             $this->createRouteFactory()
         );
     }
-
-    //***************************************************
-    // START EXCEPTION
-    //***************************************************
-
-    public function createExceptionHandler(KernelInterface $kernel): ExceptionHandler
-    {
-        return new ExceptionHandler($kernel);
-    }
-
-    //***************************************************
-    // START Logger
-    //***************************************************
 
     public function createSapiLogger(): SapiLogger
     {
