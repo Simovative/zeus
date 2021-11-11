@@ -11,7 +11,6 @@ use Simovative\Zeus\Bundle\BundleInterface;
 use Simovative\Zeus\Dependency\FrameworkFactory;
 use Simovative\Zeus\Dependency\KernelInterface;
 use Simovative\Zeus\Dependency\MasterFactory;
-use Simovative\Zeus\Exception\ExceptionHandler;
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
 use Simovative\Zeus\Http\Response\HttpResponseInterface;
 use Simovative\Zeus\State\ApplicationStateInterface;
@@ -30,11 +29,6 @@ abstract class HttpKernel implements KernelInterface
     protected $masterFactory;
 
     /**
-     * @var ExceptionHandler
-     */
-    protected $exceptionHandler;
-
-    /**
      * @var BundleInterface[]
      */
     protected $bundles;
@@ -46,17 +40,6 @@ abstract class HttpKernel implements KernelInterface
     public function __construct(MasterFactory $masterFactory)
     {
         $this->masterFactory = $masterFactory;
-        $this->initializeExceptionHandler();
-    }
-
-    /**
-     * @return void
-     * @author shartmann
-     */
-    protected function initializeExceptionHandler(): void
-    {
-        $this->exceptionHandler = $this->getMasterFactory()->createExceptionHandler($this);
-        $this->exceptionHandler->register();
     }
 
     /**
@@ -68,8 +51,6 @@ abstract class HttpKernel implements KernelInterface
     public function run(HttpRequestInterface $request, $send = true)
     {
         try {
-            $this->exceptionHandler = $this->getMasterFactory()->createExceptionHandler($this);
-            $this->exceptionHandler->register();
             $this->bundles = $this->registerBundles($request);
             foreach ($this->bundles as $bundle) {
                 $bundle->registerFactories($this->getMasterFactory());
