@@ -24,9 +24,10 @@
     "roave/security-advisories": "dev-latest"
   },
   "autoload": {
-    "psr-4": {
-      "Simovative\\Zeus\\": "src/"
-    }
+    "classmap": [
+      "src/",
+      "tests/"
+    ]
   },
   "bin": [
     "bin/zeus"
