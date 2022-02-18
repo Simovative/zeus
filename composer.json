@@ -28,23 +28,37 @@
       "Simovative\\Zeus\\": "src/"
     }
   },
+  "bin": [
+    "bin/zeus"
+  ],
   "suggest": {
     "ext-fileinfo": "Better recognition for file mime types in the file system classes.",
     "ext-libxml": "For BootstrapFormValidation",
     "ext-dom": "For BootstrapFormValidation"
   },
-  "bin": [
-    "bin/zeus"
-  ],
+  "config": {
+    "process-timeout": 600,
+    "preferred-install": {
+      "*": "dist"
+    },
+    "platform": {
+      "php": "7.4"
+    },
+    "use-include-path": true,
+    "sort-packages": true,
+    "github-protocols": [
+      "https"
+    ],
+    "allow-plugins": {
+      "phpro/grumphp": true,
+      "phpstan/phpstan": true,
+      "phpstan/extension-installer": true
+    }
+  },
   "archive": {
     "exclude": [
       "!vendor",
       "tests"
     ]
-  },
-  "config": {
-    "preferred-install": {
-      "*": "dist"
-    }
   }
 }
