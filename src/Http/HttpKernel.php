@@ -168,7 +168,7 @@ abstract class HttpKernel implements KernelInterface
      * @return BundleInterface[]
      * @author mnoerenberg
      */
-    abstract protected function registerBundles(HttpRequestInterface $request): array;
+    abstract protected function registerBundles(HttpRequestInterface $request);
 
     /**
      * If the application has no state, just return null.
@@ -180,7 +180,8 @@ abstract class HttpKernel implements KernelInterface
 
     private function createPsrRequestFromZeusRequest(HttpRequestInterface $request): ServerRequestInterface
     {
-        $serverRequestFactory = $this->getMasterFactory()->createServerRequestFactory();
-        return $serverRequestFactory->createFromZeusRequest($request);
+        return $this->getMasterFactory()
+            ->createServerRequestFactory()
+            ->createFromZeusRequest($request);
     }
 }
