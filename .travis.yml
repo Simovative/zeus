@@ -3,12 +3,6 @@ language: php
 
 jobs:
   include:
-    - php: '7.1'
-      env: PHPUNIT_EXECUTEABLE='phpunit-7.5.20.phar'
-    - php: '7.2'
-      env: PHPUNIT_EXECUTEABLE='phpunit-8.5.17.phar'
-    - php: '7.3'
-      env: PHPUNIT_EXECUTEABLE='phpunit-8.5.17.phar'
     - php: '7.4'
       env: PHPUNIT_EXECUTEABLE='phpunit-8.5.17.phar'
     - php: '8.0'

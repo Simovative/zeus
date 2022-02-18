@@ -6,59 +6,60 @@
   ],
   "homepage": "https://github.com/Simovative-gmbh/zeus",
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Benedikt Schaller",
-      "email": "benedikt.schaller@simovative.com"
-    },
-    {
-      "name": "Markus Nörenberg",
-      "email": "markus.noerenberg@simovative.com"
-    },
-    {
-      "name": "Sebastian Hartmann",
-      "email": "sebastian.hartmann@simovative.com"
-    }
-  ],
   "type": "library",
-  "autoload": {
-    "classmap": [
-      "src/",
-      "skeleton/bundles",
-      "tests/"
-    ]
-  },
   "require": {
+    "php": "^7.4",
     "ext-intl": "*",
     "ext-json": "*",
-    "guzzlehttp/guzzle": ">=6.0.0, <7.0.0",
-    "php": ">=7.1.0",
+    "guzzlehttp/guzzle": "^6.0",
     "psr/http-message": "^1.0",
     "psr/http-server-handler": "^1.0",
-    "smarty/smarty": "v3.*",
-    "symfony/debug": "<5.0.0",
-    "symfony/console": "<5.0.0"
+    "psr/http-factory": "^1.0",
+    "psr/http-server-middleware": "^1.0",
+    "smarty/smarty": "^3.1",
+    "symfony/debug": "^4.0",
+    "symfony/console": "^5.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
   },
+  "autoload": {
+    "classmap": [
+      "src/",
+      "tests/"
+    ]
+  },
+  "bin": [
+    "bin/zeus"
+  ],
   "suggest": {
     "ext-fileinfo": "Better recognition for file mime types in the file system classes.",
     "ext-libxml": "For BootstrapFormValidation",
     "ext-dom": "For BootstrapFormValidation"
   },
-  "bin": [
-    "bin/zeus"
-  ],
+  "config": {
+    "process-timeout": 600,
+    "preferred-install": {
+      "*": "dist"
+    },
+    "platform": {
+      "php": "7.4"
+    },
+    "use-include-path": true,
+    "sort-packages": true,
+    "github-protocols": [
+      "https"
+    ],
+    "allow-plugins": {
+      "phpro/grumphp": true,
+      "phpstan/phpstan": true,
+      "phpstan/extension-installer": true
+    }
+  },
   "archive": {
     "exclude": [
       "!vendor",
       "tests"
     ]
-  },
-  "config": {
-    "preferred-install": {
-      "*": "dist"
-    }
   }
 }

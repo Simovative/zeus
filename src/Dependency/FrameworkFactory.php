@@ -262,12 +262,7 @@ class FrameworkFactory extends Factory
 
     private function createSessionStorage(): NativeSessionStorage
     {
-        return new NativeSessionStorage($this->createSessionFileHandler());
-    }
-
-    private function createSessionFileHandler(): SessionFileHandler
-    {
-        return new SessionFileHandler();
+        return new NativeSessionStorage();
     }
 
     //***************************************************
