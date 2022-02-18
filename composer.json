@@ -7,23 +7,18 @@
   "homepage": "https://github.com/Simovative-gmbh/zeus",
   "license": "MIT",
   "type": "library",
-  "autoload": {
-    "classmap": [
-      "src/",
-      "skeleton/bundles",
-      "tests/"
-    ]
-  },
   "require": {
+    "php": "^7.4",
     "ext-intl": "*",
     "ext-json": "*",
-    "guzzlehttp/guzzle": ">=6.0.0, <7.0.0",
-    "php": ">=7.1.0",
+    "guzzlehttp/guzzle": "^6.0",
     "psr/http-message": "^1.0",
     "psr/http-server-handler": "^1.0",
-    "smarty/smarty": "v3.*",
-    "symfony/debug": "<5.0.0",
-    "symfony/console": "<5.0.0"
+    "psr/http-factory": "^1.0",
+    "psr/http-server-middleware": "^1.0",
+    "smarty/smarty": "^3.1",
+    "symfony/debug": "^5.0",
+    "symfony/console": "^5.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
