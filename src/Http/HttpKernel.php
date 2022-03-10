@@ -5,50 +5,77 @@ declare(strict_types=1);
 namespace Simovative\Zeus\Http;
 
 use Exception;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Simovative\Zeus\Bundle\BundleHandlerInterface;
 use Simovative\Zeus\Bundle\BundleInterface;
-use Simovative\Zeus\Dependency\FrameworkFactory;
 use Simovative\Zeus\Dependency\KernelInterface;
 use Simovative\Zeus\Dependency\MasterFactory;
+use Simovative\Zeus\Emitter\EmitterInterface;
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
 use Simovative\Zeus\Http\Response\HttpResponseInterface;
-use Simovative\Zeus\State\ApplicationStateInterface;
 
-/**
- * @author mnoerenberg
- */
 abstract class HttpKernel implements KernelInterface
 {
+    private EmitterInterface $emitter;
+    private MasterFactory $masterFactory;
 
-    private const LOG_TO_SAPI = 4;
-
-    /**
-     * @var MasterFactory
-     */
-    protected $masterFactory;
-
-    /**
-     * @var BundleInterface[]
-     */
-    protected $bundles;
-
-    /**
-     * @param MasterFactory $masterFactory
-     * @author mnoerenberg
-     */
-    public function __construct(MasterFactory $masterFactory)
-    {
+    public function __construct(
+        MasterFactory $masterFactory,
+        EmitterInterface $emitter
+    ) {
+        $this->emitter = $emitter;
         $this->masterFactory = $masterFactory;
     }
 
+    public function run(ServerRequestInterface $request, bool $send = true): ?ResponseInterface
+    {
+        $bundles = $this->getBundles($request);
+        $masterFactory = $this->registerBundleFactories($this->masterFactory, $bundles);
+
+        $pipeline = $this->buildPipeline($masterFactory, $bundles);
+
+        $psrResponse = $pipeline->handle($request);
+
+        if (! $send) {
+            return $psrResponse;
+        }
+
+        $this->emitter
+            ->emit($psrResponse);
+
+        return null;
+    }
+
+    private function registerBundleFactories(MasterFactory $masterFactory, array $bundles): MasterFactory
+    {
+        foreach ($bundles as $bundle) {
+            $bundle->registerFactories($masterFactory);
+        }
+
+        return $masterFactory;
+    }
+
     /**
-     * Entry point of the application.
+     * @param MasterFactory $masterFactory
+     * @param BundleInterface[] $bundles
      *
-     * @author mnoerenberg
-     * @inheritdoc
+     * @return RequestHandlerInterface
      */
-    public function run(HttpRequestInterface $request, $send = true)
+    abstract protected function buildPipeline(MasterFactory $masterFactory, array $bundles): RequestHandlerInterface;
+
+    /**
+     * @param ServerRequestInterface $request
+     *
+     * @return BundleInterface[]
+     */
+    abstract protected function getBundles(ServerRequestInterface $request): array;
+
+
+
+
+    public function runOld(HttpRequestInterface $request, $send = true)
     {
         try {
             $this->bundles = $this->registerBundles($request);
@@ -129,59 +156,5 @@ abstract class HttpKernel implements KernelInterface
             }
         }
         return $response;
-    }
-
-    /**
-     * @author Benedikt Schaller
-     * @inheritdoc
-     */
-    public function report($throwable, HttpRequestInterface $request = null)
-    {
-        $message = sprintf(
-            'Error %s on line "%s" in file "%s": %s',
-            $throwable->getCode(),
-            $throwable->getLine(),
-            $throwable->getFile(),
-            $throwable->getMessage()
-        );
-        if ($request !== null) {
-            // Cast is needed, even if your ide tells you it is not!
-            $message .= ' - Request-Url: ' . (string)$request->getUrl();
-        }
-        error_log($message, self::LOG_TO_SAPI);
-        return $message;
-    }
-
-    /**
-     * @return MasterFactory|FrameworkFactory
-     * @author shartmann
-     */
-    protected function getMasterFactory()
-    {
-        return $this->masterFactory;
-    }
-
-    /**
-     * Returns installed Bundles.
-     *
-     * @param HttpRequestInterface $request
-     * @return BundleInterface[]
-     * @author mnoerenberg
-     */
-    abstract protected function registerBundles(HttpRequestInterface $request);
-
-    /**
-     * If the application has no state, just return null.
-     *
-     * @return ApplicationStateInterface|null
-     * @author Benedikt Schaller
-     */
-    abstract protected function getApplicationState(): ?ApplicationStateInterface;
-
-    private function createPsrRequestFromZeusRequest(HttpRequestInterface $request): ServerRequestInterface
-    {
-        return $this->getMasterFactory()
-            ->createServerRequestFactory()
-            ->createFromZeusRequest($request);
     }
 }

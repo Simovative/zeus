@@ -10,7 +10,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
     public function createFromZeusRequest(HttpRequestInterface $request): ServerRequest
     {
-        $psrRequest = ServerRequest::fromGlobals();
+        return ServerRequest::fromGlobals();
         return $psrRequest->withUri($request->getUrl());
     }
 }

@@ -36,6 +36,8 @@ use Simovative\Zeus\Intl\IntlFormatter;
 use Simovative\Zeus\Intl\IntlFormatterInterface;
 use Simovative\Zeus\Intl\IntlSettings;
 use Simovative\Zeus\Logger\SapiLogger;
+use Simovative\Zeus\RequestHandler\Pipeline\Pipeline;
+use Simovative\Zeus\RequestHandler\Pipeline\PipelineInterface;
 use Simovative\Zeus\Session\Session;
 use Simovative\Zeus\Session\SessionInterface;
 use Simovative\Zeus\Session\Storage\Handler\SessionFileHandler;
@@ -103,6 +105,12 @@ class FrameworkFactory extends Factory
     public function createEmitter(): EmitterInterface
     {
         return new Emitter();
+    }
+
+
+    public function createPipeline(): PipelineInterface
+    {
+        return new Pipeline();
     }
 
     public function getHttpResponseLocator(): HttpResponseLocatorInterface
