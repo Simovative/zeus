@@ -19,7 +19,7 @@ class HttpResponseJson extends HttpResponse {
 	 */
 	public function __construct(Json $json) {
 		$this->json = $json;
-		$this->addHeader('Content-Type', 'application/json');
+		$this->addHeader('Content-Type: application/json');
 	}
 	
 	/**
