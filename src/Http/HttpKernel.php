@@ -18,20 +18,21 @@ use Simovative\Zeus\Http\Response\HttpResponseInterface;
 
 abstract class HttpKernel implements KernelInterface
 {
-    private EmitterInterface $emitter;
+    public const REQUEST_ATTRIBUTE_BUNDLES = '_bundles';
+
     private MasterFactory $masterFactory;
 
     public function __construct(
-        MasterFactory $masterFactory,
-        EmitterInterface $emitter
+        MasterFactory $masterFactory
     ) {
-        $this->emitter = $emitter;
         $this->masterFactory = $masterFactory;
     }
 
     public function run(ServerRequestInterface $request, bool $send = true): ?ResponseInterface
     {
         $bundles = $this->getBundles($request);
+        $request = $request->withAttribute(self::REQUEST_ATTRIBUTE_BUNDLES, $bundles);
+
         $masterFactory = $this->registerBundleFactories($this->masterFactory, $bundles);
 
         $pipeline = $this->buildPipeline($masterFactory, $bundles);
@@ -42,9 +43,7 @@ abstract class HttpKernel implements KernelInterface
             return $psrResponse;
         }
 
-        $this->emitter
-            ->emit($psrResponse);
-
+        $this->masterFactory->createEmitter()->emit($psrResponse);
         return null;
     }
 

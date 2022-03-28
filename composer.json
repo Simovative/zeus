@@ -11,6 +11,7 @@
     "php": "^7.4",
     "ext-intl": "*",
     "ext-json": "*",
+    "fig/http-message-util": "^1.1",
     "guzzlehttp/guzzle": "^6.0",
     "psr/http-message": "^1.0",
     "psr/http-server-handler": "^1.0",
