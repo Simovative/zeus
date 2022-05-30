@@ -2,8 +2,8 @@
 
 namespace Simovative\Zeus\Http\Request;
 
-use LogicException;
 use Simovative\Zeus\Dependency\FrameworkFactory;
+use Simovative\Zeus\Exception\RequestMethodNotAllowedException;
 use Simovative\Zeus\Http\Routing\RouteInterface;
 
 /**
@@ -38,6 +38,6 @@ class HttpRequestDispatcherLocator implements HttpRequestDispatcherLocatorInterf
             return $this->frameworkFactory->createHandlerDispatcher();
         }
 
-        throw new LogicException('request method not allowed.');
+        throw new RequestMethodNotAllowedException();
     }
 }
