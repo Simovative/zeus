@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Simovative\Zeus\Http;
 
-use LogicException;
 use Simovative\Zeus\Dependency\Factory;
+use Simovative\Zeus\Exception\RequestMethodNotAllowedException;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
 use Simovative\Zeus\Http\Post\UploadedFile;
@@ -25,7 +25,7 @@ class HttpRequestFactory extends Factory {
 	/**
 	 * @author Benedikt Schaller
 	 * @return HttpRequestInterface
-	 * @throws LogicException
+	 * @throws RequestMethodNotAllowedException
 	 * @throws Json\JsonEncodingException
 	 */
 	public function createRequestFromGlobals() {
@@ -48,7 +48,7 @@ class HttpRequestFactory extends Factory {
 				return new HttpHeadRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
 		}
 		
-		throw new LogicException('request method not allowed.');
+		throw new RequestMethodNotAllowedException();
 	}
 	
 	/**
