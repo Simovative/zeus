@@ -32,15 +32,16 @@
     "ext-intl": "*",
     "ext-json": "*",
     "guzzlehttp/guzzle": ">=6.0.0, <7.0.0",
-    "php": ">=7.1.0",
+    "php": "^7.4 || ^8.0",
     "psr/http-message": "^1.0",
     "psr/http-server-handler": "^1.0",
-    "smarty/smarty": "v3.*",
+    "smarty/smarty": "^4.2",
     "symfony/debug": "<5.0.0",
     "symfony/console": "<5.0.0"
   },
   "require-dev": {
-    "roave/security-advisories": "dev-latest"
+    "roave/security-advisories": "dev-latest",
+    "phpunit/phpunit": "^9.5"
   },
   "suggest": {
     "ext-fileinfo": "Better recognition for file mime types in the file system classes.",

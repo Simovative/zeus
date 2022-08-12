@@ -1,10 +1,10 @@
-version: "3.7"
+version: "3.9"
 services:
   php-cli:
     build: .
     volumes:
-    - ./bin:/usr/src/myapp/bin
-    - ./build:/usr/src/myapp/build
-    - ./skeleton:/usr/src/myapp/skeleton
-    - ./src:/usr/src/myapp/src
-    - ./tests:/usr/src/myapp/tests
+      - source: .
+        type: bind
+        target: /usr/src/myapp
+    tty: true
+    working_dir: /usr/src/myapp
