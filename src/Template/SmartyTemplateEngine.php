@@ -43,10 +43,6 @@ class SmartyTemplateEngine implements TemplateEngineInterface {
 		IntlDateTimeConverter $intlDateTimeConverter = null
 	) {
 		$this->smarty = $smarty;
-		
-		// http://www.smarty.net/forums/viewtopic.php?t=21352&sid=88c6bbab5fb1fd84d3e4f18857d3d10e
-		$this->smarty->muteExpectedErrors();
-		
 		// template dirs
 		foreach ($templateDirectories as $index => $path) {
 			$this->smarty->addTemplateDir($path);
