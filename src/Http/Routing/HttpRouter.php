@@ -50,7 +50,7 @@ class HttpRouter implements HttpRouterInterface
      */
     public function route(HttpRequestInterface $request, ServerRequestInterface $psrRequest): RouteInterface
     {
-        if ($request->isGet() || $request->isHead()) {
+        if ($request->isGet() || $request->isHead() || $request->isOption()) {
             $content = $this->getRequestRouterChain->route($request);
             if ($content !== null) {
                 return $this->routeFactory->createGetRoute($request, $content);

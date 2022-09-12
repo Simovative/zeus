@@ -10,6 +10,7 @@ use Simovative\Test\Integration\TestBundle\TestKernel;
 use Simovative\Zeus\Configuration\Configuration;
 use Simovative\Zeus\Dependency\MasterFactory;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
+use Simovative\Zeus\Http\Get\HttpOptionRequest;
 use Simovative\Zeus\Http\HttpDeleteRequest;
 use Simovative\Zeus\Http\HttpHeadRequest;
 use Simovative\Zeus\Http\HttpPatchRequest;
@@ -96,6 +97,25 @@ class ExampleKernelTest extends TestCase
     public function testThatSuccessfulHeaderRequestIsDispatched()
     {
         $request = new HttpHeadRequest(new Url('/test'), [], [], null);
+        $response = $this->kernel->run($request, false);
+        $content = '';
+        if ($response instanceof HttpTestResponse) {
+            $content = $response->getContent()->render();
+        }
+        self::assertStringContainsString(
+            'Welcome to your home page',
+            $content,
+            'Expected string of test template is not contained in output of /test page'
+        );
+    }
+
+    /**
+     * @author Benedikt Schaller
+     * @return void
+     */
+    public function testThatSuccessfulOptionRequestIsDispatched()
+    {
+        $request = new HttpOptionRequest(new Url('/test'), [], [], null);
         $response = $this->kernel->run($request, false);
         $content = '';
         if ($response instanceof HttpTestResponse) {
