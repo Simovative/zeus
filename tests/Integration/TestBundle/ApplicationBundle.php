@@ -114,6 +114,15 @@ class ApplicationBundle extends Bundle implements BundleHandlerInterface {
 	public function registerHeadRouters(HttpGetRequestRouterChain $router) {
 		$router->register($this->applicationFactory->createTestGetRequestRouter());
 	}
+
+    /**
+     * @author Benedikt Schaller
+     * @param HttpGetRequestRouterChain $router
+     * @return void
+     */
+    public function registerOptionRouters(HttpGetRequestRouterChain $router): void {
+        $router->register($this->applicationFactory->createTestGetRequestRouter());
+    }
 	
 	/**
 	 * @author Benedikt Schaller

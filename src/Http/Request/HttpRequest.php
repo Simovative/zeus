@@ -128,6 +128,13 @@ abstract class HttpRequest implements HttpRequestInterface {
 	public function isHead() {
 		return false;
 	}
+
+    /**
+     * @inheritdoc
+     */
+    public function isOption(): bool {
+        return false;
+    }
 	
 	/**
 	 * @author Benedikt Schaller

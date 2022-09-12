@@ -90,6 +90,11 @@ interface HttpRequestInterface {
 	 * @return boolean
 	 */
 	public function isHead();
+
+    /**
+     * Returns if we have an option request.
+     */
+    public function isOption(): bool;
 	
 	/**
 	 * Retrieve any parameters provided in the request body.
