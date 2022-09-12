@@ -37,7 +37,7 @@
     "psr/http-server-handler": "^1.0",
     "smarty/smarty": ">=3.0.0",
     "symfony/debug": "<5.0.0",
-    "symfony/console": "<5.0.0"
+    "symfony/console": "<6.0.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
