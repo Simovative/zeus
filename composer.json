@@ -35,7 +35,7 @@
     "php": "^7.4 || ^8.0",
     "psr/http-message": "^1.0",
     "psr/http-server-handler": "^1.0",
-    "smarty/smarty": "^4.2",
+    "smarty/smarty": ">=3.0.0",
     "symfony/debug": "<5.0.0",
     "symfony/console": "<5.0.0"
   },
