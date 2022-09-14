@@ -6,7 +6,7 @@ namespace Simovative\Zeus\Http;
 use Simovative\Zeus\Dependency\Factory;
 use Simovative\Zeus\Exception\RequestMethodNotAllowedException;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
-use Simovative\Zeus\Http\Get\HttpOptionsRequest;
+use Simovative\Zeus\Http\Options\HttpOptionsRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
 use Simovative\Zeus\Http\Post\UploadedFile;
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
