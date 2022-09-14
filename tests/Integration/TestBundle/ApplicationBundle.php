@@ -13,10 +13,7 @@ use Simovative\Zeus\Http\Get\HttpGetRequestRouterChain;
  */
 class ApplicationBundle extends Bundle implements BundleHandlerInterface {
 	
-	/**
-	 * @var ApplicationFactory
-	 */
-	private $applicationFactory;
+	private ApplicationFactory $applicationFactory;
 	
 	/**
 	 * @author Benedikt Schaller
@@ -171,5 +168,10 @@ class ApplicationBundle extends Bundle implements BundleHandlerInterface {
      */
     public function registerDeleteHandlerRouters(HandlerRouterChainInterface $routerChain): void
     {
+    }
+
+    public function registerOptionsHandlerRouters(HandlerRouterChainInterface $routerChain): void
+    {
+        $routerChain->register($this->applicationFactory->createTestHandlerRequestRouter());
     }
 }

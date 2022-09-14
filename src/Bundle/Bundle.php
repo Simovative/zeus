@@ -49,8 +49,6 @@ abstract class Bundle implements BundleInterface {
 	 */
 	public function registerGetRouters(HttpGetRequestRouterChain $router) {}
 
-    public function registerOptionRouters(HttpGetRequestRouterChain $router): void {}
-
     /**
 	 * @inheritdoc
 	 * @author mnoerenberg

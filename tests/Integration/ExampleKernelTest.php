@@ -2,7 +2,6 @@
 
 namespace Simovative\Zeus\Tests\Integration;
 
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Simovative\Test\Integration\TestBundle\HttpTestResponse;
 use Simovative\Test\Integration\TestBundle\Routing\TestBundleController;
@@ -10,11 +9,11 @@ use Simovative\Test\Integration\TestBundle\TestKernel;
 use Simovative\Zeus\Configuration\Configuration;
 use Simovative\Zeus\Dependency\MasterFactory;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
-use Simovative\Zeus\Http\Get\HttpOptionRequest;
 use Simovative\Zeus\Http\HttpDeleteRequest;
 use Simovative\Zeus\Http\HttpHeadRequest;
 use Simovative\Zeus\Http\HttpPatchRequest;
 use Simovative\Zeus\Http\HttpPutRequest;
+use Simovative\Zeus\Http\Options\HttpOptionsRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
 use Simovative\Zeus\Http\Url\Url;
 
@@ -113,25 +112,6 @@ class ExampleKernelTest extends TestCase
      * @author Benedikt Schaller
      * @return void
      */
-    public function testThatSuccessfulOptionRequestIsDispatched()
-    {
-        $request = new HttpOptionRequest(new Url('/test'), [], [], null);
-        $response = $this->kernel->run($request, false);
-        $content = '';
-        if ($response instanceof HttpTestResponse) {
-            $content = $response->getContent()->render();
-        }
-        self::assertStringContainsString(
-            'Welcome to your home page',
-            $content,
-            'Expected string of test template is not contained in output of /test page'
-        );
-    }
-
-    /**
-     * @author Benedikt Schaller
-     * @return void
-     */
     public function testThatSuccessfulPutRequestReturnsRedirect()
     {
         $request = new HttpPutRequest(new Url('/test'), [], [], null);
@@ -209,19 +189,28 @@ class ExampleKernelTest extends TestCase
 
     /**
      * @author Benedikt Schaller
-     * @return void
      */
-    public function testThatHandlerRequestIsDispatched(): void
+    public function testThatPatchHandlerRequestIsDispatched(): void
     {
         $request = new HttpPatchRequest(new Url('/handler'), [], [], null);
         $response = $this->kernel->run($request, false);
-        $content = '';
-        if ($response instanceof Response) {
-            $content = (string)$response->getBody();
-        }
         self::assertStringContainsString(
             'Welcome to your handler',
-            $content,
+            $response->getBody()->getContents(),
+            'Expected string of "Welcome to your handler"  is not contained in output of /handler page'
+        );
+    }
+
+    /**
+     * @author Benedikt Schaller
+     */
+    public function testThatOptionsHandlerRequestIsDispatched(): void
+    {
+        $request = new HttpOptionsRequest(new Url('/handler'), [], [], null);
+        $response = $this->kernel->run($request, false);
+        self::assertStringContainsString(
+            'Welcome to your handler',
+            $response->getBody()->getContents(),
             'Expected string of "Welcome to your handler"  is not contained in output of /handler page'
         );
     }

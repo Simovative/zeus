@@ -6,7 +6,7 @@ namespace Simovative\Zeus\Http;
 use Simovative\Zeus\Dependency\Factory;
 use Simovative\Zeus\Exception\RequestMethodNotAllowedException;
 use Simovative\Zeus\Http\Get\HttpGetRequest;
-use Simovative\Zeus\Http\Get\HttpOptionRequest;
+use Simovative\Zeus\Http\Get\HttpOptionsRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
 use Simovative\Zeus\Http\Post\UploadedFile;
 use Simovative\Zeus\Http\Request\HttpRequestInterface;
@@ -47,8 +47,8 @@ class HttpRequestFactory extends Factory {
 				return new HttpDeleteRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
 			case 'HEAD':
 				return new HttpHeadRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
-            case 'OPTION':
-                return new HttpOptionRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
+            case 'OPTIONS':
+                return new HttpOptionsRequest($currentUrl, $_REQUEST, $_SERVER, $parsedBody);
 		}
 		
 		throw new RequestMethodNotAllowedException();
