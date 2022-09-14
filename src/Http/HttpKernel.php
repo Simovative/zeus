@@ -104,7 +104,10 @@ abstract class HttpKernel implements KernelInterface
                     $bundle->registerHeadRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
                 }
                 if ($request->isOption()) {
-                    $bundle->registerOptionRouters($this->getMasterFactory()->getHttpGetRequestRouterChain());
+                    /** @noinspection NestedPositiveIfStatementsInspection */
+                    if ($bundle instanceof BundleHandlerInterface) {
+                        $bundle->registerOptionsHandlerRouters($this->getMasterFactory()->getHandlerRouterChain());
+                    }
                 }
             }
 

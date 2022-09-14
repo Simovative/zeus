@@ -47,8 +47,6 @@ interface BundleInterface {
 	 */
 	public function registerHeadRouters(HttpGetRequestRouterChain $router);
 
-    public function registerOptionRouters(HttpGetRequestRouterChain $router): void;
-	
 	/**
 	 * Method to register bundle controller at the main application controller.
 	 * Can be used for all post, put, patch and delete methods.

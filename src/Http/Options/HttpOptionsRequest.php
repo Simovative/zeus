@@ -1,9 +1,9 @@
 <?php
-namespace Simovative\Zeus\Http\Get;
+namespace Simovative\Zeus\Http\Options;
 
 use Simovative\Zeus\Http\Request\HttpRequest;
 
-class HttpOptionRequest extends HttpRequest {
+class HttpOptionsRequest extends HttpRequest {
 	
 	/**
 	 * @inheritdoc
