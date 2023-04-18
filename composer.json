@@ -31,7 +31,7 @@
   "require": {
     "ext-intl": "*",
     "ext-json": "*",
-    "guzzlehttp/guzzle": ">=6.0.0, <7.0.0",
+    "guzzlehttp/guzzle": ">=6.0.0, <8.0.0",
     "php": "^7.4 || ^8.0",
     "psr/http-message": "^1.0",
     "psr/http-server-handler": "^1.0",
