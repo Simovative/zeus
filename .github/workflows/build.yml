@@ -24,11 +24,11 @@ jobs:
           args: --coverage-text --coverage-clover 'tests/results/clover.xml' --coverage-html 'tests/results/html'
         env:
           XDEBUG_MODE: coverage
-      - name: Commit to clover
-        uses: emibcn/clover-coverage-badges-action@v1
-        with:
-          coverage-summary-path: tests/results/clover.xml
-          #protected-branches: '["master",  "develop"]'
+#      - name: Commit to clover
+#        uses: emibcn/clover-coverage-badges-action@v1
+#        with:
+#          coverage-summary-path: tests/results/clover.xml
+#          #protected-branches: '["master",  "develop"]'
       - name: Run SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
         env:
