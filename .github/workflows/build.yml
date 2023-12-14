@@ -1,0 +1,48 @@
+name: Build Zeus Framework and run tests
+run-name: ${{ github.actor }} is testing Zeus on GitHub Actions 🚀
+on: [push]
+jobs:
+  build-and-test:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: composer install --no-interaction
+#      - name: Run tests
+#        run: php "build/phpunit-9.5.6.phar" --configuration tests/phpunit.xml
+      - name: PHPUnit tests
+        uses: php-actions/phpunit@v3
+        with:
+          version: '9.5.6'
+          php-version: '7.4'
+          php_extensions: "xdebug intl" #pcov
+          configuration: tests/phpunit.xml
+          coverage_clover: "coverage/clover.xml"
+          coverage_html: "coverage/html"
+      - name: Commit to clover
+        uses: emibcn/clover-coverage-badges-action@v1
+        with:
+          coverage-clover-path: coverage/clover.xml
+          #protected-branches: '["master",  "develop"]'
+      - name: Run SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
