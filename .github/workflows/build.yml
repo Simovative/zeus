@@ -19,12 +19,15 @@ jobs:
           php_version: '8.1'
           php_extensions: "xdebug intl" #pcov
           configuration: tests/phpunit.xml
-          coverage_clover: "coverage/clover.xml"
-          coverage_html: "coverage/html"
+          coverage_clover: "tests/results/clover.xml"
+          coverage_html: "tests/results/html"
+          args: --coverage-text --coverage-clover 'tests/results/clover.xml' --coverage-html 'tests/results/html'
+        env:
+          XDEBUG_MODE: coverage
       - name: Commit to clover
         uses: emibcn/clover-coverage-badges-action@v1
         with:
-          coverage-summary-path: coverage/clover.xml
+          coverage-summary-path: tests/results/clover.xml
           #protected-branches: '["master",  "develop"]'
       - name: Run SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
