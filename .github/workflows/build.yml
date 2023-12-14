@@ -24,7 +24,7 @@ jobs:
       - name: Commit to clover
         uses: emibcn/clover-coverage-badges-action@v1
         with:
-          coverage-clover-path: coverage/clover.xml
+          coverage-summary-path: coverage/clover.xml
           #protected-branches: '["master",  "develop"]'
       - name: Run SonarCloud
         uses: sonarsource/sonarcloud-github-action@master

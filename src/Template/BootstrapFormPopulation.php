@@ -4,6 +4,7 @@ namespace Simovative\Zeus\Template;
 
 use DOMDocument;
 use DOMElement;
+use DOMException;
 use DOMXPath;
 use Simovative\Zeus\Command\CommandValidationResult;
 
@@ -21,7 +22,7 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	/**
 	 * @var bool
 	 */
-	private $isSuccessFeedbackPopulated;
+	private bool $isSuccessFeedbackPopulated;
 	
 	/**
 	 * @author Benedikt Schaller
@@ -30,12 +31,14 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	public function __construct(bool $isSuccessFeedbackPopulated) {
 		$this->isSuccessFeedbackPopulated = $isSuccessFeedbackPopulated;
 	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @inheritdoc
-	 */
-	public function populate($html, CommandValidationResult $validationResult) {
+
+    /**
+     * @author Benedikt Schaller
+     * @inheritdoc
+     * @throws DOMException
+     */
+	public function populate($html, CommandValidationResult $validationResult): string
+    {
 		libxml_use_internal_errors(true);
 		$domDocument = new DOMDocument();
 		$domDocument->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8"));
@@ -74,12 +77,14 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * @param string $originalHtml
 	 * @return string
 	 */
-	private function getHtml(DOMDocument $document, $originalHtml) {
+	private function getHtml(DOMDocument $document, string $originalHtml): string
+    {
 		$html = $document->saveHTML();
 		
-		$strPos = mb_strpos($originalHtml, '<html', null, 'UTF-8');
+		$strPos = mb_strpos($originalHtml, '<html', 0, 'UTF-8');
 		if ($strPos === false) {
-			$html = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace( array('<html>', '</html>', '<body>', '</body>'), array('', '', '', ''), $html));
+            /** @noinspection HtmlRequiredLangAttribute */
+            $html = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace(['<html>', '</html>', '<body>', '</body>'], ['', '', '', ''], $html));
 		}
 		return $html;
 	}
@@ -93,7 +98,8 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * @param mixed $fieldValue
 	 * @return void
 	 */
-	private function populateTextFieldValue(DOMDocument $document, $fieldName, $fieldValue) {
+	private function populateTextFieldValue(DOMDocument $document, string $fieldName, $fieldValue): void
+    {
 		$xpath = new DOMXPath($document);
 		$inputs = $xpath->query('//input[@name="' . $fieldName . '"]');
 		foreach ($inputs as $input) {
@@ -114,7 +120,8 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * @param mixed $fieldValue
 	 * @return void
 	 */
-	private function populateTextareaFieldValue(DOMDocument $document, $fieldName, $fieldValue) {
+	private function populateTextareaFieldValue(DOMDocument $document, string $fieldName, $fieldValue): void
+    {
 		$xpath = new DOMXPath($document);
 		$areas = $xpath->query('//textarea[@name="' . $fieldName . '"]');
 		
@@ -133,7 +140,8 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * @param mixed $fieldValue
 	 * @return void
 	 */
-	private function populateSelectFieldValue(DOMDocument $document, $fieldName, $fieldValue) {
+	private function populateSelectFieldValue(DOMDocument $document, string $fieldName, $fieldValue): void
+    {
 		if (is_array($fieldValue)) {
 			$fieldName .= '[]';
 		} else {
@@ -162,7 +170,8 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * @param mixed $fieldValue
 	 * @return void
 	 */
-	private function populateCheckboxFieldValue(DOMDocument $document, $fieldName, $fieldValue) {
+	private function populateCheckboxFieldValue(DOMDocument $document, string $fieldName, $fieldValue): void
+    {
 		if (is_array($fieldValue)) {
 			$fieldName .= '[]';
 		} else {
@@ -177,17 +186,19 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 			}
 		}
 	}
-	
-	/**
-	 * Populates a the message to a field with the given name.
-	 *
-	 * @author mnoerenberg
-	 * @param DOMDocument $document
-	 * @param string $fieldName
-	 * @param string $textMessage
-	 * @return void
-	 */
-	public function populateErrorFeedback(DOMDocument $document, $fieldName, $textMessage) {
+
+    /**
+     * Populates a message to a field with the given name.
+     *
+     * @author mnoerenberg
+     * @param DOMDocument $document
+     * @param string $fieldName
+     * @param string $textMessage
+     * @return void
+     * @throws DOMException
+     */
+	public function populateErrorFeedback(DOMDocument $document, string $fieldName, string $textMessage): void
+    {
 		$xpath = new DOMXPath($document);
 		$inputs = $xpath->query('//input[@name="' . $fieldName . '"]');
 		$selects = $xpath->query('//select[@name="' . $fieldName . '"]');
@@ -208,22 +219,30 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 			}
 		}
 	}
-	
-	/**
-	 * @author Benedikt Schaller
-	 * @param DOMDocument $document
-	 * @param string $textMessage
-	 * @param DOMElement $field
-	 * @return void
-	 */
+
+    /**
+     * @author Benedikt Schaller
+     * @param DOMDocument $document
+     * @param string $textMessage
+     * @param DOMElement $field
+     * @return void
+     * @throws DOMException
+     */
 	private function assignTextMessage(DOMDocument $document, string $textMessage, DOMElement $field): void {
 		$helpText = $document->createElement("p", $textMessage);
 		$helpText->setAttribute(self::ATTRIBUTE_CLASS, 'help-block');
 		
 		$parentField = $field->parentNode;
-		if (strpos($parentField->getAttribute(self::ATTRIBUTE_CLASS), 'input-group') !== false) {
-			$parentField = $field->parentNode->parentNode;
-		}
+        if (
+            $parentField instanceof DOMElement
+            && strpos(
+                $parentField->getAttribute(self::ATTRIBUTE_CLASS),
+                'input-group'
+            ) !== false
+        ) {
+            $parentField = $field->parentNode->parentNode;
+        }
+
 		
 		$parentField->appendChild($helpText);
 	}
@@ -233,15 +252,23 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * @param DOMElement $field
 	 * @return DOMElement|null
 	 */
-	private function findFormGroup(DOMElement $field) {
+	private function findFormGroup(DOMElement $field): ?DOMElement
+    {
 		$formGroup = $field->parentNode;
-		if (strpos($formGroup->getAttribute(self::ATTRIBUTE_CLASS), self::CSS_CLASS_FORM_GROUP) === false) {
-			$formGroup = $field->parentNode->parentNode;
-			if (strpos($formGroup->getAttribute(self::ATTRIBUTE_CLASS), self::CSS_CLASS_FORM_GROUP) === false) {
-				$formGroup = $field->parentNode->parentNode->parentNode;
-			}
+		if ($formGroup instanceof DOMElement) {
+            if (strpos($formGroup->getAttribute(self::ATTRIBUTE_CLASS), self::CSS_CLASS_FORM_GROUP) === false) {
+                $parentFormGroup = $field->parentNode->parentNode;
+                if ($parentFormGroup instanceof DOMElement && strpos($parentFormGroup->getAttribute(self::ATTRIBUTE_CLASS), self::CSS_CLASS_FORM_GROUP) === false) {
+                    $parentParentFormGroup = $field->parentNode->parentNode->parentNode;
+                    if ($parentParentFormGroup instanceof DOMElement) {
+                        return $parentParentFormGroup;
+                    }
+                }
+            }
+
+            return $formGroup;
 		}
-		return $formGroup;
+		return null;
 	}
 	
 	/**
@@ -251,7 +278,8 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * @param DOMDocument $document
 	 * @return void
 	 */
-	private function populateSuccessFeedback(DOMDocument $document) {
+	private function populateSuccessFeedback(DOMDocument $document): void
+    {
 		$xpath = new DOMXPath($document);
 		$inputs = $xpath->query("//form//input");
 		$selects = $xpath->query('//form//select');
@@ -269,7 +297,8 @@ class BootstrapFormPopulation implements FormPopulationInterface {
 	 * @param DOMElement $field
 	 * @return void
 	 */
-	private function assignSuccessClass(DOMElement $field) {
+	private function assignSuccessClass(DOMElement $field): void
+    {
 		$formGroup = $this->findFormGroup($field);
 		if ($formGroup === null) {
 			return;
