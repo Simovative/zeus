@@ -9,7 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: composer install --no-interaction
+        run: composer install --no-interaction --no-dev --prefer-dist
 #      - name: Run tests
 #        run: php "build/phpunit-9.5.6.phar" --configuration tests/phpunit.xml
       - name: PHPUnit tests
