@@ -29,11 +29,11 @@ jobs:
 #        with:
 #          coverage-summary-path: tests/results/clover.xml
 #          #protected-branches: '["master",  "develop"]'
-      - name: Run SonarCloud
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#      - name: Run SonarCloud
+#        uses: sonarsource/sonarcloud-github-action@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 #  demo:
 #    runs-on: ubuntu-latest
 #    steps:
