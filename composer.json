@@ -41,7 +41,6 @@
     "roave/security-advisories": "dev-latest"
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.5"
   },
   "suggest": {
     "ext-fileinfo": "Better recognition for file mime types in the file system classes.",
