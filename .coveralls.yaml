@@ -1,3 +1,4 @@
 service_name: github-actions
 coverage_clover: tests/results/clover.xml
-json_path: tests/results/coveralls-upload.json
+json_path: tests/coveralls-upload.json
+root_dir: .
