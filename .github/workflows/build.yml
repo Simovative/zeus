@@ -36,8 +36,16 @@ jobs:
           args: --coverage-text --coverage-clover 'tests/results/clover.xml' --coverage-html 'tests/results/html'
         env:
           XDEBUG_MODE: coverage
+      - name: List files in tests/results
+        run: |
+          ls -lah ${{ github.workspace }}/tests/results/
+      - name: List files in the repository
+        run: |
+          ls -lah ${{ github.workspace }}
+#      - name: Coveralls
+#        uses: coverallsapp/github-action@v2
       - name: Coveralls
-        uses: coverallsapp/github-action@v2
+        run: php build/php-coveralls.phar -v -c ${{ github.workspace }}/coveralls.yaml
 #      - name: Commit to clover
 #        uses: emibcn/clover-coverage-badges-action@v1
 #        with:
