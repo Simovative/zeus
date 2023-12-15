@@ -44,14 +44,14 @@ jobs:
           ls -lah ${{ github.workspace }}
 #      - name: Coveralls
 #        uses: coverallsapp/github-action@v2
-#      - name: Coveralls
-#        run: php build/php-coveralls.phar -v -c ${{ github.workspace }}/.coveralls.yaml
-      - name: Upload coverage results to Coveralls
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          composer global require php-coveralls/php-coveralls
-          php vendor/bin/php-coveralls --coverage_clover=tests/results/clover.xml --json_path=tests/results/coveralls-upload.json -v
+      - name: Coveralls
+        run: php build/php-coveralls.phar -v --coverage_clover=tests/results/clover.xml --json_path=tests/results/coveralls-upload.json
+#      - name: Upload coverage results to Coveralls
+#        env:
+#          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: |
+#          composer global require php-coveralls/php-coveralls
+#          php vendor/bin/php-coveralls --coverage_clover=tests/results/clover.xml --json_path=tests/results/coveralls-upload.json -v
 #      - name: Commit to clover
 #        uses: emibcn/clover-coverage-badges-action@v1
 #        with:
