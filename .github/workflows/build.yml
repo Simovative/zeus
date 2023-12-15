@@ -45,7 +45,7 @@ jobs:
 #      - name: Coveralls
 #        uses: coverallsapp/github-action@v2
       - name: Coveralls
-        run: php build/php-coveralls.phar -v --coverage_clover=tests/results/clover.xml
+        run: php build/php-coveralls.phar -v --coverage_clover=tests/results/clover.xml --json_path=tests/coveralls-upload.json
 #      - name: Run SonarCloud
 #        uses: sonarsource/sonarcloud-github-action@master
 #        env:
