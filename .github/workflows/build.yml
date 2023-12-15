@@ -45,7 +45,7 @@ jobs:
 #      - name: Coveralls
 #        uses: coverallsapp/github-action@v2
       - name: Coveralls
-        run: php build/php-coveralls.phar -v -c .coveralls.yaml
+        run: php build/php-coveralls.phar -v -c .coveralls.yaml --root_dir ${{ github.workspace }}
 #      - name: Run SonarCloud
 #        uses: sonarsource/sonarcloud-github-action@master
 #        env:
