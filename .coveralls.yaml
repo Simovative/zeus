@@ -1,5 +1,4 @@
 service_name: github-actions
 coverage_clover: tests/results/clover.xml
 json_path: tests/coveralls-upload.json
-source_files:
-  - src
+
