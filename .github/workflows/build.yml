@@ -10,8 +10,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependencies
         run: composer install --no-interaction --no-dev --prefer-dist
-#      - name: Run tests
-#        run: php "build/phpunit-9.5.6.phar" --configuration tests/phpunit.xml
       - name: Run tests with php8.1
         uses: php-actions/phpunit@v3
         with:
