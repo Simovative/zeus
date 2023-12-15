@@ -21,7 +21,7 @@ jobs:
           configuration: tests/phpunit.xml
           coverage_clover: "tests/results/clover.xml"
           coverage_html: "tests/results/html"
-          args: --coverage-text --coverage-clover 'tests/results/clover.xml' --coverage-html 'tests/results/html'
+          args: --coverage-text --coverage-clover tests/results/clover.xml --coverage-html tests/results/html
         env:
           XDEBUG_MODE: coverage
       - name: Run tests with php8.2
@@ -33,7 +33,7 @@ jobs:
           configuration: tests/phpunit.xml
           coverage_clover: "tests/results/clover.xml"
           coverage_html: "tests/results/html"
-          args: --coverage-text --coverage-clover 'tests/results/clover.xml' --coverage-html 'tests/results/html'
+          args: --coverage-text --coverage-clover tests/results/clover.xml --coverage-html tests/results/html
         env:
           XDEBUG_MODE: coverage
       - name: List files in tests/results
@@ -45,7 +45,7 @@ jobs:
 #      - name: Coveralls
 #        uses: coverallsapp/github-action@v2
       - name: Coveralls
-        run: php build/php-coveralls.phar -v -c ${{ github.workspace }}/coveralls.yaml
+        run: php build/php-coveralls.phar -v -c ${{ github.workspace }}/.coveralls.yaml
 #      - name: Commit to clover
 #        uses: emibcn/clover-coverage-badges-action@v1
 #        with:
