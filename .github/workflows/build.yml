@@ -10,11 +10,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependencies
         run: composer install --no-interaction --no-dev --prefer-dist
-      - name: Run tests with php8.1
+      - name: Run tests with php8.2
         uses: php-actions/phpunit@v3
         with:
           version: '9.6'
-          php_version: '8.1'
+          php_version: '8.2'
           php_extensions: "xdebug intl" #pcov
           configuration: tests/phpunit.xml
           coverage_clover: "tests/results/clover.xml"
@@ -22,11 +22,11 @@ jobs:
           args: --coverage-text --coverage-clover tests/results/clover.xml --coverage-html tests/results/html
         env:
           XDEBUG_MODE: coverage
-      - name: Run tests with php8.2
+      - name: Run tests with php8.3
         uses: php-actions/phpunit@v3
         with:
           version: '9.6'
-          php_version: '8.2'
+          php_version: '8.3'
           php_extensions: "xdebug intl" #pcov
           configuration: tests/phpunit.xml
           coverage_clover: "tests/results/clover.xml"
