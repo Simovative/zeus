@@ -10,6 +10,6 @@ updates:
     schedule:
       interval: "daily"
     assignees:
-      - "slider1337"
+      - "simo-benedikt-schaller"
     reviewers:
-      - "slider1337"
+      - "simo-benedikt-schaller"

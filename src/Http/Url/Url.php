@@ -37,7 +37,8 @@ class Url implements UriInterface {
      * @author mnoerenberg
      * @return string
      */
-    public function __toString() {
+    public function __toString(): string
+    {
         return (string) $this->url;
     }
 
@@ -215,7 +216,7 @@ class Url implements UriInterface {
      * @author Benedikt Schaller
      * @inheritDoc
      */
-    public function getAuthority()
+    public function getAuthority(): string
     {
         throw new RuntimeException(__METHOD__ . ' is not implemented');
     }
@@ -224,7 +225,7 @@ class Url implements UriInterface {
      * @author Benedikt Schaller
      * @inheritDoc
      */
-    public function withScheme($scheme)
+    public function withScheme($scheme): UriInterface
     {
         throw new RuntimeException(__METHOD__ . ' is not implemented');
     }
@@ -233,7 +234,7 @@ class Url implements UriInterface {
      * @author Benedikt Schaller
      * @inheritDoc
      */
-    public function withUserInfo($user, $password = null)
+    public function withUserInfo($user, $password = null): UriInterface
     {
         throw new RuntimeException(__METHOD__ . ' is not implemented');
     }
@@ -242,7 +243,7 @@ class Url implements UriInterface {
      * @author Benedikt Schaller
      * @inheritDoc
      */
-    public function withHost($host)
+    public function withHost($host): UriInterface
     {
         throw new RuntimeException(__METHOD__ . ' is not implemented');
     }
@@ -251,7 +252,7 @@ class Url implements UriInterface {
      * @author Benedikt Schaller
      * @inheritDoc
      */
-    public function withPort($port)
+    public function withPort($port): UriInterface
     {
         throw new RuntimeException(__METHOD__ . ' is not implemented');
     }
@@ -260,7 +261,7 @@ class Url implements UriInterface {
      * @author Benedikt Schaller
      * @inheritDoc
      */
-    public function withPath($path)
+    public function withPath($path): UriInterface
     {
         throw new RuntimeException(__METHOD__ . ' is not implemented');
     }
@@ -269,7 +270,7 @@ class Url implements UriInterface {
      * @author Benedikt Schaller
      * @inheritDoc
      */
-    public function withQuery($query)
+    public function withQuery($query): UriInterface
     {
         throw new RuntimeException(__METHOD__ . ' is not implemented');
     }
@@ -278,7 +279,7 @@ class Url implements UriInterface {
      * @author Benedikt Schaller
      * @inheritDoc
      */
-    public function withFragment($fragment)
+    public function withFragment($fragment): UriInterface
     {
         throw new RuntimeException(__METHOD__ . ' is not implemented');
     }
