@@ -37,10 +37,10 @@
     "psr/http-server-handler": "^1.0",
     "smarty/smarty": ">=3.1.48 <5.0.0",
     "symfony/debug": "<5.0.0",
-    "symfony/console": ">=4.0.0",
-    "roave/security-advisories": "dev-latest"
+    "symfony/console": ">=4.0.0"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-latest"
   },
   "suggest": {
     "ext-fileinfo": "Better recognition for file mime types in the file system classes.",
