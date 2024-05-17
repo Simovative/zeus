@@ -10,7 +10,6 @@ jobs:
       - name: Install dependencies
         uses: php-actions/composer@v6
         with:
-          dev: no
           args: --profile --ignore-platform-reqs
       - name: Run tests with php8.2
         uses: php-actions/phpunit@v3
