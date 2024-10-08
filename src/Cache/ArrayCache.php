@@ -49,7 +49,7 @@ class ArrayCache implements CacheInterface {
 	 */
 	public function remove($key) {
 		if ($this->exists($key)) {
-			unset($this[$key]);
+			unset($this->cache[$key]);
 		}
 	}
 }
