@@ -42,9 +42,9 @@ class Url implements UriInterface {
         return new self($url);
     }
 
-    private static function isCliRequest(): bool
+    private static function isCliRequest(array $serverArray): bool
     {
-        return PHP_SAPI === 'cli';
+        return ! empty($serverArray['argv']);
     }
 
     /**
@@ -128,7 +128,7 @@ class Url implements UriInterface {
      * @return Url
      */
     public static function createFromServerArray(array $serverArray): Url {
-        if (self::isCliRequest()) {
+        if (self::isCliRequest($serverArray)) {
             return self::createFromCliRequest($serverArray);
         }
         if (self::isForwardedRequest($serverArray)) {
