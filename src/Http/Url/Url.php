@@ -25,6 +25,28 @@ class Url implements UriInterface {
         $this->url = $url;
     }
 
+    private static function createFromCliRequest(array $serverArray): Url
+    {
+        $url = 'cli://';
+        # Add hostname
+        $hostname = gethostname();
+        if ($hostname !== false) {
+            $url .= $hostname;
+        } else {
+            $hostname = 'unknown';
+        }
+        # Add script name
+        if (! empty($serverArray['argv'])) {
+            $url .= '/' . $serverArray['argv'][0];
+        }
+        return new self($url);
+    }
+
+    private static function isCliRequest(): bool
+    {
+        return PHP_SAPI === 'cli';
+    }
+
     /**
      * @author mnoerenberg
      * @return string
@@ -106,6 +128,9 @@ class Url implements UriInterface {
      * @return Url
      */
     public static function createFromServerArray(array $serverArray): Url {
+        if (self::isCliRequest()) {
+            return self::createFromCliRequest($serverArray);
+        }
         if (self::isForwardedRequest($serverArray)) {
             return self::createUrlForForwardedRequest($serverArray);
         }
