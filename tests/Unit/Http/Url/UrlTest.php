@@ -15,6 +15,8 @@ class UrlTest extends TestCase {
     private const URL_WITH_CREDENTIALS = 'https://username:password@www.simovative.com:443/api/v1/event/20?param=1&user=1#myFragment';
     
     private const URL = 'https://www.simovative.com/api/v1/event/20?param=1&user=1#myFragment';
+
+    private const URL_PATTERN_CLI = '#^cli\:\/\/[^\/]+\/bin\/cli\.php$#';
     private const URL_HTTPS = 'on';
     private const URL_REQUEST_URI = '/api/v1/event/20?param=1&user=1#myFragment';
     private const URL_SERVER_PORT = 443;
@@ -178,5 +180,15 @@ class UrlTest extends TestCase {
         ];
         $url = Url::createFromServerArray($serverArray);
         self::assertEquals(self::URL, $url->__toString());
+    }
+
+    public function testThatUrlIsCorrectlyParsedFromCliRequest(): void
+    {
+        $serverArray = [
+            'argv' => ['bin/cli.php'],
+            'argc' => 1,
+        ];
+        $url = Url::createFromServerArray($serverArray);
+        self::assertMatchesRegularExpression(self::URL_PATTERN_CLI, $url->__toString());
     }
 }
