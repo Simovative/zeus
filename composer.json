@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "name": "simovative/zeus",
   "description": "A Post-Redirect-Get specialised framework for PHP",
   "keywords": [
