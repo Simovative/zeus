@@ -44,7 +44,8 @@ class Url implements UriInterface {
 
     private static function isCliRequest(array $serverArray): bool
     {
-        return ! empty($serverArray['argv']);
+        # check for argv in server array only to fake the result for unit tests
+        return ! empty($serverArray['argv']) && PHP_SAPI === 'cli';
     }
 
     /**
