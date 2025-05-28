@@ -122,10 +122,10 @@ abstract class HttpKernel implements KernelInterface
                 $this->getApplicationState()->commit();
             }
             if ($send) {
+                if ($psrInterfaceInjectedPipeline !== null) {
+                    $response = $psrInterfaceInjectedPipeline($this->getMasterFactory(), $response, $route->isPsrRoute());
+                }
                 if ($route->isPsrRoute()) {
-                    if ($psrInterfaceInjectedPipeline !== null) {
-                        $response = $psrInterfaceInjectedPipeline($this->getMasterFactory(), $response);
-                    }
                     $this->getMasterFactory()->createEmitter()->emit($response);
                 } else {
                     $response->send();
