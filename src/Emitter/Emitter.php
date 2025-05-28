@@ -79,8 +79,12 @@ final class Emitter implements EmitterInterface
         header($statusHeader, true, $statusCode);
 
         foreach ($response->getHeaders() as $header => $values) {
-            foreach ($values as $value) {
-                header(sprintf('%s: %s', $header, $value), true, $statusCode);
+            if (is_array($values)) {
+                foreach ($values as $value) {
+                    header(sprintf('%s: %s', $header, $value), true, $statusCode);
+                }
+            } else {
+                header(sprintf('%s: %s', $header, $values), true, $statusCode);
             }
         }
     }
