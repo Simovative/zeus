@@ -48,7 +48,7 @@ abstract class HttpKernel implements KernelInterface
      * @author mnoerenberg
      * @inheritdoc
      */
-    public function run(HttpRequestInterface $request, $send = true, ?callable $psrInterfaceInjectedPipeline = null)
+    public function run(HttpRequestInterface $request, $send = true, ?callable $injectedPipeline = null)
     {
         try {
             $this->bundles = $this->registerBundles($request);
@@ -122,8 +122,8 @@ abstract class HttpKernel implements KernelInterface
                 $this->getApplicationState()->commit();
             }
             if ($send) {
-                if ($psrInterfaceInjectedPipeline !== null) {
-                    $response = $psrInterfaceInjectedPipeline($this->getMasterFactory(), $response, $route->isPsrRoute());
+                if ($injectedPipeline !== null) {
+                    $response = $injectedPipeline($this->getMasterFactory(), $response, $route->isPsrRoute());
                 }
                 if ($route->isPsrRoute()) {
                     $this->getMasterFactory()->createEmitter()->emit($response);
