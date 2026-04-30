@@ -36,6 +36,18 @@ jobs:
           args: --coverage-text --coverage-clover tests/results/clover.xml --coverage-html tests/results/html
         env:
           XDEBUG_MODE: coverage
+      - name: Run tests with php8.4
+        uses: php-actions/phpunit@v3
+        with:
+          version: '9.6'
+          php_version: '8.4'
+          php_extensions: "xdebug intl" #pcov
+          configuration: tests/phpunit.xml
+          coverage_clover: "tests/results/clover.xml"
+          coverage_html: "tests/results/html"
+          args: --coverage-text --coverage-clover tests/results/clover.xml --coverage-html tests/results/html
+        env:
+          XDEBUG_MODE: coverage
       - name: List files in tests/results
         run: |
           ls -lah ${{ github.workspace }}/tests/results/

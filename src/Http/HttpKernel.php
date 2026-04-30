@@ -144,7 +144,7 @@ abstract class HttpKernel implements KernelInterface
      * @author Benedikt Schaller
      * @inheritdoc
      */
-    public function report($throwable, HttpRequestInterface $request = null)
+    public function report($throwable, ?HttpRequestInterface $request = null)
     {
         $message = sprintf(
             'Error %s on line "%s" in file "%s": %s',
@@ -189,7 +189,6 @@ abstract class HttpKernel implements KernelInterface
 
     private function createPsrRequestFromZeusRequest(HttpRequestInterface $request): ServerRequestInterface
     {
-        $serverRequestFactory = $this->getMasterFactory()->createServerRequestFactory();
-        return $serverRequestFactory->createFromZeusRequest($request);
+        return $this->getMasterFactory()->createServerRequestFactory()->createFromZeusRequest($request);
     }
 }

@@ -42,7 +42,7 @@ class SkeletonKernel extends HttpKernel {
 	 * @author Benedikt Schaller
 	 * @inheritdoc
 	 */
-	public function report($throwable, HttpRequestInterface $request = null) {
+	public function report($throwable, ?HttpRequestInterface $request = null) {
 		parent::report($throwable);
 		var_dump($throwable);
 	}

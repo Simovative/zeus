@@ -4,3 +4,5 @@
 /tests/data/smarty
 /tests/results
 /vendor/
+/build/phpunit
+/build/.phpunit.result.cache

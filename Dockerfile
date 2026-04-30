@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:8.4-cli
 RUN pecl install xdebug
 RUN apt-get update
 RUN apt-get install -y libicu-dev zip unzip

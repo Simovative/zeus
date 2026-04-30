@@ -1,6 +1,8 @@
 <?php
 namespace Simovative\Zeus\Intl;
 
+use DateTime;
+
 /**
  * @author mnoerenberg
  */
@@ -24,7 +26,7 @@ class IntlFormatter implements IntlFormatterInterface {
 	 * @author mnoerenberg
 	 * @inheritdoc
 	 */
-	public function formatDate(\DateTime $dateTime = null, $emptyValue = '') {
+	public function formatDate(?DateTime $dateTime = null, $emptyValue = '') {
 		if ($dateTime === null) {
 			return $emptyValue;
 		}
@@ -35,7 +37,7 @@ class IntlFormatter implements IntlFormatterInterface {
 	 * @author mnoerenberg
 	 * @inheritdoc
 	 */
-	public function formatDateTime(\DateTime $dateTime = null, $emptyValue = '') {
+	public function formatDateTime(?DateTime $dateTime = null, $emptyValue = '') {
 		if ($dateTime === null) {
 			return $emptyValue;
 		}
@@ -46,7 +48,7 @@ class IntlFormatter implements IntlFormatterInterface {
 	 * @author mnoerenberg
 	 * @inheritdoc
 	 */
-	public function formatTime(\DateTime $dateTime = null, $emptyValue = '') {
+	public function formatTime(?DateTime $dateTime = null, $emptyValue = '') {
 		if ($dateTime === null) {
 			return $emptyValue;
 		}
@@ -71,12 +73,12 @@ class IntlFormatter implements IntlFormatterInterface {
 	 * Format a date using a custom format string.
 	 *
 	 * @author Benedikt Schaller
-	 * @param \DateTime|null $dateTime
+	 * @param DateTime|null $dateTime
 	 * @param string $customFormat
 	 * @param string $emptyValue
 	 * @return string
 	 */
-	public function customDateFormat(\DateTime $dateTime = null, $customFormat = '', $emptyValue = '') {
+	public function customDateFormat(?DateTime $dateTime = null, $customFormat = '', $emptyValue = '') {
 		if ($dateTime === null) {
 			return $emptyValue;
 		}

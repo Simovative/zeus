@@ -1,6 +1,8 @@
 <?php
 namespace Simovative\Zeus\Intl;
 
+use DateTime;
+
 /**
  * Interface for a class that does internationalization for dates and numbers.
  *
@@ -10,27 +12,27 @@ interface IntlFormatterInterface {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @param \DateTime|null $dateTime
+	 * @param DateTime|null $dateTime
 	 * @param string $emptyValue Value to show on null.
 	 * @return string
 	 */
-	public function formatDate(\DateTime $dateTime = null, $emptyValue = '');
+	public function formatDate(?DateTime $dateTime = null, $emptyValue = '');
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @param \DateTime|null $dateTime
+	 * @param DateTime|null $dateTime
 	 * @param string $emptyValue Value to show on null.
 	 * @return string
 	 */
-	public function formatDateTime(\DateTime $dateTime = null, $emptyValue = '');
+	public function formatDateTime(?DateTime $dateTime = null, $emptyValue = '');
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @param \DateTime|null $dateTime
+	 * @param DateTime|null $dateTime
 	 * @param string $emptyValue Value to show on null.
 	 * @return string
 	 */
-	public function formatTime(\DateTime $dateTime = null, $emptyValue = '');
+	public function formatTime(?DateTime $dateTime = null, $emptyValue = '');
 	
 	/**
 	 * @author Benedikt Schaller
@@ -45,10 +47,10 @@ interface IntlFormatterInterface {
 	 * Format a date using a custom format string.
 	 *
 	 * @author Benedikt Schaller
-	 * @param \DateTime|null $dateTime
+	 * @param DateTime|null $dateTime
 	 * @param string $customFormat
 	 * @param string $emptyValue
 	 * @return string
 	 */
-	public function customDateFormat(\DateTime $dateTime = null, $customFormat = '', $emptyValue = '');
+	public function customDateFormat(?DateTime $dateTime = null, $customFormat = '', $emptyValue = '');
 }

@@ -23,7 +23,7 @@ interface KernelInterface
      * @param HttpRequestInterface|null $request
      * @return HttpResponseInterface|null
      */
-    public function report($throwable, HttpRequestInterface $request = null);
+    public function report($throwable, ?HttpRequestInterface $request = null);
     
     /**
      * @author shartmann
