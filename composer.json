@@ -1,6 +1,7 @@
 {
   "name": "simovative/zeus",
   "description": "A Post-Redirect-Get specialised framework for PHP",
+  "version": "2.0.0",
   "keywords": [
     "framework"
   ],
@@ -26,17 +27,19 @@
       "src/",
       "skeleton/bundles",
       "tests/"
+    ],
+    "files": [
+      "src/Template/smarty-compat.php"
     ]
   },
   "require": {
     "ext-intl": "*",
     "ext-json": "*",
     "guzzlehttp/guzzle": ">=6.0.0, <8.0.0",
-    "php": "^8.2 || ^8.3",
+    "php": "^8.2 || ^8.3 || ^8.4",
     "psr/http-message": "^1.0 || ^2.0",
     "psr/http-server-handler": "^1.0",
-    "smarty/smarty": ">=3.1.48 <5.0.0",
-    "symfony/debug": "<5.0.0",
+    "smarty/smarty": ">=3.1.48 <6.0.0",
     "symfony/console": ">=4.0.0",
     "roave/security-advisories": "dev-latest"
   },

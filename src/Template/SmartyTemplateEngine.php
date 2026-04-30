@@ -38,9 +38,9 @@ class SmartyTemplateEngine implements TemplateEngineInterface {
 	public function __construct(
 		\Smarty $smarty,
 		array $templateDirectories,
-		TranslatorInterface $translator = null,
-		IntlFormatterInterface $intlFormatter = null,
-		IntlDateTimeConverter $intlDateTimeConverter = null
+		?TranslatorInterface $translator = null,
+		?IntlFormatterInterface $intlFormatter = null,
+		?IntlDateTimeConverter $intlDateTimeConverter = null
 	) {
 		$this->smarty = $smarty;
 		// template dirs
@@ -58,7 +58,7 @@ class SmartyTemplateEngine implements TemplateEngineInterface {
 	 * @param TranslatorInterface|null $translator
 	 * @return void
 	 */
-	private function setTranslator(TranslatorInterface $translator = null) {
+	private function setTranslator(?TranslatorInterface $translator = null) {
 		$this->translator = $translator;
 		if ($translator === null) {
 			$this->smarty->unregisterPlugin(\Smarty::PLUGIN_MODIFIER, 'translate');
@@ -72,7 +72,7 @@ class SmartyTemplateEngine implements TemplateEngineInterface {
 	 * @param IntlFormatterInterface|null $intlFormatter
 	 * @return void
 	 */
-	private function setIntlFormatter(IntlFormatterInterface $intlFormatter = null) {
+	private function setIntlFormatter(?IntlFormatterInterface $intlFormatter = null) {
 		$this->intlFormatter = $intlFormatter;
 		if ($intlFormatter === null) {
 			$this->smarty->unregisterPlugin(\Smarty::PLUGIN_MODIFIER, 'date');
@@ -93,7 +93,7 @@ class SmartyTemplateEngine implements TemplateEngineInterface {
 	 * @param IntlDateTimeConverter|null $intlDateTimeConverter
 	 * @return void
 	 */
-	private function setIntlDateTimeConverter(IntlDateTimeConverter $intlDateTimeConverter = null) {
+	private function setIntlDateTimeConverter(?IntlDateTimeConverter $intlDateTimeConverter = null) {
 		$this->intlDateTimeConverter = $intlDateTimeConverter;
 		if ($intlDateTimeConverter === null) {
 			$this->smarty->unregisterPlugin(\Smarty::PLUGIN_MODIFIER, 'userTime');

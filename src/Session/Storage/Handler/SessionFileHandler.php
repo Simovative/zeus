@@ -30,7 +30,7 @@ class SessionFileHandler extends SessionHandler
      * @param Directory|null $sessionDirectory - default: null
      * @throws FilesystemException
      */
-    public function __construct(Directory $sessionDirectory = null)
+    public function __construct(?Directory $sessionDirectory = null)
     {
         $this->sessionDirectory = $sessionDirectory;
         if (! $this->sessionDirectory instanceof Directory) {
@@ -64,9 +64,9 @@ class SessionFileHandler extends SessionHandler
      * @author Benedikt Schaller
      * @inheritdoc
      */
-    public function read($session_id)
+    public function read($id)
     {
-        $sessionData = $this->getFile($session_id)->read();
+        $sessionData = $this->getFile($id)->read();
         $this->sessionChecksum = hash("crc32b", $sessionData);
         return $sessionData;
     }
@@ -75,14 +75,14 @@ class SessionFileHandler extends SessionHandler
      * @author Benedikt Schaller
      * @inheritdoc
      */
-    public function write($session_id, $session_data)
+    public function write($id, $data)
     {
-        $newSessionChecksum = hash("crc32b", $session_data);
+        $newSessionChecksum = hash("crc32b", $data);
         if ($this->sessionChecksum === $newSessionChecksum) {
-            $this->getFile($session_id)->touch();
+            $this->getFile($id)->touch();
             return true;
         }
-        return $this->getFile($session_id)->write($session_data);
+        return $this->getFile($id)->write($data);
     }
     
     /**
@@ -107,9 +107,9 @@ class SessionFileHandler extends SessionHandler
      * @author Benedikt Schaller
      * @inheritdoc
      */
-    public function destroy($session_id)
+    public function destroy($id)
     {
-        $file = $this->getFile($session_id);
+        $file = $this->getFile($id);
         if (! $file->exists()) {
             return false;
         }
@@ -125,10 +125,10 @@ class SessionFileHandler extends SessionHandler
      * @author Benedikt Schaller
      * @inheritdoc
      */
-    public function gc($maxlifetime)
+    public function gc($max_lifetime)
     {
         $lastKeepTime = new \DateTime();
-        $lastKeepTime->sub(new \DateInterval(sprintf('PT%dS', $maxlifetime)));
+        $lastKeepTime->sub(new \DateInterval(sprintf('PT%dS', $max_lifetime)));
         try {
             foreach ($this->sessionDirectory->getFiles() as $file) {
                 if (! $file->exists()) {
@@ -154,7 +154,7 @@ class SessionFileHandler extends SessionHandler
      * @author Benedikt Schaller
      * @inheritdoc
      */
-    public function open($save_path, $session_name)
+    public function open($path, $name)
     {
         return true;
     }

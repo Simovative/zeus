@@ -1,6 +1,8 @@
 <?php
 namespace Simovative\Zeus\Intl;
 
+use DateTime;
+
 /**
  * Class to convert date times from user to system time and back.
  *
@@ -29,10 +31,10 @@ class IntlDateTimeConverter {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @param \DateTime|null $systemDateTime
-	 * @return \DateTime|null
+	 * @param DateTime|null $systemDateTime
+	 * @return DateTime|null
 	 */
-	public function convertSystemToUserTime(\DateTime $systemDateTime = null) {
+	public function convertSystemToUserTime(?DateTime $systemDateTime = null) {
 		if ($systemDateTime === null) {
 			return $systemDateTime;
 		}
@@ -43,10 +45,10 @@ class IntlDateTimeConverter {
 	
 	/**
 	 * @author Benedikt Schaller
-	 * @param \DateTime|null $userDateTime
-	 * @return \DateTime|null
+	 * @param DateTime|null $userDateTime
+	 * @return DateTime|null
 	 */
-	public function convertUserToSystemTime(\DateTime $userDateTime = null) {
+	public function convertUserToSystemTime(?DateTime $userDateTime = null) {
 		if ($userDateTime === null) {
 			return $userDateTime;
 		}
