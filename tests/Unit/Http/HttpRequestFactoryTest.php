@@ -7,6 +7,7 @@ namespace Simovative\Zeus\Tests\Unit\Http;
 use PHPUnit\Framework\TestCase;
 use Simovative\Zeus\Configuration\Configuration;
 use Simovative\Zeus\Dependency\MasterFactory;
+use Simovative\Zeus\Http\Get\HttpGetRequest;
 use Simovative\Zeus\Http\Post\HttpPostRequest;
 use Simovative\Zeus\Stream\PhpInputStream;
 use Simovative\Zeus\Tests\Unit\Stream\PhpInputStreamMock;
@@ -71,6 +72,23 @@ class HttpRequestFactoryTest extends TestCase
         $parsedBody = $request->getParsedBody();
         $this->assertInstanceOf(PhpInputStream::class, $parsedBody);
         $this->assertSame('{"data": {"type": "articles", "id": "1"}}', $parsedBody->getContents());
+    }
+
+    public function testThatRequestWithoutContentTypeIsCreated(): void
+    {
+        $masterFactory = new MasterFactory(new Configuration([], __DIR__));
+
+        $_SERVER = array_merge($_SERVER, [
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => '/api/v1/articles',
+            'HTTP_HOST' => 'localhost',
+            'SERVER_PROTOCOL' => 'HTTP/1.1'
+        ]);
+        unset($_SERVER['CONTENT_TYPE']);
+
+        $request = $masterFactory->createRequestFromGlobals();
+
+        $this->assertInstanceOf(HttpGetRequest::class, $request);
     }
 
     protected function setUp(): void
