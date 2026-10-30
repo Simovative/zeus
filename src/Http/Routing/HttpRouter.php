@@ -16,33 +16,12 @@ use Simovative\Zeus\Http\Request\HttpRequestInterface;
 
 class HttpRouter implements HttpRouterInterface
 {
-    /**
-     * @var CommandRequestRouterChain
-     */
-    private $commandRequestRouterChain;
-    /**
-     * @var HttpGetRequestRouterChain
-     */
-    private $getRequestRouterChain;
-    /**
-     * @var HandlerRouterChainInterface
-     */
-    private $handlerRouterChain;
-    /**
-     * @var RouteFactoryInterface
-     */
-    private $routeFactory;
-
     public function __construct(
-        CommandRequestRouterChain $commandRequestRouterChain,
-        HttpGetRequestRouterChain $getRequestRouterChain,
-        HandlerRouterChainInterface $handlerRouterChain,
-        RouteFactoryInterface $routeFactory
+        private readonly CommandRequestRouterChain $commandRequestRouterChain,
+        private readonly HttpGetRequestRouterChain $getRequestRouterChain,
+        private readonly HandlerRouterChainInterface $handlerRouterChain,
+        private readonly RouteFactoryInterface $routeFactory
     ) {
-        $this->commandRequestRouterChain = $commandRequestRouterChain;
-        $this->getRequestRouterChain = $getRequestRouterChain;
-        $this->handlerRouterChain = $handlerRouterChain;
-        $this->routeFactory = $routeFactory;
     }
 
     /**
@@ -50,6 +29,15 @@ class HttpRouter implements HttpRouterInterface
      */
     public function route(HttpRequestInterface $request, ServerRequestInterface $psrRequest): RouteInterface
     {
+        $psrHandler = $this->handlerRouterChain->route($psrRequest);
+        if ($psrHandler !== null) {
+            $psrRequest = $psrRequest->withParsedBody($request->getParsedBody());
+            $psrRequest = $psrRequest->withAttribute(
+                HandlerRouteParameterMapInterface::class,
+                $this->createRouteParameterMap($psrRequest->getUri())
+            );
+            return $this->routeFactory->createPsrRoute($psrRequest, $psrHandler);
+        }
         if ($request->isGet() || $request->isHead() || $request->isOption()) {
             $content = $this->getRequestRouterChain->route($request);
             if ($content !== null) {
@@ -59,15 +47,6 @@ class HttpRouter implements HttpRouterInterface
         $commandBuilder = $this->commandRequestRouterChain->route($request);
         if ($commandBuilder !== null) {
             return $this->routeFactory->createCommandRoute($request, $commandBuilder);
-        }
-        $psrHandler = $this->handlerRouterChain->route($psrRequest);
-        if ($psrHandler !== null) {
-            $psrRequest = $psrRequest->withParsedBody($request->getParsedBody());
-            $psrRequest = $psrRequest->withAttribute(
-                HandlerRouteParameterMapInterface::class,
-                $this->createRouteParameterMap($psrRequest->getUri())
-            );
-            return $this->routeFactory->createPsrRoute($psrRequest, $psrHandler);
         }
 
         throw new RouteNotFoundException($request->getUrl());
